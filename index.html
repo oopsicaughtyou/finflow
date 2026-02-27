@@ -1234,6 +1234,34 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 }
 .theme-card.selected .check-badge { display: flex; }
 
+/* ══════════════════════════════
+   PLANNED CALENDAR (previously missing)
+══════════════════════════════ */
+.cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.cal-nav button { background:var(--bg3); border:1px solid var(--border); border-radius:8px; width:30px; height:30px; color:var(--text); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
+.cal-nav button:active { background:var(--blue-bg); color:var(--blue); }
+.cal-month { font-size:14px; font-weight:700; color:var(--text); }
+.cal-day-labels { display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:4px; }
+.cal-dl { text-align:center; font-size:9px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.5px; padding:3px 0; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.cal-cell { display:flex; flex-direction:column; align-items:center; border-radius:7px; padding:3px 2px; min-height:50px; cursor:pointer; border:1px solid transparent; transition:background .1s; }
+.cal-cell:active { background:var(--blue-bg) !important; }
+.cal-cell.today { background:rgba(124,131,253,.10); border-color:rgba(124,131,253,.4); }
+.cal-cell.selected { background:var(--blue-bg); border-color:var(--blue); }
+.cal-cell.empty { pointer-events:none; }
+.cal-cell.empty-day { opacity:.4; }
+.cal-num { font-size:11px; font-weight:700; line-height:22px; width:22px; height:22px; text-align:center; display:flex; align-items:center; justify-content:center; flex-shrink:0; border-radius:50%; }
+.cal-cell.today .cal-num { background:var(--blue); color:#fff; }
+.cal-exp { font-size:8px; font-weight:700; color:var(--rose); line-height:1.2; text-align:center; }
+.cal-inc { font-size:8px; font-weight:700; color:var(--emerald); line-height:1.2; text-align:center; }
+.cal-dot { width:5px; height:5px; border-radius:50%; margin:1px 1px 0; display:inline-block; }
+.cal-dot.overdue { background:var(--rose); }
+.cal-dot.planned { background:var(--amber); }
+.day-detail-panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; margin-top:10px; }
+.day-detail-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.day-detail-close { background:var(--bg3); border:1px solid var(--border); border-radius:8px; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; color:var(--text2); }
+.day-detail-close:active { background:var(--blue-bg); color:var(--blue); }
+
 /* ══ UPGRADED SETTINGS SCREEN ══ */
 .settings-card {
   background: var(--card); border: 1px solid var(--border);
@@ -1925,7 +1953,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div class="modal-title" id="modal-account-title">Add Account</div>
     <div class="form-group">
       <label class="form-label">Account Name *</label>
-      <input type="text" class="form-input" id="acc-name" placeholder="e.g. BDO Savings, GCash, Cash Wallet">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="acc-name" placeholder="e.g. BDO Savings, GCash, Cash Wallet" style="flex:1">
+        <button type="button" class="voice-btn" id="acc-voice-btn" onclick="genericVoice('acc-voice-btn','acc-name',null,'acc-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="acc-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
     </div>
     <div class="form-group">
       <label class="form-label">Account Type *</label>
@@ -2008,7 +2040,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Description</label>
-      <input type="text" class="form-input" id="pl-desc" placeholder="What is this for?">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="pl-desc" placeholder="What is this for?" style="flex:1">
+        <button type="button" class="voice-btn" id="pl-voice-btn" onclick="genericVoice('pl-voice-btn','pl-desc',null,'pl-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="pl-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0;align-items:center;gap:6px"></div>
     </div>
     <button class="btn-primary" id="pl-save-btn" onclick="savePlanned()">Save Planned Activity</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-planned')">Cancel</button>
@@ -2097,7 +2133,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div class="modal-title" id="modal-payable-title">Add Payable</div>
     <div class="form-group">
       <label class="form-label">Payable Name *</label>
-      <input type="text" class="form-input" id="py-name" placeholder="e.g. BDO Credit Card, SSS Loan">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="py-name" placeholder="e.g. BDO Credit Card, SSS Loan" style="flex:1">
+        <button type="button" class="voice-btn" id="py-voice-btn" onclick="genericVoice('py-voice-btn','py-name',null,'py-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="py-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
     </div>
     <div class="form-group">
       <label class="form-label">Type *</label>
@@ -2311,11 +2351,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div class="modal-title" id="modal-goal-title">New Savings Goal</div>
     <div class="form-group">
       <label class="form-label">Goal Name *</label>
-      <input type="text" class="form-input" id="goal-name" placeholder="e.g. Vacation, New Phone, Emergency Fund">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="goal-name" placeholder="e.g. Vacation, New Phone, Emergency Fund" style="flex:1">
+        <button type="button" class="voice-btn" id="goal-voice-btn" onclick="genericVoice('goal-voice-btn','goal-name',null,'goal-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="goal-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
     </div>
     <div class="form-group">
-      <label class="form-label">Emoji Icon</label>
-      <input type="text" class="form-input" id="goal-emoji" placeholder="🎯" maxlength="4" style="font-size:22px;text-align:center">
+      <label class="form-label">Icon</label>
+      <input type="hidden" id="goal-emoji" value="🎯">
+      <div id="goal-icon-picker" style="display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px">
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:4px">Tap to select an icon for your goal</div>
     </div>
     <div class="form-group">
       <label class="form-label">Target Amount *</label>
@@ -2405,7 +2452,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Name / Description *</label>
-      <input type="text" class="form-input" id="recur-name" placeholder="e.g. Netflix, Salary, Rent">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="recur-name" placeholder="e.g. Netflix, Salary, Rent" style="flex:1">
+        <button type="button" class="voice-btn" id="recur-voice-btn" onclick="genericVoice('recur-voice-btn','recur-name',null,'recur-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="recur-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
     </div>
     <div class="form-group">
       <label class="form-label">Amount *</label>
@@ -4030,27 +4081,114 @@ function navHomeCal(dir){
 function openHomeDayDetail(dateStr){
   const dayTxs=db.transactions.filter(t=>t.date===dateStr);
   const dayPlanned=db.planned.filter(p=>p.date===dateStr);
-  if(!dayTxs.length&&!dayPlanned.length){showToast('No activity on '+fmtDate(dateStr),'info');return;}
+  const todayStr=today();
+  // Also check payables due on this date (not in planned)
+  const dayPayables=[];
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    const d=new Date(dateStr+'T00:00:00');
+    if(d.getDate()===py.dueDay){
+      const alreadyPlanned=dayPlanned.some(pl=>pl.payableId===py.id);
+      if(!alreadyPlanned)dayPayables.push(py);
+    }
+  });
+  // Recurring events on this date
+  const dayRecurring=[];
+  db.recurring.filter(r=>r.status==='active').forEach(r=>{
+    const nextD=getNextRecurDate(r);
+    if(nextD===dateStr)dayRecurring.push(r);
+  });
+  // Goals with target date matching
+  const dayGoals=db.goals.filter(g=>g.targetDate===dateStr&&g.status!=='achieved');
+
+  if(!dayTxs.length&&!dayPlanned.length&&!dayPayables.length&&!dayRecurring.length&&!dayGoals.length){
+    showToast('No activity on '+fmtDate(dateStr),'info');return;
+  }
   const label=fmtDate(dateStr);
   let html=`<div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px">📅 ${label}</div>`;
-  if(dayPlanned.length){
-    html+=`<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Planned (${dayPlanned.length})</div>`;
-    dayPlanned.forEach(p=>{
-      const tc=p.type==='expense'?'var(--expense)':p.type==='income'?'var(--income)':'var(--transfer)';
-      html+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <div><div style="font-size:12px;font-weight:600">${p.category}</div><span style="font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(244,169,90,0.12);color:var(--planned)">${p.status.toUpperCase()}</span></div>
-        <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:${tc}">${fmt(p.amount)}</div>
+
+  // Payables due
+  if(dayPayables.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">💳 Payables Due (${dayPayables.length})</div>`;
+    dayPayables.forEach(py=>{
+      const acc=py.linkedAccount?db.accounts.find(a=>a.id===py.linkedAccount):null;
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--amber-bg);border:1px solid rgba(245,158,11,.2);margin-bottom:6px">
+        <div>
+          <div style="font-size:13px;font-weight:700">💳 ${py.name}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${PAYABLE_TYPES[py.type]||py.type}${acc?' · '+acc.name:' · No account linked'}</div>
+          <div style="font-size:10px;color:var(--amber);margin-top:1px">Due every ${py.dueDay}${py.dueDay===1?'st':py.dueDay===2?'nd':py.dueDay===3?'rd':'th'} of month</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--expense)">${fmt(py.monthlyPayment)}</div>
       </div>`;
     });
   }
+
+  // Planned activities
+  if(dayPlanned.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📅 Planned (${dayPlanned.length})</div>`;
+    dayPlanned.forEach(p=>{
+      const tc=p.type==='expense'?'var(--expense)':p.type==='income'?'var(--income)':'var(--transfer)';
+      const acc=db.accounts.find(a=>a.id===p.accountId);
+      const statusColor=p.date<todayStr?'var(--rose)':p.date===todayStr?'var(--amber)':'var(--blue)';
+      const statusLabel=p.date<todayStr?'OVERDUE':p.date===todayStr?'TODAY':'UPCOMING';
+      const payable=p.payableId?db.payables.find(py=>py.id===p.payableId):null;
+      const nameToShow=payable?payable.name:(p.desc||p.category.replace(/^\S+\s/,''));
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);margin-bottom:6px;cursor:pointer" onclick="closeModal('modal-day-detail');setTimeout(()=>{ showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50); },50)">
+        <div>
+          <div style="font-size:13px;font-weight:700">${p.category.split(' ')[0]} ${nameToShow}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${p.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''}</div>
+          ${p.desc&&!payable?`<div style="font-size:10px;color:var(--text3)">${p.desc}</div>`:''}
+          <span style="font-size:9px;font-weight:700;color:${statusColor};background:${p.date<todayStr?'var(--rose-bg)':p.date===todayStr?'var(--amber-bg)':'var(--blue-bg)'};padding:1px 6px;border-radius:4px">${statusLabel}</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${fmt(p.amount)}</div>
+      </div>`;
+    });
+  }
+
+  // Upcoming recurring
+  if(dayRecurring.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:10px">🔄 Recurring (${dayRecurring.length})</div>`;
+    dayRecurring.forEach(r=>{
+      const tc=r.type==='expense'?'var(--expense)':'var(--income)';
+      const acc=db.accounts.find(a=>a.id===r.accountId);
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--violet-bg);border:1px solid rgba(20,184,166,.2);margin-bottom:6px">
+        <div>
+          <div style="font-size:13px;font-weight:700">🔄 ${r.name}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${r.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''} · ${r.frequency}</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${r.type==='expense'?'-':'+'} ${fmt(r.amount)}</div>
+      </div>`;
+    });
+  }
+
+  // Goals reaching target
+  if(dayGoals.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--emerald);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:10px">🎯 Goal Deadline (${dayGoals.length})</div>`;
+    dayGoals.forEach(g=>{
+      const pct=Math.min(100,(g.saved/g.target)*100);
+      html+=`<div style="padding:9px 10px;border-radius:10px;background:var(--emerald-bg);border:1px solid rgba(16,185,129,.2);margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;font-weight:700">${g.emoji||'🎯'} ${g.name}</div>
+          <div style="font-size:11px;font-weight:700;color:var(--emerald)">${pct.toFixed(0)}%</div>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">${fmt(g.saved)} saved of ${fmt(g.target)} target</div>
+        <div style="background:var(--bg3);border-radius:99px;height:3px;margin-top:5px;overflow:hidden"><div style="width:${pct.toFixed(1)}%;height:100%;background:var(--emerald);border-radius:99px"></div></div>
+      </div>`;
+    });
+  }
+
+  // Transactions
   if(dayTxs.length){
-    html+=`<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin:${dayPlanned.length?'12px 0 6px':'0 0 6px'}">Transactions (${dayTxs.length})</div>`;
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin:${(dayPlanned.length||dayPayables.length||dayRecurring.length||dayGoals.length)?'10px 0 6px':'0 0 6px'}">📊 Transactions (${dayTxs.length})</div>`;
     dayTxs.forEach(tx=>{
       const sign=tx.type==='expense'?'-':'+';
       const tc=tx.type==='expense'?'var(--expense)':tx.type==='income'?'var(--income)':'var(--transfer)';
-      html+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="closeModal('modal-day-detail');viewTx('${tx.id}')">
-        <div style="font-size:12px;font-weight:600">${tx.category.replace(/^\S+\s/,'')}</div>
-        <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:${tc}">${sign}${fmt(tx.amount)}</div>
+      const acc=db.accounts.find(a=>a.id===tx.accountId);
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="closeModal('modal-day-detail');viewTx('${tx.id}')">
+        <div>
+          <div style="font-size:12px;font-weight:600">${tx.category.split(' ')[0]} ${tx.category.replace(/^\S+\s/,'')}</div>
+          ${(tx.desc||acc)?`<div style="font-size:10px;color:var(--text3)">${acc?acc.name:''}${tx.desc?' · '+tx.desc:''}</div>`:''}
+        </div>
+        <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:${tc}">${sign}${fmt(tx.amount)}</div>
       </div>`;
     });
   }
@@ -5643,6 +5781,13 @@ function saveBudget(){
   editingBudgetId=null;
   renderBudgetSettings();
   renderBudgetHomePanel();
+  // If currently viewing budget screen, refresh it immediately
+  if(document.getElementById('screen-budget')&&document.getElementById('screen-budget').classList.contains('active')){
+    renderBudgetScreen();
+  } else {
+    // Always re-render so next visit shows updated data
+    renderBudgetScreen();
+  }
 }
 function deleteBudget(){
   showConfirm('Remove Budget?','This budget limit will be removed.',()=>{
@@ -5723,18 +5868,23 @@ function renderBudgetScreen(){
   // Update label
   const labelEl=document.getElementById('budget-screen-month-label');
   if(labelEl)labelEl.textContent=`${MONTHS[budgetScreenMonth]} ${budgetScreenYear}`;
-  // Render month quick-tabs (current ±3 months)
+  // Render month quick-tabs: all 12 months for the current year, Jan→Dec, scrollable
   const tabsEl=document.getElementById('budget-screen-month-tabs');
   if(tabsEl){
     let tabs='';
-    for(let i=-2;i<=3;i++){
-      let m=now.getMonth()+i, y=now.getFullYear();
-      while(m<0){m+=12;y--;}while(m>11){m-=12;y++;}
+    for(let m=0;m<12;m++){
+      const y=budgetScreenYear;
       const isActive=m===budgetScreenMonth&&y===budgetScreenYear;
       const isCurrent=m===now.getMonth()&&y===now.getFullYear();
-      tabs+=`<button onclick="setBudgetScreenMonth(${y},${m})" style="flex-shrink:0;padding:6px 14px;border-radius:99px;border:1px solid ${isActive?'var(--blue)':'var(--border)'};background:${isActive?'var(--blue)':isCurrent?'var(--bg3)':'var(--bg2)'};color:${isActive?'#fff':isCurrent?'var(--blue)':'var(--text3)'};font-size:11px;font-weight:700;cursor:pointer;transition:all .15s">${SHORT[m]}${isCurrent?' ·':''}</button>`;
+      // Dot if any budget data exists for that month
+      const ymCheck=`${y}-${String(m+1).padStart(2,'0')}`;
+      const hasBudget=db.budgets.some(b=>!b.targetMonth||b.targetMonth===ymCheck);
+      tabs+=`<button onclick="setBudgetScreenMonth(${y},${m})" style="flex-shrink:0;padding:6px 14px;border-radius:99px;border:1.5px solid ${isActive?'var(--blue)':'var(--border)'};background:${isActive?'var(--blue)':'var(--bg2)'};color:${isActive?'#fff':isCurrent?'var(--blue)':'var(--text3)'};font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;position:relative">${SHORT[m]}${isCurrent&&!isActive?'<span style="position:absolute;top:2px;right:2px;width:5px;height:5px;background:var(--blue);border-radius:50%"></span>':''}</button>`;
     }
     tabsEl.innerHTML=tabs;
+    // Scroll active tab into view
+    const activeBtn=tabsEl.querySelector('[style*="var(--blue)"]');
+    if(activeBtn)setTimeout(()=>activeBtn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}),50);
   }
   // Get budgets for this month
   const ymStr=`${budgetScreenYear}-${String(budgetScreenMonth+1).padStart(2,'0')}`;
@@ -6302,15 +6452,17 @@ function focusSmartInput() {
 // ── Smart Voice Input ─────────────────────────────────────────
 function toggleSmartVoice() {
   if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-    showToast('Voice input not supported on this browser','error'); return;
+    showToast('Voice input not supported on this browser. Try Chrome.','error'); return;
   }
   if (smartVoiceListening) { stopSmartVoice(); return; }
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   smartVoiceRecog = new SR();
-  smartVoiceRecog.lang = 'en-PH';
+  // Use en-US for best mobile support, fallback gracefully
+  smartVoiceRecog.lang = 'en-US';
   smartVoiceRecog.continuous = false;
   smartVoiceRecog.interimResults = true;
+  smartVoiceRecog.maxAlternatives = 1;
   smartVoiceListening = true;
 
   const btn = document.getElementById('smart-voice-btn');
@@ -6321,6 +6473,9 @@ function toggleSmartVoice() {
   if (bar) bar.classList.add('show');
   if (inputBar) inputBar.classList.add('listening');
 
+  smartVoiceRecog.onstart = () => {
+    if (txt) txt.textContent = '🎙️ Listening… speak now';
+  };
   smartVoiceRecog.onresult = e => {
     const interim = Array.from(e.results).map(r => r[0].transcript).join('');
     if (txt) txt.textContent = '🎙️ ' + interim;
@@ -6331,12 +6486,23 @@ function toggleSmartVoice() {
       stopSmartVoice();
     }
   };
-  smartVoiceRecog.onerror = () => {
+  smartVoiceRecog.onerror = (ev) => {
     stopSmartVoice();
-    showToast('Could not hear you. Try again.','error');
+    if (ev.error === 'not-allowed') {
+      showToast('Microphone access denied. Please allow mic in browser settings.','error');
+    } else if (ev.error === 'no-speech') {
+      showToast('No speech detected. Try again.','warn');
+    } else {
+      showToast('Voice error: ' + ev.error + '. Try again.','error');
+    }
   };
   smartVoiceRecog.onend = () => stopSmartVoice();
-  smartVoiceRecog.start();
+  try {
+    smartVoiceRecog.start();
+  } catch(e) {
+    stopSmartVoice();
+    showToast('Could not start voice input. Check mic permissions.','error');
+  }
 }
 
 function stopSmartVoice() {
@@ -6365,6 +6531,66 @@ function resetSmartInput() {
 // ── Keep old parseVoiceInput & toggleVoiceInput for compat ────
 function toggleVoiceInput() { toggleSmartVoice(); }
 function parseVoiceInput(text) { onSmartInput(text); }
+
+// ── Generic voice input for any field ─────────────────────────
+// Usage: genericVoice(btnId, targetFieldId, onResult, statusId)
+let genericVoiceRecog = null;
+let genericVoiceListening = false;
+function genericVoice(btnId, targetFieldId, onResult, statusId) {
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    showToast('Voice input not supported. Try Chrome.','error'); return;
+  }
+  if (genericVoiceListening) {
+    // Stop
+    if (genericVoiceRecog) { try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null; }
+    genericVoiceListening = false;
+    const btn = document.getElementById(btnId);
+    if (btn) btn.classList.remove('listening');
+    const st = statusId ? document.getElementById(statusId) : null;
+    if (st) st.style.display = 'none';
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  genericVoiceRecog = new SR();
+  genericVoiceRecog.lang = 'en-US';
+  genericVoiceRecog.continuous = false;
+  genericVoiceRecog.interimResults = true;
+  genericVoiceRecog.maxAlternatives = 1;
+  genericVoiceListening = true;
+  const btn = document.getElementById(btnId);
+  if (btn) btn.classList.add('listening');
+  const st = statusId ? document.getElementById(statusId) : null;
+  if (st) { st.style.display='flex'; st.textContent='🎙️ Listening…'; }
+
+  genericVoiceRecog.onresult = e => {
+    const text = Array.from(e.results).map(r=>r[0].transcript).join('');
+    const field = document.getElementById(targetFieldId);
+    if (field) field.value = text;
+    if (st) st.textContent = '🎙️ '+text;
+    if (e.results[e.results.length-1].isFinal) {
+      if (onResult) onResult(text);
+      genericVoiceListening = false;
+      if (btn) btn.classList.remove('listening');
+      if (genericVoiceRecog) {try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null;}
+      setTimeout(()=>{ if(st) st.style.display='none'; }, 1500);
+    }
+  };
+  genericVoiceRecog.onerror = (ev) => {
+    genericVoiceListening = false;
+    if (btn) btn.classList.remove('listening');
+    if (genericVoiceRecog) {try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null;}
+    if (st) st.style.display='none';
+    if (ev.error === 'not-allowed') showToast('Mic access denied. Allow mic in browser.','error');
+    else if (ev.error !== 'no-speech') showToast('Voice error. Try again.','warn');
+  };
+  genericVoiceRecog.onend = () => {
+    genericVoiceListening = false;
+    if (btn) btn.classList.remove('listening');
+    if (st) setTimeout(()=>{ if(st)st.style.display='none'; }, 800);
+  };
+  try { genericVoiceRecog.start(); }
+  catch(e) { genericVoiceListening=false; if(btn)btn.classList.remove('listening'); showToast('Cannot start voice.','error'); }
+}
 
 // ===== END AI CATEGORIZATION ENGINE ======
 
@@ -6501,7 +6727,16 @@ function cleanDismissedAlerts(){
 }
 
 // ===== SAVINGS GOALS =====
-const GOAL_EMOJIS=['🎯','✈️','🏠','🚗','📱','💻','💍','🎓','🏋️','🌴','🎸','🏖️','💰','🏆','🛒'];
+const GOAL_EMOJIS=['🎯','✈️','🏠','🚗','📱','💻','💍','🎓','🏋️','🌴','🎸','🏖️','💰','🏆','🛒','🍕','☕','🎮','📷','⌚','👗','👠','🏥','🌏','🛫','🏕️','🎉','🎁','🏦','💎','🚀','🐶','🏡','🌊','🎨','🎵'];
+
+function renderGoalIconPicker(selectedEmoji){
+  const el=document.getElementById('goal-icon-picker');if(!el)return;
+  el.innerHTML=GOAL_EMOJIS.map(e=>`<button type="button" onclick="selectGoalIcon('${e}')" style="width:36px;height:36px;border-radius:8px;border:2px solid ${e===selectedEmoji?'var(--blue)':'transparent'};background:${e===selectedEmoji?'var(--blue-bg)':'var(--bg3)'};font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;-webkit-appearance:none" id="gi-${e.codePointAt(0)}">${e}</button>`).join('');
+}
+function selectGoalIcon(emoji){
+  document.getElementById('goal-emoji').value=emoji;
+  renderGoalIconPicker(emoji);
+}
 
 function handleGoalsAdd(){
   if(currentGoalsTab==='recurring')openAddRecurring();
@@ -6725,6 +6960,7 @@ function openAddGoal(){
   document.getElementById('goal-notes').value='';
   const accOpts='<option value="">— No linked account —</option>'+db.accounts.map(a=>`<option value="${a.id}">${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('');
   document.getElementById('goal-linked-account').innerHTML=accOpts;
+  renderGoalIconPicker('🎯');
   openModal('modal-goal');
 }
 function openEditGoal(id){
@@ -6741,6 +6977,7 @@ function openEditGoal(id){
   document.getElementById('goal-notes').value=g.notes||'';
   const accOpts='<option value="">— No linked account —</option>'+db.accounts.map(a=>`<option value="${a.id}"${a.id===g.linkedAccountId?' selected':''}>${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('');
   document.getElementById('goal-linked-account').innerHTML=accOpts;
+  renderGoalIconPicker(g.emoji||'🎯');
   openModal('modal-goal');
 }
 function saveGoal(){
