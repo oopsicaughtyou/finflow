@@ -559,9 +559,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .vai-tab-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .vai-tab-btn{padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text3);font-size:10px;font-weight:700;cursor:pointer;transition:all .15s}
 .vai-tab-btn.active{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
-.vai-confirm-field{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg3);transition:all .2s}
-.vai-confirm-field.filled{background:var(--emerald-bg);border-color:rgba(16,185,129,.35)}
-.vai-confirm-field.empty{background:var(--bg3);border-color:rgba(148,163,184,.15)}
+.vai-confirm-field{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);transition:all .2s;gap:8px}
+.vai-confirm-field.filled{background:var(--card);border-color:rgba(16,185,129,.3);box-shadow:0 2px 8px rgba(16,185,129,.07)}
+.vai-confirm-field.empty{background:var(--bg3);border-color:rgba(245,158,11,.2);opacity:.75}
 .vai-quick-bar{position:fixed;bottom:72px;left:0;right:0;z-index:900;padding:0 12px 6px;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
 .vai-quick-bar.show{pointer-events:auto;opacity:1;transform:translateY(0)}
 .vai-quick-inner{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;box-shadow:0 4px 24px rgba(0,0,0,.28)}
@@ -574,6 +574,37 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .vai-conf-bar-wrap{background:var(--bg3);border-radius:8px;padding:10px 12px;margin-bottom:12px}
 .vai-conf-bar-track{background:var(--bg);border-radius:99px;height:5px;overflow:hidden;margin-top:6px}
 .vai-conf-bar-fill{height:100%;border-radius:99px;background:var(--emerald);transition:width .4s}
+
+/* ── Form VAI Smart Input (embedded in forms) ── */
+.form-vai-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:16px}
+.form-vai-header{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.form-vai-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;background:var(--violet-bg);color:var(--violet);text-transform:uppercase}
+.form-vai-bar{display:flex;gap:6px;align-items:center}
+.form-vai-input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--text);outline:none;transition:border-color .15s}
+.form-vai-input:focus{border-color:var(--violet)}
+.form-vai-input::placeholder{color:var(--text3)}
+.form-vai-mic{width:36px;height:36px;border-radius:9px;background:var(--violet-bg);border:1px solid var(--violet);color:var(--violet);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+.form-vai-mic.listening{background:var(--rose-bg);border-color:var(--rose);color:var(--rose);animation:pulse-ring 1.2s infinite}
+.form-vai-result{background:var(--card);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:10px 12px;margin-top:8px;display:none}
+.form-vai-result.show{display:block}
+.form-vai-result-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.form-vai-result-lbl{font-size:10px;font-weight:700;color:var(--emerald);display:flex;align-items:center;gap:5px}
+.form-vai-conf-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--emerald-bg);color:var(--emerald)}
+.form-vai-conf-badge.mid{background:var(--amber-bg);color:var(--amber)}
+.form-vai-conf-badge.low{background:var(--rose-bg);color:var(--rose)}
+.form-vai-dismiss{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0;line-height:1}
+.form-vai-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.form-vai-field{background:var(--bg3);border-radius:7px;padding:6px 8px}
+.form-vai-field-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.form-vai-field-val{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.form-vai-field-val.empty{color:var(--text3);font-style:italic}
+.form-vai-meter{height:3px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.form-vai-meter-fill{height:100%;border-radius:99px;background:var(--emerald);transition:width .35s}
+.form-vai-actions{display:flex;gap:6px}
+.form-vai-apply{flex:1;background:var(--emerald);color:#fff;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.form-vai-apply:active{opacity:.8}
+.form-vai-edit{background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.form-vai-hint{font-size:10px;color:var(--text3);margin-top:6px;min-height:14px}
 
 
 .mini-report-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 16px; margin-bottom: 8px; }
@@ -1371,7 +1402,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         🔔<span class="bell-badge" id="bell-badge" style="display:none;position:absolute;top:-2px;right:-2px;background:var(--rose);color:#fff;font-size:7px;font-weight:700;min-width:14px;height:14px;border-radius:99px;display:none;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid var(--bg)"></span>
       </button>
       <button class="icon-btn" id="global-eye-btn" onclick="toggleGlobalPrivacy()" title="Toggle visibility">👁️</button>
-      <button class="icon-btn" onclick="showScreen('settings')" title="Settings" style="font-size:15px">⚙️</button>
+
     </div>
   </div>
 
@@ -1834,6 +1865,29 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
     </div>
 
+    <!-- ── DEMO DATA ── -->
+    <div class="settings-card">
+      <div class="settings-card-header">
+        <div class="settings-card-icon" style="background:var(--emerald-bg)">🧪</div>
+        <div>
+          <div class="settings-card-title">Demo / Sample Data</div>
+          <div class="settings-card-sub" id="demo-data-status">For QA, UI/UX review &amp; feature testing</div>
+        </div>
+      </div>
+      <div class="settings-card-body">
+        <div style="font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:12px">
+          Load pre-built sample data covering all features: accounts, transactions, payables, goals, recurring rules, budgets and planned events. Your real data is safely preserved and restored when demo mode is turned off.
+        </div>
+        <div id="demo-mode-indicator" style="display:none;background:var(--amber-bg);border:1px solid var(--amber);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:11px;color:var(--amber);font-weight:600;text-align:center">
+          🧪 DEMO MODE ACTIVE — All data shown is sample data
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="demo-on-btn" class="btn-primary" style="flex:1;background:var(--emerald)" onclick="enableDemoMode()">🚀 Load Demo Data</button>
+          <button id="demo-off-btn" class="btn-primary btn-secondary" style="flex:1;display:none" onclick="disableDemoMode()">↩ Restore My Data</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ── ABOUT ── -->
     <div class="settings-card" style="margin-bottom:24px">
       <div style="padding:22px;text-align:center">
@@ -2016,11 +2070,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
     <!-- Record-type tab bar -->
     <div class="vai-tab-bar" id="vai-type-tabs">
-      <button class="vai-tab-btn active" onclick="switchVAITab('payable',this)">💳 Payable</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('payable',this)">💳 Payable</button>
       <button class="vai-tab-btn" onclick="switchVAITab('goal',this)">🎯 Goal</button>
       <button class="vai-tab-btn" onclick="switchVAITab('recurring',this)">🔄 Recurring</button>
       <button class="vai-tab-btn" onclick="switchVAITab('planned',this)">📅 Event</button>
       <button class="vai-tab-btn" onclick="switchVAITab('account',this)">🏦 Account</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('budget',this)">📊 Budget</button>
     </div>
 
     <div id="vai-fields-panel" style="max-height:54vh;overflow-y:auto"></div>
@@ -2092,6 +2147,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-account-title">Add Account</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="account-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="account-vai-input"
+          placeholder='e.g. "GCash wallet balance 5000" or "BDO savings 20000"'
+          oninput="onFormVAI('account',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('account')">
+        <button class="form-vai-mic" id="account-vai-mic" onclick="toggleFormVAIVoice('account')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="account-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('account')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="account-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="account-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('account')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="account-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="account-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('account')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('account-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="account-vai-hint">🏦 Account — speak or type to pre-fill the form</div>
+    </div>
     <div class="form-group">
       <label class="form-label">Account Name *</label>
       <div style="display:flex;gap:8px;align-items:flex-start">
@@ -2140,6 +2227,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-planned-title">Add Planned Activity</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="planned-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="planned-vai-input"
+          placeholder='e.g. "plan transport 500 March 18" or "bill food 150 for next week"'
+          oninput="onFormVAI('planned',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('planned')">
+        <button class="form-vai-mic" id="planned-vai-mic" onclick="toggleFormVAIVoice('planned')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="planned-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('planned')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="planned-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="planned-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('planned')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="planned-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="planned-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('planned')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('planned-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="planned-vai-hint">📅 Upcoming Event — speak or type to pre-fill the form</div>
+    </div>
     <div class="type-tabs">
       <button class="type-tab active expense" onclick="setPlannedType('expense',this)">💸 Expense</button>
       <button class="type-tab income" onclick="setPlannedType('income',this)">💰 Income</button>
@@ -2181,11 +2300,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Description</label>
-      <div style="display:flex;gap:8px;align-items:flex-start">
-        <input type="text" class="form-input" id="pl-desc" placeholder="What is this for?" style="flex:1">
-        <button type="button" class="voice-btn" id="pl-voice-btn" onclick="genericVoice('pl-voice-btn','pl-desc',null,'pl-voice-status')" title="Voice input">🎤</button>
-      </div>
-      <div id="pl-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0;align-items:center;gap:6px"></div>
+      <input type="text" class="form-input" id="pl-desc" placeholder="What is this for?">
     </div>
     <button class="btn-primary" id="pl-save-btn" onclick="savePlanned()">Save Planned Activity</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-planned')">Cancel</button>
@@ -2272,6 +2387,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-payable-title">Add Payable</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="payable-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="payable-vai-input"
+          placeholder='e.g. "BDO loan total 15000 monthly 3000 due 5"'
+          oninput="onFormVAI('payable',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('payable')">
+        <button class="form-vai-mic" id="payable-vai-mic" onclick="toggleFormVAIVoice('payable')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="payable-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('payable')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="payable-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="payable-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('payable')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="payable-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="payable-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('payable')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('payable-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="payable-vai-hint">💳 Payable / Loan — speak or type to pre-fill the form</div>
+    </div>
     <div class="form-group">
       <label class="form-label">Payable Name *</label>
       <div style="display:flex;gap:8px;align-items:flex-start">
@@ -2456,6 +2603,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-budget-title">Add Budget Limit</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="budget-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="budget-vai-input"
+          placeholder='e.g. "budget food 5000 monthly" or "set limit 3000"'
+          oninput="onFormVAI('budget',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('budget')">
+        <button class="form-vai-mic" id="budget-vai-mic" onclick="toggleFormVAIVoice('budget')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="budget-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('budget')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="budget-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="budget-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('budget')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="budget-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="budget-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('budget')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('budget-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="budget-vai-hint">📊 Budget — speak or type to pre-fill the form</div>
+    </div>
     <div class="form-group">
       <label class="form-label">Category *</label>
       <select class="form-input" id="budget-category"></select>
@@ -2490,6 +2669,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-goal-title">New Savings Goal</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="goal-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="goal-vai-input"
+          placeholder='e.g. "goal vacation 50000" or "save for new phone 25000"'
+          oninput="onFormVAI('goal',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('goal')">
+        <button class="form-vai-mic" id="goal-vai-mic" onclick="toggleFormVAIVoice('goal')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="goal-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('goal')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="goal-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="goal-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('goal')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="goal-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="goal-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('goal')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('goal-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="goal-vai-hint">🎯 Savings Goal — speak or type to pre-fill the form</div>
+    </div>
     <div class="form-group">
       <label class="form-label">Goal Name *</label>
       <div style="display:flex;gap:8px;align-items:flex-start">
@@ -2587,6 +2798,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-recur-title">New Recurring Transaction</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="recurring-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="recurring-vai-input"
+          placeholder='e.g. "Netflix subscription 299 monthly" or "rent 8000 every 5th"'
+          oninput="onFormVAI('recurring',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('recurring')">
+        <button class="form-vai-mic" id="recurring-vai-mic" onclick="toggleFormVAIVoice('recurring')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="recurring-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('recurring')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="recurring-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="recurring-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('recurring')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="recurring-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="recurring-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('recurring')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('recurring-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="recurring-vai-hint">🔄 Recurring Rule — speak or type to pre-fill the form</div>
+    </div>
     <div class="type-tabs">
       <button class="type-tab active expense" onclick="setRecurType('expense',this)">💸 Expense</button>
       <button class="type-tab income" onclick="setRecurType('income',this)">💰 Income</button>
@@ -2930,6 +3173,9 @@ function maskSpan(n,isHidden,extraStyle=''){
 function getCurrency(){return(db.settings.currency||'₱|PHP').split('|')[0];}
 function fmt(n){const s=getCurrency();return s+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function today(){return new Date().toISOString().split('T')[0];}
+// localDate: convert a Date to YYYY-MM-DD using LOCAL timezone (avoids UTC shift for UTC+8 etc.)
+function localDate(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function localMonthEnd(year,month){return localDate(new Date(year,month+1,0));} // last day of given month
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
 function fmtDate(d){return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 function fmtShort(d){return new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});}
@@ -2939,7 +3185,7 @@ function getDateRange(period){
   const d=new Date();let start,end;
   if(period==='daily'){start=end=d.toISOString().split('T')[0];}
   else if(period==='weekly'){const day=d.getDay();const s=new Date(d);s.setDate(d.getDate()-day);const e=new Date(s);e.setDate(s.getDate()+6);start=s.toISOString().split('T')[0];end=e.toISOString().split('T')[0];}
-  else if(period==='monthly'){const y=d.getFullYear(),m=d.getMonth();start=new Date(y,m,1).toISOString().split('T')[0];end=new Date(y,m+1,0).toISOString().split('T')[0];}
+  else if(period==='monthly'){const y=d.getFullYear(),m=d.getMonth();start=new Date(y,m,1).toISOString().split('T')[0];end=localMonthEnd(y,m);}
   else{const y=d.getFullYear();start=`${y}-01-01`;end=`${y}-12-31`;}
   return{start,end};
 }
@@ -3288,6 +3534,32 @@ function viewTx(id){
     if(tx.receipt.startsWith('data:image/'))receiptHtml=`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:6px">RECEIPT</div><img src="${tx.receipt}" style="width:100%;border-radius:8px;max-height:220px;object-fit:cover"></div>`;
     else receiptHtml=`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:4px">ATTACHMENT</div><div style="font-size:13px;color:var(--accent)">📎 File attached</div></div>`;
   }
+
+  // Payable multi-month badge
+  let payableHtml='';
+  if(tx.payableId){
+    const py=db.payables.find(p=>p.id===tx.payableId);
+    if(py){
+      // Find the payment record for this transaction
+      const payRec=(py.payments||[]).find(p=>p.id&&tx.desc&&tx.desc.includes(py.name)&&p.date===tx.date)||
+                   (py.payments||[]).slice().reverse().find(p=>p.date===tx.date);
+      const months=payRec?payRec.months||1:
+        (tx.desc&&tx.desc.match(/\((\d+) months?\)/)?parseInt(tx.desc.match(/\((\d+) months?\)/)[1]):1);
+      const ordinal=n=>n===1?'st':n===2?'nd':n===3?'rd':'th';
+      const remainAfter=fmt(py.remaining||0);
+      payableHtml=`<div class="card-sm" style="background:var(--violet-bg);border-color:rgba(20,184,166,.25)">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">💳 Payable Payment</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="font-size:13px;font-weight:700">${py.name}</div>
+          ${months>1?`<span style="font-size:10px;font-weight:700;background:var(--amber-bg);color:var(--amber);border-radius:6px;padding:2px 8px">${months} Months Advance</span>`:'<span style="font-size:10px;font-weight:700;background:var(--emerald-bg);color:var(--emerald);border-radius:6px;padding:2px 8px">1 Month</span>'}
+        </div>
+        ${months>1?`<div style="font-size:11px;color:var(--text2);margin-bottom:2px">⏩ Advance payment covering <strong>${months} billing cycle${months>1?'s':''}</strong></div>`:''}
+        <div style="font-size:11px;color:var(--text3)">Remaining balance after payment: <strong style="color:${py.remaining>0?'var(--expense)':'var(--emerald)'}">${remainAfter}</strong></div>
+        ${py.remaining<=0?`<div style="font-size:11px;font-weight:700;color:var(--emerald);margin-top:4px">🎉 Fully Paid Off!</div>`:''}
+      </div>`;
+    }
+  }
+
   document.getElementById('view-tx-content').innerHTML=`
     <div style="text-align:center;margin-bottom:16px">
       <div style="font-size:36px;margin-bottom:8px">${tx.category.split(' ')[0]}</div>
@@ -3300,6 +3572,7 @@ function viewTx(id){
       <div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:2px">DATE</div><div>${fmtDate(tx.date)}</div></div>
       ${tx.ref?`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:2px">REFERENCE</div><div>${tx.ref}</div></div>`:''}
       ${tx.desc?`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:2px">DESCRIPTION</div><div>${tx.desc}</div></div>`:''}
+      ${payableHtml}
       ${receiptHtml}
     </div>
   `;
@@ -3329,6 +3602,8 @@ function openAddAccount(){
   document.getElementById('acc-savings').value='';
   document.getElementById('acc-delete-btn').style.display='none';
   document.getElementById('acc-save-btn').textContent='Save Account';
+  dismissFormVAI('account');
+  const vInp=document.getElementById('account-vai-input');if(vInp)vInp.value='';
   toggleAccFields();buildColorGrid('#7c83fd');openModal('modal-account');
 }
 function openEditAccount(id){
@@ -3751,7 +4026,7 @@ function cfCollectEvents(endDate) {
     const now = new Date();
     for (let m = 0; m < 3; m++) {
       const dueDate = new Date(now.getFullYear(), now.getMonth() + m, py.dueDay);
-      const ds = dueDate.toISOString().split('T')[0];
+      const ds = dueDate.getFullYear()+'-'+String(dueDate.getMonth()+1).padStart(2,'0')+'-'+String(dueDate.getDate()).padStart(2,'0');
       if (ds > todayStr && ds <= endDate) {
         // avoid double-counting with planned items that already exist for this payable
         const alreadyPlanned = events.some(e => e.source === 'planned' && e.date === ds && e.label.includes(py.name));
@@ -4117,7 +4392,7 @@ function renderHomeMiniReport(){
   const el=document.getElementById('home-mini-report');if(!el)return;
   const now=new Date();
   const ms=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];
-  const me=new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().split('T')[0];
+  const me=localMonthEnd(now.getFullYear(),now.getMonth());
   const txs=db.transactions.filter(t=>t.date>=ms&&t.date<=me);
   if(!txs.length){el.innerHTML='';return;}
   const income=txs.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
@@ -4165,7 +4440,7 @@ function renderHomeMiniCal(yearOverride, monthOverride){
   const monthName=new Date(year,month,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
 
   const ms=`${year}-${String(month+1).padStart(2,'0')}-01`;
-  const me=new Date(year,month+1,0).toISOString().split('T')[0];
+  const me=localMonthEnd(year,month);
   const plannedInMonth=db.planned.filter(p=>p.date>=ms&&p.date<=me);
   const txInMonth=db.transactions.filter(t=>t.date>=ms&&t.date<=me);
 
@@ -4348,10 +4623,12 @@ function openHomeDayDetail(dateStr){
     });
   }
 
-  // Planned activities
-  if(dayPlanned.length){
-    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📅 Planned (${dayPlanned.length})</div>`;
-    dayPlanned.forEach(p=>{
+  // Planned activities — exclude payable-linked items already shown in PAYABLES DUE above
+  const shownPayableIds = new Set(dayPayables.map(({py})=>py.id));
+  const filteredPlanned = dayPlanned.filter(p => !p.payableId || !shownPayableIds.has(p.payableId));
+  if(filteredPlanned.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📅 Planned (${filteredPlanned.length})</div>`;
+    filteredPlanned.forEach(p=>{
       const tc=p.type==='expense'?'var(--expense)':p.type==='income'?'var(--income)':'var(--transfer)';
       const acc=db.accounts.find(a=>a.id===p.accountId);
       const statusColor=p.date<todayStr?'var(--rose)':p.date===todayStr?'var(--amber)':'var(--blue)';
@@ -4588,7 +4865,7 @@ function renderCalendar(container){
 
   // Payable dots — only UNPAID scheduled dates
   const ms2=`${calYear}-${String(calMonth+1).padStart(2,'0')}-01`;
-  const me2=new Date(calYear,calMonth+1,0).toISOString().split('T')[0];
+  const me2=localMonthEnd(calYear,calMonth);
   db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
     try {
       const sched=generatePayableSchedule(py);
@@ -4806,6 +5083,8 @@ function openAddPlanned(prefillDate){
   document.getElementById('pl-date').value=prefillDate||today();
   document.getElementById('pl-delete-btn').style.display='none';
   document.getElementById('pl-save-btn').textContent='Save Planned Activity';
+  dismissFormVAI('planned');
+  const vInp=document.getElementById('planned-vai-input');if(vInp)vInp.value='';
   setPlannedType('expense',document.querySelector('#modal-planned .type-tab.expense'));
   fillAccDropdowns();openModal('modal-planned');
 }
@@ -5007,7 +5286,7 @@ function renderIncomeReport(){
   const year=now.getFullYear();
   const monthlyData=months.map((m,i)=>{
     const ms=`${year}-${String(i+1).padStart(2,'0')}-01`;
-    const me=new Date(year,i+1,0).toISOString().split('T')[0];
+    const me=localMonthEnd(year,i);
     const txs=db.transactions.filter(t=>t.type==='income'&&t.date>=ms&&t.date<=me);
     const total=txs.reduce((s,t)=>s+t.amount,0);
     const bycat={};txs.forEach(t=>{bycat[t.category]=(bycat[t.category]||0)+t.amount;});
@@ -5219,6 +5498,9 @@ function openAddPayable(){
   document.getElementById('py-notes').value='';
   document.getElementById('py-delete-btn').style.display='none';
   document.getElementById('py-save-btn').textContent='Save Payable';
+  // Reset Form VAI
+  dismissFormVAI('payable');
+  const vInp=document.getElementById('payable-vai-input');if(vInp)vInp.value='';
   // fill account dropdown
   const opts='<option value="">-- No linked account --</option>'+db.accounts.map(a=>`<option value="${a.id}">${ACC_ICONS[a.type]} ${a.name}</option>`).join('');
   document.getElementById('py-account').innerHTML=opts;
@@ -5239,6 +5521,8 @@ function openEditPayable(id){
   document.getElementById('py-notes').value=py.notes||'';
   document.getElementById('py-delete-btn').style.display='';
   document.getElementById('py-save-btn').textContent='Update Payable';
+  dismissFormVAI('payable');
+  const vInp=document.getElementById('payable-vai-input');if(vInp)vInp.value='';
   const opts='<option value="">-- No linked account --</option>'+db.accounts.map(a=>`<option value="${a.id}"${a.id===py.linkedAccount?' selected':''}>${ACC_ICONS[a.type]} ${a.name}</option>`).join('');
   document.getElementById('py-account').innerHTML=opts;
   openModal('modal-payable');
@@ -5289,7 +5573,7 @@ function autoSchedulePayable(py){
   for(let i=0;i<3;i++){
     const d=new Date(now.getFullYear(),now.getMonth()+i,py.dueDay);
     if(d<now)continue; // skip past dates
-    const dateStr=d.toISOString().split('T')[0];
+    const dateStr=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     // Check if already scheduled
     const exists=db.planned.some(p=>p.payableId===py.id&&p.date===dateStr);
     if(!exists){
@@ -5360,7 +5644,8 @@ function generatePayableSchedule(py) {
   let futureCount=0;
 
   for(let i=0;i<Math.min(totalRows+2,120);i++){
-    const dateStr=iter.toISOString().split('T')[0];
+    // Use local date parts to avoid UTC timezone shift (e.g. UTC+8 would show day-1 with toISOString)
+    const dateStr=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0')+'-'+String(iter.getDate()).padStart(2,'0');
     const monthKey=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0');
     const isPaid=coveredMonths.has(monthKey);
     const payRef=isPaid?coveredMonths.get(monthKey):null;
@@ -5487,7 +5772,7 @@ function generateRecurringSchedule(r) {
   }
 
   for(let i=0;i<MAX;i++){
-    const dateStr=iter.toISOString().split('T')[0];
+    const dateStr=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0')+'-'+String(iter.getDate()).padStart(2,'0');
     if(endDate&&dateStr>endDate) break;
 
     const isApplied=appliedDates.has(dateStr);
@@ -5672,8 +5957,20 @@ function executePayPayable(){
   if(py.remaining<=0)py.status='paid';
   if(!py.payments)py.payments=[];
   py.payments.push({id:uid(),amount,accountId:accId,date:payDate,ref,months,createdAt:Date.now()});
+  // Build multi-month coverage label for transaction description
+  let txDesc=`Payment: ${py.name}`;
+  if(months>1&&py.dueDay){
+    const now2=new Date();
+    let firstDue=new Date(now2.getFullYear(),now2.getMonth(),py.dueDay);
+    if(firstDue<now2)firstDue=new Date(now2.getFullYear(),now2.getMonth()+1,py.dueDay);
+    const lastDue=new Date(firstDue.getFullYear(),firstDue.getMonth()+months-1,py.dueDay);
+    const fmtD=d=>d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    txDesc+=` — Paid for ${fmtD(firstDue)} to ${fmtD(lastDue)}`;
+  } else if(months>1){
+    txDesc+=` (${months} months)`;
+  }
   // Create transaction record
-  const tx={id:uid(),type:'expense',amount,category:'💰 Bills',accountId:accId,date:payDate,ref,desc:`Payment: ${py.name}${months>1?' ('+months+' months)':''}`,receipt:null,createdAt:Date.now(),payableId:py.id};
+  const tx={id:uid(),type:'expense',amount,category:'💰 Bills',accountId:accId,date:payDate,ref,desc:txDesc,receipt:null,createdAt:Date.now(),payableId:py.id};
   db.transactions.unshift(tx);
   addLog('created',`Payable payment: ${py.name} ${fmt(amount)}${months>1?' ('+months+' months)':''}`,py.id,'payable');
 
@@ -5686,7 +5983,7 @@ function executePayPayable(){
     // Mark the upcoming 'months' planned entries as waived/completed
     for(let i=0;i<months;i++){
       const waiveDate=new Date(nextDue.getFullYear(),nextDue.getMonth()+i,py.dueDay);
-      const waiveDateStr=waiveDate.toISOString().split('T')[0];
+      const waiveDateStr=waiveDate.getFullYear()+'-'+String(waiveDate.getMonth()+1).padStart(2,'0')+'-'+String(waiveDate.getDate()).padStart(2,'0');
       // Find exact or close planned entry for this month
       const existingPl=db.planned.find(p=>p.payableId===py.id&&p.status==='pending'&&p.date===waiveDateStr);
       if(existingPl){
@@ -5702,7 +5999,7 @@ function executePayPayable(){
 
     // Schedule next due date after advance payment window
     const nextDueFuture=new Date(nextDue.getFullYear(),nextDue.getMonth()+months,py.dueDay);
-    const nextDueFutureStr=nextDueFuture.toISOString().split('T')[0];
+    const nextDueFutureStr=nextDueFuture.getFullYear()+'-'+String(nextDueFuture.getMonth()+1).padStart(2,'0')+'-'+String(nextDueFuture.getDate()).padStart(2,'0');
     const exists=db.planned.some(p=>p.payableId===py.id&&p.date===nextDueFutureStr&&p.status==='pending');
     if(!exists&&py.status!=='paid'){
       db.planned.push({id:uid(),type:'expense',amount:py.monthlyPayment||amount,category:'💰 Bills',accountId:accId,date:nextDueFutureStr,ref:'',desc:`Scheduled: ${py.name}`,status:'pending',originalDate:nextDueFutureStr,createdAt:Date.now(),payableId:py.id});
@@ -5724,7 +6021,7 @@ function openSchedulePayable(id){
   const tc=PAYABLE_COLORS[py.type]||'var(--text)';
   document.getElementById('schedule-payable-detail').innerHTML=`<div class="card-sm" style="text-align:center"><div style="font-size:13px;font-weight:700">${py.name}</div><div style="font-family:'Space Mono',monospace;font-size:16px;color:${tc};margin-top:4px">${fmt(py.remaining)} remaining</div></div>`;
   // Suggest next due date
-  if(py.dueDay){const d=new Date();d.setDate(py.dueDay);if(d<new Date())d.setMonth(d.getMonth()+1);document.getElementById('sched-date').value=d.toISOString().split('T')[0];}
+  if(py.dueDay){const d=new Date();d.setDate(py.dueDay);if(d<new Date())d.setMonth(d.getMonth()+1);document.getElementById('sched-date').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   else document.getElementById('sched-date').value=today();
   document.getElementById('sched-amount').value=py.monthlyPayment||'';
   document.getElementById('sched-notes').value='';
@@ -5907,10 +6204,23 @@ function renderPayablesHistory(container){
         <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px">Recent Payments</div>
         ${payments.slice(0,3).map(pay=>{
           const acc=db.accounts.find(a=>a.id===pay.accountId);
-          return`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          const mths=pay.months||1;
+          let coverageLine='';
+          if(mths>1&&py.dueDay){
+            const payDate=new Date(pay.date+'T00:00:00');
+            let firstDue=new Date(payDate.getFullYear(),payDate.getMonth(),py.dueDay);
+            if(firstDue<payDate)firstDue=new Date(payDate.getFullYear(),payDate.getMonth()+1,py.dueDay);
+            const lastDue=new Date(firstDue.getFullYear(),firstDue.getMonth()+mths-1,py.dueDay);
+            const fd=firstDue.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+            const ld=lastDue.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+            coverageLine=`<div style="font-size:9px;color:var(--blue-l);font-weight:600">📅 ${fd} — ${ld}</div>`;
+          }
+          const mBadge=mths>1?`<span style="font-size:8px;font-weight:700;background:var(--blue-bg);color:var(--blue-l);padding:1px 5px;border-radius:4px;margin-left:4px">${mths}M</span>`:'';
+          return`<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border)">
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--income)">+${fmt(pay.amount)}</div>
+              <div style="font-size:12px;font-weight:600;color:var(--income)">+${fmt(pay.amount)}${mBadge}</div>
               <div style="font-size:10px;color:var(--text3)">${fmtDate(pay.date)}${acc?' · '+acc.name:''}${pay.ref?' · '+pay.ref:''}</div>
+              ${coverageLine}
             </div>
             <div style="font-size:10px;color:var(--income)">✓ Paid</div>
           </div>`;
@@ -5937,14 +6247,31 @@ function openPayableHistory(id){
   } else {
     document.getElementById('payable-history-list').innerHTML=`<div class="card" style="margin-top:0">${payments.map(pay=>{
       const acc=db.accounts.find(a=>a.id===pay.accountId);
-      return`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
-        <div>
-          <div style="font-size:13px;font-weight:700;color:var(--income)">${fmt(pay.amount)}</div>
+      const months=pay.months||1;
+      // Build coverage label for multi-month payments
+      let coverageHtml='';
+      if(months>1&&py.dueDay){
+        const payDate=new Date(pay.date+'T00:00:00');
+        let firstDue=new Date(payDate.getFullYear(),payDate.getMonth(),py.dueDay);
+        if(firstDue<payDate)firstDue=new Date(payDate.getFullYear(),payDate.getMonth()+1,py.dueDay);
+        const lastDue=new Date(firstDue.getFullYear(),firstDue.getMonth()+months-1,py.dueDay);
+        const fmtD=d=>d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+        coverageHtml=`<div style="font-size:10px;color:var(--blue-l);margin-top:3px;font-weight:600">📅 Covers: ${fmtD(firstDue)} — ${fmtD(lastDue)}</div>`;
+      }
+      const monthsBadge=months>1?`<span style="font-size:9px;font-weight:700;background:var(--blue-bg);color:var(--blue-l);padding:2px 7px;border-radius:6px;margin-left:6px">${months} Months Advance</span>`:'';
+      return`<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+            <div style="font-size:13px;font-weight:700;color:var(--income)">+${fmt(pay.amount)}</div>
+            ${monthsBadge}
+          </div>
           <div style="font-size:11px;color:var(--text3);margin-top:2px">${fmtDate(pay.date)}${acc?' · '+acc.name:''}</div>
+          ${coverageHtml}
           ${pay.ref?`<div style="font-size:10px;color:var(--text3)">Ref: ${pay.ref}</div>`:''}
         </div>
-        <div style="text-align:right">
-          <div style="font-size:10px;color:var(--income)">✓ Paid</div>
+        <div style="text-align:right;flex-shrink:0;margin-left:10px">
+          <div style="font-size:10px;color:var(--income);font-weight:700">✓ Paid</div>
+          ${months>1?`<div style="font-size:9px;color:var(--text3);margin-top:2px">${months} cycles</div>`:''}
         </div>
       </div>`;
     }).join('')}</div>`;
@@ -6266,10 +6593,10 @@ function getBudgetSpend(category, period, targetMonth){
   } else if(targetMonth){
     const [y,m]=targetMonth.split('-').map(Number);
     ms=new Date(y,m-1,1).toISOString().split('T')[0];
-    me=new Date(y,m,0).toISOString().split('T')[0];
+    me=localDate(new Date(y,m,0));
   } else {
     ms=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];
-    me=new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().split('T')[0];
+    me=localMonthEnd(now.getFullYear(),now.getMonth());
   }
   return db.transactions.filter(t=>t.type==='expense'&&t.category===category&&t.date>=ms&&t.date<=me).reduce((s,t)=>s+t.amount,0);
 }
@@ -6307,6 +6634,8 @@ function openAddBudget(){
   document.getElementById('budget-month-selector-group').style.display='';
   populateBudgetMonthOptions();
   document.getElementById('budget-target-month').value='';
+  dismissFormVAI('budget');
+  const vInp=document.getElementById('budget-vai-input');if(vInp)vInp.value='';
   // Category dropdown — only expense cats not already budgeted (for current/default)
   const budgetedCats=db.budgets.filter(b=>!b.targetMonth).map(b=>b.category);
   const available=EXPENSE_CATS.filter(c=>!budgetedCats.includes(c));
@@ -6475,7 +6804,7 @@ function renderBudgetScreen(){
     return b.targetMonth===ymStr;
   });
   const ms=`${budgetScreenYear}-${String(budgetScreenMonth+1).padStart(2,'0')}-01`;
-  const me=new Date(budgetScreenYear,budgetScreenMonth+1,0).toISOString().split('T')[0];
+  const me=localMonthEnd(budgetScreenYear,budgetScreenMonth);
   const totalSpent=db.transactions.filter(t=>t.type==='expense'&&t.date>=ms&&t.date<=me).reduce((s,t)=>s+t.amount,0);
   const totalBudgeted=monthBudgets.reduce((s,b)=>s+b.monthlyLimit,0);
   const overallPct=totalBudgeted>0?Math.min(100,(totalSpent/totalBudgeted)*100):0;
@@ -6613,7 +6942,7 @@ function renderBudgetReport(){
     const year=now.getFullYear();
     const tableRows=months.map((m,idx)=>{
       const ms=`${year}-${String(idx+1).padStart(2,'0')}-01`;
-      const me=new Date(year,idx+1,0).toISOString().split('T')[0];
+      const me=localMonthEnd(year,idx);
       const mSpent=allBudgets.reduce((s,b)=>{
         return s+db.transactions.filter(t=>t.type==='expense'&&t.category===b.category&&t.date>=ms&&t.date<=me).reduce((ss,t)=>ss+t.amount,0);
       },0);
@@ -7327,6 +7656,8 @@ function showGoalsTab(tab,btn){
   if(btn)btn.classList.add('active');
   const addBtn=document.getElementById('goals-add-btn');
   if(addBtn)addBtn.textContent=tab==='recurring'?'➕':tab==='planned'?'➕':'➕';
+  // Update VAI bar context based on sub-tab — all forms now have embedded Smart Input
+  hideVAIBar();
   renderGoalsScreen();
 }
 function renderGoalsScreen(){
@@ -7538,6 +7869,8 @@ function openAddGoal(){
   document.getElementById('goal-notes').value='';
   const accOpts='<option value="">— No linked account —</option>'+db.accounts.map(a=>`<option value="${a.id}">${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('');
   document.getElementById('goal-linked-account').innerHTML=accOpts;
+  dismissFormVAI('goal');
+  const vInp=document.getElementById('goal-vai-input');if(vInp)vInp.value='';
   renderGoalIconPicker('🎯');
   openModal('modal-goal');
 }
@@ -7829,6 +8162,8 @@ function openAddRecurring(){
   document.querySelector('#modal-recur .type-tab.income').classList.remove('active');
   const accOpts=db.accounts.map(a=>`<option value="${a.id}">${ACC_ICONS[a.type]} ${a.name}</option>`).join('')||'<option value="">No accounts</option>';
   document.getElementById('recur-account').innerHTML=accOpts;
+  dismissFormVAI('recurring');
+  const vInp=document.getElementById('recurring-vai-input');if(vInp)vInp.value='';
   openModal('modal-recur');
 }
 function openEditRecurring(id){
@@ -7945,8 +8280,8 @@ function updateExportPreview(){
 function getExportTxs(period,type){
   const now=new Date();
   let start,end;
-  if(period==='month'){start=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];end=new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().split('T')[0];}
-  else if(period==='lastmonth'){start=new Date(now.getFullYear(),now.getMonth()-1,1).toISOString().split('T')[0];end=new Date(now.getFullYear(),now.getMonth(),0).toISOString().split('T')[0];}
+  if(period==='month'){start=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];end=localMonthEnd(now.getFullYear(),now.getMonth());}
+  else if(period==='lastmonth'){start=localDate(new Date(now.getFullYear(),now.getMonth()-1,1));end=localDate(new Date(now.getFullYear(),now.getMonth(),0));}
   else if(period==='year'){start=`${now.getFullYear()}-01-01`;end=`${now.getFullYear()}-12-31`;}
   else{start='1970-01-01';end='2099-12-31';}
   let txs=db.transactions.filter(t=>t.date>=start&&t.date<=end);
@@ -8216,6 +8551,14 @@ const VAI_SCHEMA = {
       {id:'name',    label:'Account Name', type:'text',   enabled:true,  keywords:['account','named','called','bank'],    formField:'acc-name'   },
       {id:'balance', label:'Balance',      type:'number', enabled:true,  keywords:['balance','opening','amount','worth'],  formField:'acc-balance'},
     ]
+  },
+  budget: {
+    label:'Budget Limit', icon:'📊',
+    openFn: 'openAddBudget',
+    triggerWords: ['budget','limit','cap','spending','set budget','monthly limit'],
+    fields: [
+      {id:'amount', label:'Budget Amount', type:'number', enabled:true,  keywords:['budget','limit','cap','amount','set'],    formField:'budget-limit-amount'},
+    ]
   }
 };
 
@@ -8460,19 +8803,22 @@ function vaiNextKeywordPos(str, enabledFields, currentId){
   return min;
 }
 
-function parseVAIText(rawText) {
+function parseVAIText(rawText, hintType=null) {
   const text  = rawText.trim();
   const lower = text.toLowerCase();
   const config = getVAIConfig();
 
   // 1. Detect record type via trigger words (longest match wins)
-  let detectedType=null, bestScore=0;
-  for(const [rtype,def] of Object.entries(config)){
-    let score=0;
-    for(const kw of def.triggerWords){
-      if(lower.includes(kw.toLowerCase())) score+=kw.length;
+  //    If hintType is provided, use it directly (called from a form context)
+  let detectedType=hintType||null, bestScore=hintType?1:0;
+  if(!hintType){
+    for(const [rtype,def] of Object.entries(config)){
+      let score=0;
+      for(const kw of def.triggerWords){
+        if(lower.includes(kw.toLowerCase())) score+=kw.length;
+      }
+      if(score>bestScore){bestScore=score;detectedType=rtype;}
     }
-    if(score>bestScore){bestScore=score;detectedType=rtype;}
   }
   if(!detectedType||bestScore===0) return null;
 
@@ -8556,13 +8902,15 @@ function showVAIConfirm(parsed) {
     const hasVal = val!==undefined;
     const disp  = hasVal ? (f.type==='number' ? fmt(val) : val) : '—';
     return `<div class="vai-confirm-field ${hasVal?'filled':'empty'}">
-      <div>
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">${f.label}</div>
-        <div style="font-size:14px;font-weight:700;color:${hasVal?'var(--text)':'var(--text3)'}">${disp}</div>
-        <div style="font-size:9px;color:var(--text3);margin-top:1px">fills <code style="font-size:8.5px;background:var(--bg2);padding:0 4px;border-radius:3px">#${f.formField}</code> · keywords: ${f.keywords.slice(0,3).join(', ')}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">${f.label}</div>
+        <div style="font-size:15px;font-weight:700;color:${hasVal?'var(--text)':'var(--text3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${disp}</div>
       </div>
-      <div style="font-size:11px;font-weight:700;flex-shrink:0;margin-left:8px;color:${hasVal?'var(--emerald)':'var(--amber)'}">
-        ${hasVal?'✅ Parsed':'⚠️ Missing'}
+      <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;margin-left:10px">
+        ${hasVal
+          ? `<span style="font-size:11px;font-weight:700;color:var(--emerald);background:var(--emerald-bg);border-radius:6px;padding:3px 9px">✓ Filled</span>`
+          : `<span style="font-size:11px;font-weight:700;color:var(--amber);background:var(--amber-bg);border-radius:6px;padding:3px 9px">Missing</span>`
+        }
       </div>
     </div>`;
   }).join('');
@@ -8635,6 +8983,13 @@ function executeVAIConfirm() {
         if(fields.balance)setFldNum('acc-balance',fields.balance);
         vaiFormToast(fields);
       },220);
+
+    }else if(type==='budget'){
+      openAddBudget();
+      setTimeout(()=>{
+        if(fields.amount)setFldNum('budget-limit-amount',fields.amount);
+        vaiFormToast(fields);
+      },220);
     }
   },160);
 }
@@ -8642,6 +8997,198 @@ function executeVAIConfirm() {
 function setFld(id,val){ const el=document.getElementById(id); if(el){el.value=val;el.dispatchEvent(new Event('input',{bubbles:true}));} }
 function setFldNum(id,val){ setFld(id,val); }
 function vaiFormToast(fields){ showToast(`✨ Voice AI filled ${Object.keys(fields).length} field(s). Review &amp; save!`,'success'); }
+
+// ══════════════════════════════════════════════════════════════
+// ── FORM-LEVEL VAI SMART INPUT ────────────────────────────────
+// Embedded smart voice/text input inside each form
+// ══════════════════════════════════════════════════════════════
+const _fvaiState   = {};   // parsed result per formType
+const _fvaiRecog   = {};   // speech recognition instances
+const _fvaiActive  = {};   // is voice listening per formType
+
+// Map formType key → how to fill the form
+const FORM_VAI_FILL = {
+  payable: (fields) => {
+    if(fields.name)          setFld('py-name',    fields.name);
+    if(fields.totalAmount)   setFldNum('py-total',   fields.totalAmount);
+    if(fields.paidAmount)    setFldNum('py-paid',    fields.paidAmount);
+    if(fields.monthlyPayment)setFldNum('py-monthly', fields.monthlyPayment);
+    if(fields.interestRate)  setFldNum('py-interest',fields.interestRate);
+    if(fields.dueDay)        setFld('py-due-day', String(fields.dueDay));
+    if(fields.notes)         setFld('py-notes',   fields.notes);
+  },
+  account: (fields) => {
+    if(fields.name)    setFld('acc-name',    fields.name);
+    if(fields.balance) setFldNum('acc-balance',fields.balance);
+  },
+  budget: (fields) => {
+    if(fields.amount) setFldNum('budget-limit', fields.amount);
+  },
+  goal: (fields) => {
+    if(fields.name)   setFld('goal-name',   fields.name);
+    if(fields.target) setFldNum('goal-target', fields.target);
+    if(fields.saved)  setFldNum('goal-saved',  fields.saved);
+  },
+  recurring: (fields) => {
+    if(fields.name)   setFld('recur-name',    fields.name);
+    if(fields.amount) setFldNum('recur-amount', fields.amount);
+    if(fields.dueDay) setFld('recur-due-day',  String(fields.dueDay));
+  },
+  planned: (fields) => {
+    if(fields.amount) setFldNum('pl-amount', fields.amount);
+    if(fields.desc)   setFld('pl-desc',    fields.desc);
+  }
+};
+
+// Parse text using VAI config for the specific form type (no trigger word needed — we know the type)
+function parseFormVAIText(text, formType) {
+  const config  = getVAIConfig();
+  const def     = config[formType];
+  if (!def) return null;
+  const lower   = text.trim().toLowerCase();
+  const enabledFields = def.fields.filter(f => f.enabled);
+  const parsedValues  = {};
+  const allNums = vaiExtractAllNums(lower);
+  let numIdx    = 0;
+  let totalScore = 0;
+
+  for (const field of enabledFields) {
+    let found = false;
+    for (const kw of field.keywords) {
+      const kwL = kw.toLowerCase();
+      const idx = lower.indexOf(kwL);
+      if (idx === -1) continue;
+      const afterKw = text.trim().slice(idx + kw.length).trimStart();
+      if (field.type === 'number') {
+        const val = vaiSpokenToNum(afterKw);
+        if (val > 0) { parsedValues[field.id] = val; totalScore += 1.2; found = true; break; }
+      } else if (field.type === 'text') {
+        const bound  = vaiNextKeywordPos(afterKw, enabledFields, field.id);
+        const phrase = afterKw.slice(0, bound).trim().split(/\s+/).slice(0, 6).join(' ');
+        if (phrase) { parsedValues[field.id] = phrase; totalScore += 0.9; found = true; break; }
+      }
+    }
+    if (!found && field.type === 'number') {
+      const used = new Set(Object.values(parsedValues).filter(v => typeof v === 'number'));
+      while (numIdx < allNums.length && used.has(allNums[numIdx])) numIdx++;
+      if (numIdx < allNums.length) { parsedValues[field.id] = allNums[numIdx++]; totalScore += 0.4; }
+    }
+  }
+
+  const fillRatio  = enabledFields.length ? Object.keys(parsedValues).length / enabledFields.length : 0;
+  const confidence = Math.min(0.97, fillRatio * 0.70 + Math.min(0.15, totalScore * 0.03));
+
+  return { recordType: formType, fields: parsedValues, enabledFields, rawText: text.trim(), confidence, def };
+}
+
+function onFormVAI(formType, text) {
+  if (!text.trim()) { dismissFormVAI(formType); return; }
+  const parsed = parseFormVAIText(text, formType);
+  if (parsed && Object.keys(parsed.fields).length > 0) {
+    _fvaiState[formType] = parsed;
+    _renderFormVAIResult(formType, parsed);
+  } else {
+    dismissFormVAI(formType);
+    const hint = document.getElementById(formType+'-vai-hint');
+    if (hint) hint.textContent = '⚠️ No fields detected. Check your VAI settings or add more keywords.';
+  }
+}
+
+function _renderFormVAIResult(formType, parsed) {
+  const card      = document.getElementById(formType+'-vai-result');
+  const flds      = document.getElementById(formType+'-vai-fields');
+  const confBadge = document.getElementById(formType+'-vai-conf');
+  const meter     = document.getElementById(formType+'-vai-meter');
+  if (!card) return;
+
+  const pct = Math.round(parsed.confidence * 100);
+  const col = pct >= 60 ? 'var(--emerald)' : pct >= 35 ? 'var(--amber)' : 'var(--rose)';
+  const cls = pct >= 60 ? '' : pct >= 35 ? 'mid' : 'low';
+
+  confBadge.textContent = pct + '%';
+  confBadge.className   = 'form-vai-conf-badge ' + cls;
+  meter.style.width     = pct + '%';
+  meter.style.background = col;
+
+  flds.innerHTML = parsed.enabledFields.map(f => {
+    const val    = parsed.fields[f.id];
+    const hasVal = val !== undefined;
+    const disp   = hasVal ? (f.type === 'number' ? fmt(val) : val) : '—';
+    return `<div class="form-vai-field">
+      <div class="form-vai-field-lbl">${f.label}</div>
+      <div class="form-vai-field-val ${hasVal ? '' : 'empty'}">${disp}</div>
+    </div>`;
+  }).join('');
+
+  card.classList.add('show');
+  const hint = document.getElementById(formType+'-vai-hint');
+  if (hint) hint.textContent = `${pct}% confidence · ${Object.keys(parsed.fields).length} field(s) detected`;
+}
+
+function applyFormVAI(formType) {
+  const parsed = _fvaiState[formType];
+  if (!parsed || !Object.keys(parsed.fields).length) {
+    showToast('⚠️ Nothing to apply. Speak or type a command first.', 'warn'); return;
+  }
+  const filler = FORM_VAI_FILL[formType];
+  if (filler) filler(parsed.fields);
+  showToast(`✨ Voice AI filled ${Object.keys(parsed.fields).length} field(s). Review & save!`, 'success');
+  dismissFormVAI(formType);
+  const inp = document.getElementById(formType+'-vai-input');
+  if (inp) inp.value = '';
+}
+
+function dismissFormVAI(formType) {
+  const card = document.getElementById(formType+'-vai-result');
+  if (card) card.classList.remove('show');
+  _fvaiState[formType] = null;
+  const hint = document.getElementById(formType+'-vai-hint');
+  if (hint) {
+    const labels = {payable:'💳 Payable / Loan',account:'🏦 Account',budget:'📊 Budget',goal:'🎯 Savings Goal',recurring:'🔄 Recurring Rule'};
+    hint.textContent = (labels[formType]||'') + ' — speak or type to pre-fill the form';
+  }
+}
+
+function toggleFormVAIVoice(formType) {
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    showToast('Voice input not supported on this browser. Try Chrome.', 'error'); return;
+  }
+  if (_fvaiActive[formType]) { stopFormVAIVoice(formType); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  _fvaiRecog[formType] = new SR();
+  _fvaiRecog[formType].lang = 'en-US';
+  _fvaiRecog[formType].continuous = false;
+  _fvaiRecog[formType].interimResults = true;
+  _fvaiActive[formType] = true;
+  const mic    = document.getElementById(formType+'-vai-mic');
+  const vsBar  = document.getElementById(formType+'-vai-voice-status');
+  if (mic)   mic.classList.add('listening');
+  if (vsBar) vsBar.classList.add('show');
+  _fvaiRecog[formType].onresult = e => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    const inp = document.getElementById(formType+'-vai-input');
+    if (inp) { inp.value = transcript; onFormVAI(formType, transcript); }
+    if (e.results[e.results.length-1].isFinal) stopFormVAIVoice(formType);
+  };
+  _fvaiRecog[formType].onerror = ev => {
+    stopFormVAIVoice(formType);
+    if (ev.error === 'not-allowed') showToast('Microphone access denied.', 'error');
+    else if (ev.error === 'no-speech') showToast('No speech detected. Try again.', 'warn');
+    else showToast('Voice error: '+ev.error, 'error');
+  };
+  _fvaiRecog[formType].onend = () => stopFormVAIVoice(formType);
+  try { _fvaiRecog[formType].start(); }
+  catch(e) { stopFormVAIVoice(formType); showToast('Cannot start mic. Check permissions.', 'error'); }
+}
+
+function stopFormVAIVoice(formType) {
+  _fvaiActive[formType] = false;
+  const mic   = document.getElementById(formType+'-vai-mic');
+  const vsBar = document.getElementById(formType+'-vai-voice-status');
+  if (mic)   mic.classList.remove('listening');
+  if (vsBar) vsBar.classList.remove('show');
+  if (_fvaiRecog[formType]) { try { _fvaiRecog[formType].stop(); } catch(e) {} _fvaiRecog[formType] = null; }
+}
 
 // ── FLOATING QUICK BAR ─────────────────────────────────────────────
 function showVAIBar(recordType){
@@ -8659,7 +9206,12 @@ function showVAIBar(recordType){
     const ex     = [def.triggerWords?.[0]||'', ...eflds.slice(0,3).map(f=>`${f.keywords[0]||''} [${f.type==='number'?'0':'…'}]`)].join(' ');
     inp.placeholder = eflds.length ? `e.g. "${ex}"` : 'Speak or type…';
   }
-  if(hint) hint.textContent='';
+  // Show context label
+  if(hint){
+    const def = getVAIConfig()[recordType]||{};
+    const ctxLabel = def.icon && def.label ? `${def.icon} <b style="color:var(--blue)">${def.label}</b> — speak or type to pre-fill the form` : '';
+    hint.innerHTML = ctxLabel;
+  }
 }
 
 function hideVAIBar(){
@@ -8679,10 +9231,16 @@ function onVAITextInput(text){
       const col=pct>=60?'var(--emerald)':pct>=35?'var(--amber)':'var(--rose)';
       hint.innerHTML=`${parsed.def.icon} <b>${parsed.def.label}</b> · ${Object.keys(parsed.fields).length} field(s) · <b style="color:${col}">${pct}% confidence</b>`;
     }else{
-      hint.textContent='Add a trigger word: loan, goal, recurring, plan, account…';
+      hint.innerHTML='<span style="color:var(--amber)">⚠️ Add a trigger word: loan, goal, recurring, plan, account…</span>';
     }
   }else{
-    hint.textContent='';
+    // Restore context hint when cleared
+    if(vaiCurrentScreen){
+      const def = getVAIConfig()[vaiCurrentScreen]||{};
+      hint.innerHTML = def.icon && def.label ? `${def.icon} <b style="color:var(--blue)">${def.label}</b> — speak or type to pre-fill the form` : '';
+    }else{
+      hint.textContent='';
+    }
   }
 }
 
@@ -8742,10 +9300,185 @@ function stopVAIVoice(){
 
 // ── Hook VAI bar into screen navigation ───────────────────────────
 // Patching is done after the original showScreen exists (see INIT below)
-const VAI_SCREENS={payables:'payable', goals:'goal'};
+const VAI_SCREENS={};  // All forms now have embedded Smart Input — floating bar disabled for cleanliness
 function _vaiOnScreenChange(name){
-  if(VAI_SCREENS[name]) showVAIBar(VAI_SCREENS[name]);
-  else hideVAIBar();
+  // Always hide the floating bar — each form has its own embedded Smart Input
+  hideVAIBar();
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// ── DEMO / SAMPLE DATA MODE ───────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+function buildDemoData() {
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+  const ld = (yr,mo,d) => `${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const todayStr = today();
+  const prev = (days) => { const d=new Date(now); d.setDate(d.getDate()-days); return localDate(d); };
+  const next = (days) => { const d=new Date(now); d.setDate(d.getDate()+days); return localDate(d); };
+
+  const accBDO   = uid(); const accGCash = uid(); const accCash = uid(); const accMaya = uid();
+  const pyLoan   = uid(); const pyCC     = uid(); const pyHP   = uid();
+  const goalVac  = uid(); const goalPhone= uid(); const goalEF = uid();
+  const recNetflix=uid(); const recRent  = uid(); const recSal = uid();
+  const budFood  = uid(); const budTrans = uid(); const budEntm = uid();
+
+  const accounts = [
+    {id:accBDO,  name:'BDO Savings',    type:'bank',    balance:42500,  savingsReserve:5000, color:'#3B82F6', accountNumber:'****4821', holderName:'Juan Dela Cruz', createdAt:Date.now()-30*864e5},
+    {id:accGCash,name:'GCash',          type:'ewallet', balance:3200,   savingsReserve:500,  color:'#10B981', accountNumber:'09171234567', holderName:'Juan Dela Cruz', createdAt:Date.now()-30*864e5},
+    {id:accCash,  name:'Cash on Hand',  type:'cash',    balance:1800,   savingsReserve:0,    color:'#F59E0B', createdAt:Date.now()-30*864e5},
+    {id:accMaya,  name:'Maya Wallet',   type:'ewallet', balance:6800,   savingsReserve:1000, color:'#8B5CF6', accountNumber:'09281234567', holderName:'Juan Dela Cruz', createdAt:Date.now()-20*864e5},
+  ];
+
+  const payables = [
+    {id:pyLoan, name:'BDO Personal Loan', type:'loan',   totalAmount:120000, paidAmount:36000, remaining:84000, monthlyPayment:5000, interestRate:12, dueDay:15, allowOverpay:false, linkedAccount:accBDO,  notes:'3-year loan, started Jan 2024', status:'active', payments:[
+      {id:uid(),amount:5000,accountId:accBDO,date:prev(45),ref:'AUTO-001',months:1,createdAt:Date.now()-45*864e5},
+      {id:uid(),amount:5000,accountId:accBDO,date:prev(15),ref:'AUTO-002',months:1,createdAt:Date.now()-15*864e5},
+      {id:uid(),amount:15000,accountId:accBDO,date:prev(5), ref:'ADVANCE-003',months:3,createdAt:Date.now()-5*864e5},
+    ], createdAt:Date.now()-400*864e5},
+    {id:pyCC,   name:'BDO Credit Card',   type:'credit', totalAmount:28000,  paidAmount:8000,  remaining:20000, monthlyPayment:3500, interestRate:24, dueDay:20, allowOverpay:false, linkedAccount:accBDO,  notes:'Mastercard ending 9832', status:'active', payments:[
+      {id:uid(),amount:3500,accountId:accBDO,date:prev(30),ref:'CC-MIN-001',months:1,createdAt:Date.now()-30*864e5},
+      {id:uid(),amount:4500,accountId:accBDO,date:prev(8), ref:'CC-MIN-002',months:1,createdAt:Date.now()-8*864e5},
+    ], createdAt:Date.now()-90*864e5},
+    {id:pyHP,   name:'Home Credit',       type:'spl',    totalAmount:10000,  paidAmount:1500,  remaining:8500,  monthlyPayment:900,  interestRate:0,  dueDay:24, allowOverpay:false, linkedAccount:accGCash,'notes':'Samsung phone installment', status:'active', payments:[
+      {id:uid(),amount:900, accountId:accGCash,date:prev(20),ref:'HC-001',months:1,createdAt:Date.now()-20*864e5},
+      {id:uid(),amount:600, accountId:accGCash,date:prev(5), ref:'HC-ADV',months:1,createdAt:Date.now()-5*864e5},
+    ], createdAt:Date.now()-60*864e5},
+  ];
+
+  const goals = [
+    {id:goalVac, name:'Palawan Vacation', emoji:'✈️', target:50000, saved:12500, targetDate:ld(y,m+5,15), linkedAccount:accBDO,  notes:'Flights + hotel for 4 nights', status:'active', createdAt:Date.now()-60*864e5},
+    {id:goalPhone,name:'New iPhone 16',   emoji:'📱', target:75000, saved:31000, targetDate:ld(y,m+3,1),  linkedAccount:accMaya, notes:'iPhone 16 Pro 256GB', status:'active', createdAt:Date.now()-45*864e5},
+    {id:goalEF,  name:'Emergency Fund',   emoji:'🛡️', target:100000,saved:85000, targetDate:ld(y,m+2,1),  linkedAccount:accBDO,  notes:'6 months of expenses', status:'active', createdAt:Date.now()-180*864e5},
+  ];
+
+  const recurring = [
+    {id:recNetflix,name:'Netflix',        type:'expense',amount:299,  frequency:'monthly',startDate:ld(y-1,0,5),  dueDay:5,  category:'🎬 Entertainment',accountId:accGCash,status:'active', createdAt:Date.now()-365*864e5},
+    {id:recRent,   name:'House Rent',     type:'expense',amount:8000, frequency:'monthly',startDate:ld(y-1,0,1),  dueDay:1,  category:'🏠 Housing',     accountId:accBDO,  status:'active', createdAt:Date.now()-365*864e5},
+    {id:recSal,    name:'Monthly Salary', type:'income', amount:45000,frequency:'monthly',startDate:ld(y-1,0,25), dueDay:25, category:'💼 Salary',      accountId:accBDO,  status:'active', createdAt:Date.now()-365*864e5},
+    {id:uid(),     name:'PhilHealth',     type:'expense',amount:500,  frequency:'monthly',startDate:ld(y-1,0,15), dueDay:15, category:'🏥 Healthcare', accountId:accBDO,  status:'active', createdAt:Date.now()-200*864e5},
+    {id:uid(),     name:'SSS Contribution',type:'expense',amount:1125,frequency:'monthly',startDate:ld(y-1,0,15), dueDay:15, category:'💼 Salary',      accountId:accBDO,  status:'active', createdAt:Date.now()-200*864e5},
+  ];
+
+  const budgets = [
+    {id:budFood, category:'🍔 Food',         monthlyLimit:8000, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:budTrans,category:'🚌 Transport',     monthlyLimit:3000, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:budEntm, category:'🎬 Entertainment', monthlyLimit:1500, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:uid(),   category:'🛒 Shopping',      monthlyLimit:5000, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:uid(),   category:'💊 Health',        monthlyLimit:2000, period:'monthly', createdAt:Date.now()-30*864e5},
+  ];
+
+  const transactions = [
+    // Current month income & expenses
+    {id:uid(),type:'income', amount:45000,category:'💼 Salary',      accountId:accBDO,  date:ld(y,m,25), desc:'Monthly Salary — Employer Inc.',ref:'SAL-'+m,createdAt:Date.now()-5*864e5},
+    {id:uid(),type:'expense',amount:8000, category:'🏠 Housing',     accountId:accBDO,  date:ld(y,m,1),  desc:'House Rent - February',ref:'',createdAt:Date.now()-27*864e5},
+    {id:uid(),type:'expense',amount:2500, category:'🍔 Food',        accountId:accGCash,date:prev(2),     desc:'Groceries - SM Supermarket',ref:'GR-001',createdAt:Date.now()-2*864e5},
+    {id:uid(),type:'expense',amount:850,  category:'🍔 Food',        accountId:accGCash,date:prev(3),     desc:'Jollibee - Family Meal',ref:'JB-456',createdAt:Date.now()-3*864e5},
+    {id:uid(),type:'expense',amount:299,  category:'🎬 Entertainment',accountId:accGCash,date:ld(y,m,5),  desc:'Netflix Subscription',ref:'NF-AUTO',createdAt:Date.now()-22*864e5},
+    {id:uid(),type:'expense',amount:1200, category:'🚌 Transport',   accountId:accCash, date:prev(4),     desc:'Grab rides — weekly',ref:'',createdAt:Date.now()-4*864e5},
+    {id:uid(),type:'expense',amount:650,  category:'🍔 Food',        accountId:accCash, date:prev(6),     desc:'Mang Inasal',ref:'',createdAt:Date.now()-6*864e5},
+    {id:uid(),type:'expense',amount:3500, category:'💳 Bills',       accountId:accBDO,  date:prev(8),     desc:'Payment: BDO Credit Card',ref:'CC-MIN-002',payableId:pyCC,createdAt:Date.now()-8*864e5},
+    {id:uid(),type:'expense',amount:500,  category:'💊 Health',      accountId:accGCash,date:prev(9),     desc:'Mercury Drug',ref:'',createdAt:Date.now()-9*864e5},
+    {id:uid(),type:'expense',amount:1800, category:'🛒 Shopping',    accountId:accGCash,date:prev(10),    desc:'Shopee Order - Clothes',ref:'SPE-002',createdAt:Date.now()-10*864e5},
+    {id:uid(),type:'transfer',amount:5000,category:'💸 Transfer',    accountId:accBDO,  date:prev(12),    desc:'Transfer to GCash',toAccountId:accGCash,ref:'',createdAt:Date.now()-12*864e5},
+    {id:uid(),type:'expense',amount:900,  category:'💳 Bills',       accountId:accGCash,date:prev(20),    desc:'Payment: Home Credit',ref:'HC-001',payableId:pyHP,createdAt:Date.now()-20*864e5},
+    // Last month
+    {id:uid(),type:'income', amount:45000,category:'💼 Salary',      accountId:accBDO,  date:ld(y,m-1,25),desc:'Monthly Salary',ref:'',createdAt:Date.now()-32*864e5},
+    {id:uid(),type:'expense',amount:8000, category:'🏠 Housing',     accountId:accBDO,  date:ld(y,m-1,1), desc:'House Rent',ref:'',createdAt:Date.now()-58*864e5},
+    {id:uid(),type:'expense',amount:5000, category:'💳 Bills',       accountId:accBDO,  date:prev(45),    desc:'Payment: BDO Personal Loan',ref:'AUTO-001',payableId:pyLoan,createdAt:Date.now()-45*864e5},
+    {id:uid(),type:'expense',amount:3500, category:'💳 Bills',       accountId:accBDO,  date:prev(30),    desc:'Payment: BDO Credit Card',ref:'CC-MIN-001',payableId:pyCC,createdAt:Date.now()-30*864e5},
+    {id:uid(),type:'expense',amount:2200, category:'🍔 Food',        accountId:accGCash,date:ld(y,m-1,18),desc:'Groceries',ref:'',createdAt:Date.now()-39*864e5},
+    {id:uid(),type:'expense',amount:1500, category:'🛒 Shopping',    accountId:accMaya, date:ld(y,m-1,12),desc:'Lazada purchase',ref:'LZD-003',createdAt:Date.now()-45*864e5},
+    // Advance payment transactions matching payable records
+    {id:uid(),type:'expense',amount:15000,category:'💳 Bills',       accountId:accBDO,  date:prev(5),     desc:'Payment: BDO Personal Loan — Paid for '+new Date(y,m,15).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+' to '+new Date(y,m+2,15).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),ref:'ADVANCE-003',payableId:pyLoan,createdAt:Date.now()-5*864e5},
+    {id:uid(),type:'expense',amount:600,  category:'💳 Bills',       accountId:accGCash,date:prev(5),     desc:'Payment: Home Credit',ref:'HC-ADV',payableId:pyHP,createdAt:Date.now()-5*864e5},
+    {id:uid(),type:'expense',amount:5000, category:'💳 Bills',       accountId:accBDO,  date:prev(15),    desc:'Payment: BDO Personal Loan',ref:'AUTO-002',payableId:pyLoan,createdAt:Date.now()-15*864e5},
+  ];
+
+  const planned = [
+    {id:uid(),type:'expense',amount:5000, category:'💳 Bills',       accountId:accBDO,  date:ld(y,m,15),  desc:'BDO Personal Loan',   status:'pending',originalDate:ld(y,m,15),  payableId:pyLoan,createdAt:Date.now()-60*864e5},
+    {id:uid(),type:'expense',amount:3500, category:'💳 Bills',       accountId:accBDO,  date:ld(y,m,20),  desc:'BDO Credit Card',     status:'pending',originalDate:ld(y,m,20),  payableId:pyCC, createdAt:Date.now()-90*864e5},
+    {id:uid(),type:'expense',amount:900,  category:'💳 Bills',       accountId:accGCash,date:ld(y,m,24),  desc:'Home Credit',         status:'pending',originalDate:ld(y,m,24),  payableId:pyHP, createdAt:Date.now()-60*864e5},
+    {id:uid(),type:'expense',amount:2500, category:'🛒 Shopping',    accountId:accGCash,date:next(5),      desc:'Birthday gift shopping',status:'pending',originalDate:next(5),  createdAt:Date.now()},
+    {id:uid(),type:'income', amount:5000, category:'💰 Freelance',   accountId:accMaya, date:next(10),     desc:'Web design project payment',status:'pending',originalDate:next(10),createdAt:Date.now()},
+    {id:uid(),type:'expense',amount:1500, category:'🏥 Healthcare',  accountId:accGCash,date:next(3),      desc:'Annual checkup',      status:'pending',originalDate:next(3),    createdAt:Date.now()},
+    {id:uid(),type:'expense',amount:18000,category:'✈️ Travel',      accountId:accBDO,  date:next(45),     desc:'Palawan trip deposit',status:'pending',originalDate:next(45),   createdAt:Date.now()},
+  ];
+
+  // Add goal fund transactions
+  transactions.push(
+    {id:uid(),type:'income',amount:12500,category:'🎯 Goal Deposit',accountId:accBDO,  date:prev(30),desc:'Goal: Palawan Vacation',goalId:goalVac,  ref:'',createdAt:Date.now()-30*864e5},
+    {id:uid(),type:'income',amount:31000,category:'🎯 Goal Deposit',accountId:accMaya, date:prev(45),desc:'Goal: New iPhone 16',   goalId:goalPhone,ref:'',createdAt:Date.now()-45*864e5},
+    {id:uid(),type:'income',amount:85000,category:'🎯 Goal Deposit',accountId:accBDO,  date:prev(90),desc:'Goal: Emergency Fund',  goalId:goalEF,   ref:'',createdAt:Date.now()-90*864e5},
+  );
+
+  const logs = [
+    {id:uid(),action:'created',desc:'Demo data loaded for QA testing',entityId:'demo',entityType:'system',createdAt:Date.now()},
+  ];
+
+  return {accounts, payables, goals, recurring, budgets, transactions, planned, logs};
+}
+
+let _preDemo = null; // stores real user data while demo is active
+
+function enableDemoMode(){
+  if(db.settings.demoMode){showToast('Demo mode already active','warn');return;}
+  showConfirm('Load Demo Data?','Your current data will be hidden (not deleted). You can restore it anytime from Settings.',()=>{
+    // Save real user data
+    _preDemo = JSON.parse(JSON.stringify(db));
+    localStorage.setItem('finflow_pre_demo', JSON.stringify(_preDemo));
+    // Load demo data
+    const demo = buildDemoData();
+    db.accounts     = demo.accounts;
+    db.transactions = demo.transactions;
+    db.payables     = demo.payables;
+    db.goals        = demo.goals;
+    db.recurring    = demo.recurring;
+    db.budgets      = demo.budgets;
+    db.planned      = demo.planned;
+    db.logs         = demo.logs;
+    db.settings.demoMode = true;
+    saveDB();
+    applyDueRecurring();
+    saveDB();
+    _updateDemoUI(true);
+    renderHome();
+    showToast('🧪 Demo data loaded! Explore all features freely.','success');
+  });
+}
+
+function disableDemoMode(){
+  if(!db.settings.demoMode){showToast('Demo mode is not active','warn');return;}
+  showConfirm('Restore Your Data?','Demo data will be removed and your original data restored.',()=>{
+    // Try restoring from memory first, then localStorage
+    const saved = _preDemo || JSON.parse(localStorage.getItem('finflow_pre_demo')||'null');
+    if(saved){
+      Object.assign(db, saved);
+      _preDemo = null;
+      localStorage.removeItem('finflow_pre_demo');
+    } else {
+      // No backup found — just clear demo data
+      db.accounts=[]; db.transactions=[]; db.payables=[]; db.goals=[];
+      db.recurring=[]; db.budgets=[]; db.planned=[]; db.logs=[];
+    }
+    db.settings.demoMode = false;
+    saveDB();
+    _updateDemoUI(false);
+    renderHome();
+    showToast('✅ Your data has been restored!','success');
+  });
+}
+
+function _updateDemoUI(isDemo){
+  const onBtn  = document.getElementById('demo-on-btn');
+  const offBtn = document.getElementById('demo-off-btn');
+  const status = document.getElementById('demo-data-status');
+  const indicator = document.getElementById('demo-mode-indicator');
+  if(onBtn)  onBtn.style.display  = isDemo ? 'none'  : '';
+  if(offBtn) offBtn.style.display = isDemo ? ''      : 'none';
+  if(status) status.textContent   = isDemo ? '🟢 Demo mode is ACTIVE' : 'For QA, UI/UX review & feature testing';
+  if(indicator) indicator.style.display = isDemo ? '' : 'none';
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -8756,6 +9489,8 @@ initTheme();
 cleanDismissedAlerts();
 applyDueRecurring(); // auto-apply any due recurring transactions
 saveDB(); // save any auto-applied transactions
+// Restore demo mode UI if app was reloaded during demo
+if(db.settings.demoMode) _updateDemoUI(true);
 updateOverdueBadge();
 updatePayablesBadge();
 updateRecurringBadge();
