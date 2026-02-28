@@ -551,7 +551,31 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .acc-chip-type { font-size: 9px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
 .acc-chip-bal { font-family: var(--mono); font-size: 15px; font-weight: 600; }
 
-/* ── Mini report grid ── */
+/* ── Voice AI Settings ───────────────────────────── */
+.vai-field-row{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:8px;transition:border-color .2s}
+.vai-field-row.enabled{border-color:rgba(16,185,129,.35)}
+.vai-kw-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 9px;font-size:11px;color:var(--text);outline:none;margin-top:5px}
+.vai-kw-input:focus{border-color:var(--blue)}
+.vai-tab-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.vai-tab-btn{padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text3);font-size:10px;font-weight:700;cursor:pointer;transition:all .15s}
+.vai-tab-btn.active{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.vai-confirm-field{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg3);transition:all .2s}
+.vai-confirm-field.filled{background:var(--emerald-bg);border-color:rgba(16,185,129,.35)}
+.vai-confirm-field.empty{background:var(--bg3);border-color:rgba(148,163,184,.15)}
+.vai-quick-bar{position:fixed;bottom:72px;left:0;right:0;z-index:900;padding:0 12px 6px;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.vai-quick-bar.show{pointer-events:auto;opacity:1;transform:translateY(0)}
+.vai-quick-inner{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;box-shadow:0 4px 24px rgba(0,0,0,.28)}
+.vai-quick-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text);outline:none}
+.vai-quick-input:focus{border-color:var(--violet)}
+.vai-mic-btn{width:38px;height:38px;border-radius:10px;background:var(--violet-bg);border:1px solid var(--violet);color:var(--violet);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+.vai-mic-btn.listening{background:var(--rose-bg);border-color:var(--rose);color:var(--rose);animation:pulse-ring 1.2s infinite}
+.vai-parse-btn{background:var(--violet);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.vai-parse-btn:active{opacity:.8}
+.vai-conf-bar-wrap{background:var(--bg3);border-radius:8px;padding:10px 12px;margin-bottom:12px}
+.vai-conf-bar-track{background:var(--bg);border-radius:99px;height:5px;overflow:hidden;margin-top:6px}
+.vai-conf-bar-fill{height:100%;border-radius:99px;background:var(--emerald);transition:width .4s}
+
+
 .mini-report-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 16px; margin-bottom: 8px; }
 .mrc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 10px; text-align: center; }
 .mrc-val { font-family: var(--mono); font-size: 13px; font-weight: 600; }
@@ -1334,82 +1358,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </style>
 </head>
 <body>
-
-<!-- ▸ SPLASH SCREEN ──────────────────────────────────────────── -->
-<div id="splash-screen" style="
-  position:fixed;inset:0;z-index:99999;
-  background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:0;
-  transition:opacity 0.5s ease, transform 0.5s ease;
-">
-  <!-- Glow blob behind logo -->
-  <div style="position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.18) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none"></div>
-
-  <!-- Logo mark -->
-  <div id="splash-logo-wrap" style="
-    display:flex;align-items:center;justify-content:center;
-    width:88px;height:88px;border-radius:26px;
-    background:linear-gradient(135deg,#1D4ED8,#3B82F6);
-    box-shadow:0 8px 40px rgba(59,130,246,0.45);
-    margin-bottom:22px;
-    animation:splashPop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
-  ">
-    <span style="font-size:42px;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.3))">💸</span>
-  </div>
-
-  <!-- Brand name -->
-  <div style="
-    font-size:34px;font-weight:800;letter-spacing:-1px;
-    color:var(--text);
-    animation:splashFadeUp 0.5s 0.2s ease both;
-  ">Fin<span style="color:var(--blue)">Flow</span></div>
-
-  <!-- Tagline -->
-  <div style="
-    font-size:13px;color:var(--text3);font-weight:500;
-    margin-top:6px;letter-spacing:0.2px;
-    animation:splashFadeUp 0.5s 0.35s ease both;
-  ">Your Personal Money Tracker</div>
-
-  <!-- Loading dots -->
-  <div style="
-    display:flex;gap:7px;margin-top:40px;
-    animation:splashFadeUp 0.4s 0.5s ease both;
-  " id="splash-dots">
-    <div class="splash-dot" style="animation-delay:0s"></div>
-    <div class="splash-dot" style="animation-delay:0.18s"></div>
-    <div class="splash-dot" style="animation-delay:0.36s"></div>
-  </div>
-
-  <!-- Version -->
-  <div style="
-    position:absolute;bottom:32px;
-    font-size:10px;color:var(--text3);letter-spacing:0.3px;
-    animation:splashFadeUp 0.4s 0.6s ease both;
-  ">v3.0 · Powered by FinFlow</div>
-</div>
-
-<style>
-@keyframes splashPop {
-  from { transform: scale(0.4); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
-}
-@keyframes splashFadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes splashDot {
-  0%, 80%, 100% { transform: scale(0.5); opacity: 0.3; }
-  40%           { transform: scale(1);   opacity: 1; }
-}
-.splash-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--blue);
-  animation: splashDot 1.2s infinite ease-in-out both;
-}
-</style>
-
 <div id="app">
 
 <!-- ▸ HOME ─────────────────────────────────────────────────── -->
@@ -1504,7 +1452,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div id="home-mini-report"></div>
 
     <!-- Mini Calendar -->
-    <div class="sh"><span class="sh-label">📅 Calendar</span><span class="sh-link" onclick="showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50)">Upcoming Events →</span></div>
+    <div class="sh"><span class="sh-label">📅 Calendar</span><span class="sh-link" onclick="showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50)">Full View →</span></div>
     <div style="padding:0 16px;margin-bottom:16px"><div id="home-mini-cal"></div></div>
 
     <!-- Recent Transactions -->
@@ -1576,7 +1524,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <button class="screen-tab active" onclick="showGoalsTab('active',this)">🎯 Goals</button>
     <button class="screen-tab" onclick="showGoalsTab('achieved',this)">🏆 Achieved</button>
     <button class="screen-tab" onclick="showGoalsTab('recurring',this)">🔄 Recurring</button>
-    <button class="screen-tab" onclick="showGoalsTab('planned',this)">📋 Upcoming Events</button>
+    <button class="screen-tab" onclick="showGoalsTab('planned',this)">📅 Planned</button>
   </div>
   <div class="scroll-area" id="goals-content"></div>
 </div>
@@ -1867,6 +1815,25 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
     </div>
 
+    <!-- ── VOICE AI ── -->
+    <div class="settings-card">
+      <div class="settings-card-header">
+        <div class="settings-card-icon" style="background:var(--violet-bg)">🎙️</div>
+        <div>
+          <div class="settings-card-title">Voice AI — Record Settings</div>
+          <div class="settings-card-sub">Configure smart voice fields per record type</div>
+        </div>
+      </div>
+      <div class="settings-card-body" style="padding-bottom:8px">
+        <div style="font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:12px">
+          Choose which fields voice AI recognises when adding Payables, Goals, Recurring Rules, Planned Events, and Accounts.
+          Assign keywords per field so the parser knows exactly what you mean.
+        </div>
+        <div id="vai-settings-summary"></div>
+        <button class="btn-primary btn-secondary" style="width:100%;margin-top:10px" onclick="openVAISettings()">⚙️ Configure Voice AI Fields</button>
+      </div>
+    </div>
+
     <!-- ── ABOUT ── -->
     <div class="settings-card" style="margin-bottom:24px">
       <div style="padding:22px;text-align:center">
@@ -2038,7 +2005,78 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </div>
 
 <!-- ACCOUNT DETAIL MODAL -->
-<div class="modal-overlay" id="modal-account-detail">
+<!-- ▸ VOICE AI SETTINGS MODAL ──────────────────────────── -->
+<div class="modal-overlay" id="modal-vai-settings">
+  <div class="modal">
+    <div class="modal-title">🎙️ Voice AI Field Settings</div>
+    <div style="font-size:11px;color:var(--text3);text-align:center;margin:-10px 0 14px;line-height:1.6">
+      Pick which fields voice recognises per record type.<br>
+      Set keywords so the AI maps what you say to each field.
+    </div>
+
+    <!-- Record-type tab bar -->
+    <div class="vai-tab-bar" id="vai-type-tabs">
+      <button class="vai-tab-btn active" onclick="switchVAITab('payable',this)">💳 Payable</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('goal',this)">🎯 Goal</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('recurring',this)">🔄 Recurring</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('planned',this)">📅 Event</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('account',this)">🏦 Account</button>
+    </div>
+
+    <div id="vai-fields-panel" style="max-height:54vh;overflow-y:auto"></div>
+
+    <button class="btn-primary" style="margin-top:14px" onclick="saveVAISettings()">💾 Save Settings</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-vai-settings')">Cancel</button>
+  </div>
+</div>
+
+<!-- ▸ VOICE AI CONFIRM MODAL ────────────────────────────── -->
+<div class="modal-overlay" id="modal-vai-confirm">
+  <div class="modal">
+    <div class="modal-title" id="vai-confirm-title">🎙️ Voice AI — Confirm</div>
+    <div style="font-size:11px;color:var(--text3);text-align:center;margin:-10px 0 14px;line-height:1.5">
+      Review what the AI parsed from your voice input,<br>then confirm to pre-fill the form.
+    </div>
+
+    <!-- Confidence -->
+    <div class="vai-conf-bar-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">AI Confidence</span>
+        <span id="vai-conf-pct" style="font-size:12px;font-weight:800">—</span>
+      </div>
+      <div class="vai-conf-bar-track">
+        <div class="vai-conf-bar-fill" id="vai-conf-bar" style="width:0%"></div>
+      </div>
+      <div id="vai-raw-text" style="font-size:9px;color:var(--text3);margin-top:6px;font-style:italic;word-break:break-word"></div>
+    </div>
+
+    <!-- Parsed fields list -->
+    <div id="vai-confirm-fields" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
+
+    <!-- Unrecognised words hint -->
+    <div id="vai-unrecognised" style="display:none;background:var(--amber-bg);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:8px 10px;font-size:10px;color:var(--amber);margin-bottom:10px;line-height:1.5"></div>
+
+    <button class="btn-primary btn-success" onclick="executeVAIConfirm()">✅ Confirm &amp; Open Form</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-vai-confirm')">✕ Dismiss</button>
+  </div>
+</div>
+
+<!-- ▸ VOICE AI FLOATING QUICK-BAR ──────────────────────── -->
+<div class="vai-quick-bar" id="vai-quick-bar">
+  <div class="vai-quick-inner">
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="vai-mic-btn" id="vai-mic-btn" onclick="toggleVAIVoice()" title="Voice input">🎤</button>
+      <input class="vai-quick-input" id="vai-quick-input" type="text"
+        placeholder="Speak or type…"
+        oninput="onVAITextInput(this.value)"
+        onkeydown="if(event.key==='Enter'){parseAndConfirmVAI(this.value,'manual')}">
+      <button class="vai-parse-btn" onclick="parseAndConfirmVAI(document.getElementById('vai-quick-input').value,'manual')">Parse ›</button>
+    </div>
+    <div id="vai-bar-hint" style="font-size:9.5px;color:var(--text3);margin-top:5px;min-height:14px"></div>
+  </div>
+</div>
+
+
   <div class="modal" style="padding-bottom:24px">
     <div class="modal-handle"></div>
     <div id="account-detail-content"></div>
@@ -2101,7 +2139,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 <div class="modal-overlay" id="modal-planned">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="modal-planned-title">Add Upcoming Event</div>
+    <div class="modal-title" id="modal-planned-title">Add Planned Activity</div>
     <div class="type-tabs">
       <button class="type-tab active expense" onclick="setPlannedType('expense',this)">💸 Expense</button>
       <button class="type-tab income" onclick="setPlannedType('income',this)">💰 Income</button>
@@ -2149,7 +2187,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
       <div id="pl-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0;align-items:center;gap:6px"></div>
     </div>
-    <button class="btn-primary" id="pl-save-btn" onclick="savePlanned()">Save Event</button>
+    <button class="btn-primary" id="pl-save-btn" onclick="savePlanned()">Save Planned Activity</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-planned')">Cancel</button>
     <button class="btn-primary btn-danger" id="pl-delete-btn" style="display:none;margin-top:8px" onclick="deletePlanned()">Delete</button>
   </div>
@@ -2929,6 +2967,7 @@ function showScreen(name){
   else if(name==='payables'){renderPayables();updatePayablesBadge();}
   else if(name==='budget'){renderBudgetScreen();}
   else if(name==='settings'){loadPrivacyToggles();renderBudgetSettings();updateThemeUI();}
+  if(typeof _vaiOnScreenChange==='function') _vaiOnScreenChange(name);
 }
 function showReportsTab(tab,btn){
   currentReportsTab=tab;
@@ -4280,14 +4319,7 @@ function openHomeDayDetail(dateStr){
   // Goals with target date matching
   const dayGoals=db.goals.filter(g=>g.targetDate===dateStr&&g.status!=='achieved');
 
-  // Deduplicate: planned entries linked to payables already shown in dayPayables
-  const shownPayableIdsCheck = new Set(dayPayables.map(({py})=>py.id));
-  const dayPlannedFiltered_check = dayPlanned.filter(p=>
-    !(p.payableId && shownPayableIdsCheck.has(p.payableId)) &&
-    p.status!=='completed' && p.status!=='skipped'
-  );
-
-  if(!dayTxs.length&&!dayPlannedFiltered_check.length&&!dayPayables.length&&!dayRecurring.length&&!dayGoals.length){
+  if(!dayTxs.length&&!dayPlanned.length&&!dayPayables.length&&!dayRecurring.length&&!dayGoals.length){
     showToast('No activity on '+fmtDate(dateStr),'info');return;
   }
   const label=fmtDate(dateStr);
@@ -4316,26 +4348,14 @@ function openHomeDayDetail(dateStr){
     });
   }
 
-  // Planned activities — EXCLUDE entries already shown as Payables Due above
-  // (planned items with a payableId whose payable already appeared in dayPayables)
-  const shownPayableIds = new Set(dayPayables.map(({py})=>py.id));
-  const dayPlannedFiltered = dayPlanned.filter(p => {
-    // Skip if this planned entry belongs to a payable we already displayed
-    if(p.payableId && shownPayableIds.has(p.payableId)) return false;
-    // Skip completed/skipped entries
-    if(p.status==='completed'||p.status==='skipped') return false;
-    return true;
-  });
-
-  if(dayPlannedFiltered.length){
-    html+=`<div style="font-size:10px;font-weight:700;color:var(--planned);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📋 Upcoming Events (${dayPlannedFiltered.length})</div>`;
-    dayPlannedFiltered.forEach(p=>{
+  // Planned activities
+  if(dayPlanned.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📅 Planned (${dayPlanned.length})</div>`;
+    dayPlanned.forEach(p=>{
       const tc=p.type==='expense'?'var(--expense)':p.type==='income'?'var(--income)':'var(--transfer)';
-      const sign=p.type==='expense'?'-':p.type==='income'?'+':'⇄';
       const acc=db.accounts.find(a=>a.id===p.accountId);
       const statusColor=p.date<todayStr?'var(--rose)':p.date===todayStr?'var(--amber)':'var(--blue)';
       const statusLabel=p.date<todayStr?'OVERDUE':p.date===todayStr?'TODAY':'UPCOMING';
-      const statusBg=p.date<todayStr?'var(--rose-bg)':p.date===todayStr?'var(--amber-bg)':'var(--blue-bg)';
       const payable=p.payableId?db.payables.find(py=>py.id===p.payableId):null;
       const nameToShow=payable?payable.name:(p.desc||p.category.replace(/^\S+\s/,''));
       html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);margin-bottom:6px;cursor:pointer" onclick="closeModal('modal-day-detail');setTimeout(()=>{ showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50); },50)">
@@ -4343,9 +4363,9 @@ function openHomeDayDetail(dateStr){
           <div style="font-size:13px;font-weight:700">${p.category.split(' ')[0]} ${nameToShow}</div>
           <div style="font-size:10px;color:var(--text3);margin-top:2px">${p.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''}</div>
           ${p.desc&&!payable?`<div style="font-size:10px;color:var(--text3)">${p.desc}</div>`:''}
-          <span style="font-size:9px;font-weight:700;color:${statusColor};background:${statusBg};padding:1px 6px;border-radius:4px">${statusLabel}</span>
+          <span style="font-size:9px;font-weight:700;color:${statusColor};background:${p.date<todayStr?'var(--rose-bg)':p.date===todayStr?'var(--amber-bg)':'var(--blue-bg)'};padding:1px 6px;border-radius:4px">${statusLabel}</span>
         </div>
-        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${sign}${fmt(p.amount)}</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${fmt(p.amount)}</div>
       </div>`;
     });
   }
@@ -4725,10 +4745,10 @@ function calNav(dir){calMonth+=dir;if(calMonth<0){calMonth=11;calYear--;}if(calM
 function renderPlannedList(container){
   const pending=db.planned.filter(p=>p.status==='pending').sort((a,b)=>a.date.localeCompare(b.date));
   const done=db.planned.filter(p=>p.status==='done').sort((a,b)=>b.date.localeCompare(a.date));
-  if(!pending.length&&!done.length){container.innerHTML=`<div class="empty"><div class="empty-icon">📋</div><p>No upcoming events yet.<br>Tap + to schedule one.</p></div>`;return;}
+  if(!pending.length&&!done.length){container.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><p>No planned activities.<br>Tap + to add one.</p></div>`;return;}
   let html='';
-  if(pending.length){html+=`<div class="section-title">📋 Upcoming Events (${pending.length})</div>${renderPlannedItemsHTML(pending)}`;}
-  if(done.length){html+=`<div class="section-title" style="margin-top:16px">✅ Completed (${done.length})</div>${done.slice(0,15).map(p=>{const acc=db.accounts.find(a=>a.id===p.accountId);return`<div class="planned-item" style="opacity:0.55"><div class="planned-header"><div class="planned-cat">${p.category}</div><div class="planned-amount" style="color:var(--income)">${fmt(p.amount)}</div></div><div class="planned-meta"><span class="planned-badge done">DONE</span><span>${acc?acc.name:''}</span><span>${fmtDate(p.actualDate||p.date)}</span></div></div>`;}).join('')}`;}
+  if(pending.length){html+=`<div class="section-title">Pending (${pending.length})</div>${renderPlannedItemsHTML(pending)}`;}
+  if(done.length){html+=`<div class="section-title" style="margin-top:16px">Completed (${done.length})</div>${done.slice(0,15).map(p=>{const acc=db.accounts.find(a=>a.id===p.accountId);return`<div class="planned-item" style="opacity:0.55"><div class="planned-header"><div class="planned-cat">${p.category}</div><div class="planned-amount" style="color:var(--income)">${fmt(p.amount)}</div></div><div class="planned-meta"><span class="planned-badge done">DONE</span><span>${acc?acc.name:''}</span><span>${fmtDate(p.actualDate||p.date)}</span></div></div>`;}).join('')}`;}
   container.innerHTML=html;
 }
 function renderOverdue(container){
@@ -4779,13 +4799,13 @@ function renderPlannedItemsHTML(items){
 // ===== PLANNED CRUD =====
 function openAddPlanned(prefillDate){
   editingPlannedId=null;currentPlannedType='expense';
-  document.getElementById('modal-planned-title').textContent='Add Upcoming Event';
+  document.getElementById('modal-planned-title').textContent='Add Planned Activity';
   document.getElementById('pl-amount').value='';
   document.getElementById('pl-ref').value='';
   document.getElementById('pl-desc').value='';
   document.getElementById('pl-date').value=prefillDate||today();
   document.getElementById('pl-delete-btn').style.display='none';
-  document.getElementById('pl-save-btn').textContent='Save Event';
+  document.getElementById('pl-save-btn').textContent='Save Planned Activity';
   setPlannedType('expense',document.querySelector('#modal-planned .type-tab.expense'));
   fillAccDropdowns();openModal('modal-planned');
 }
@@ -4822,7 +4842,7 @@ function savePlanned(){
 function openEditPlanned(id){
   const pl=db.planned.find(p=>p.id===id);if(!pl)return;
   editingPlannedId=id;currentPlannedType=pl.type;
-  document.getElementById('modal-planned-title').textContent='Edit Upcoming Event';
+  document.getElementById('modal-planned-title').textContent='Edit Planned Activity';
   document.getElementById('pl-delete-btn').style.display='';
   document.getElementById('pl-save-btn').textContent='Update';
   setPlannedType(pl.type,document.querySelector(`#modal-planned .type-tab.${pl.type}`));
@@ -4836,7 +4856,7 @@ function openEditPlanned(id){
   else document.getElementById('pl-account').value=pl.accountId;
   fillAccDropdowns();openModal('modal-planned');
 }
-function deletePlanned(){showConfirm('Delete Upcoming Event?','',()=>{db.planned=db.planned.filter(p=>p.id!==editingPlannedId);saveDB();closeModal('modal-planned');showToast('Deleted','error');editingPlannedId=null;renderPlanned();updateOverdueBadge();});}
+function deletePlanned(){showConfirm('Delete Planned Activity?','',()=>{db.planned=db.planned.filter(p=>p.id!==editingPlannedId);saveDB();closeModal('modal-planned');showToast('Deleted','error');editingPlannedId=null;renderPlanned();updateOverdueBadge();});}
 
 // ===== CONFIRM PLANNED =====
 function openConfirmPlanned(id){
@@ -5330,48 +5350,41 @@ function generatePayableSchedule(py) {
     if(d<startDate) startDate=d;
   });
 
-  // ─── CORE: Build schedule rows from REMAINING balance ────────
-  // Row count  = ceil(remaining / monthly)          [NOT totalAmount]
-  // Row amount = min(monthly, remainingLeft)          [last row is partial]
-  //
-  // Example: total=10000, paid=4000, remaining=6000, monthly=1250, dueDay=5
-  //   #1 Mar 5  → 1250   #2 Apr 5 → 1250   #3 May 5 → 1250
-  //   #4 Jun 5  → 1250   #5 Jul 5 → 1000  ← last partial
-  const remaining    = Math.max(0, py.remaining || 0);
-  const monthly      = py.monthlyPayment;
-  const futureInstall = remaining > 0 ? Math.ceil(remaining / monthly) : 0;
-  const totalRows    = coveredMonths.size + futureInstall;
-  if(totalRows === 0) return [];
+  // Row count based on REMAINING (not totalAmount) so schedule shows only what's left
+  const remaining = Math.max(0, py.remaining||0);
+  const futureInstall = py.monthlyPayment>0 ? Math.ceil(remaining/py.monthlyPayment) : 0;
+  const totalRows = coveredMonths.size + futureInstall;
+  if(!totalRows) return [];
 
-  let iter        = new Date(startDate);
-  let futureCount = 0; // tracks future (unpaid) rows emitted
+  let iter=new Date(startDate);
+  let futureCount=0;
 
-  for(let i = 0; i < totalRows && i < 120; i++){
-    const dateStr  = iter.toISOString().split('T')[0];
-    const monthKey = iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0');
-    const isPaid   = coveredMonths.has(monthKey);
-    const payRef   = isPaid ? coveredMonths.get(monthKey) : null;
+  for(let i=0;i<Math.min(totalRows+2,120);i++){
+    const dateStr=iter.toISOString().split('T')[0];
+    const monthKey=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0');
+    const isPaid=coveredMonths.has(monthKey);
+    const payRef=isPaid?coveredMonths.get(monthKey):null;
 
     let rowAmount;
     if(isPaid){
-      rowAmount = monthly; // show standard monthly for paid rows
+      rowAmount=py.monthlyPayment;
     } else {
-      const alreadyAllocated = futureCount * monthly;
-      rowAmount = Math.min(monthly, Math.max(0, remaining - alreadyAllocated));
-      if(rowAmount <= 0) break;
+      if(futureCount>=futureInstall) break; // all future slots filled
+      const alreadyAllocated=futureCount*py.monthlyPayment;
+      rowAmount=Math.min(py.monthlyPayment, Math.max(0, remaining-alreadyAllocated));
+      if(rowAmount<=0) break;
       futureCount++;
     }
 
     let status;
-    if(isPaid)                status = 'paid';
-    else if(dateStr < todayStr)  status = 'overdue';
-    else if(dateStr === todayStr) status = 'current';
-    else                      status = 'upcoming';
+    if(isPaid) status='paid';
+    else if(dateStr<todayStr) status='overdue';
+    else if(dateStr===todayStr) status='current';
+    else status='upcoming';
 
-    schedule.push({ date:dateStr, monthKey, amount:rowAmount, status, payRef });
-
-    if(!isPaid && futureCount >= futureInstall) break;
-    iter = new Date(iter.getFullYear(), iter.getMonth()+1, py.dueDay);
+    schedule.push({date:dateStr,monthKey,amount:rowAmount,status,payRef});
+    if(!isPaid && futureCount>=futureInstall) break;
+    iter=new Date(iter.getFullYear(),iter.getMonth()+1,py.dueDay);
   }
   return schedule;
 }
@@ -8145,12 +8158,604 @@ function exportAllCSV(){
   showToast('Exported 4 CSV files! 🗂️','success');
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// VOICE AI SETTINGS  –  per-record field configuration & smart parser
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Schema: field definitions per record type ──────────────────────
+// formField: the real DOM id that will be filled on confirm
+const VAI_SCHEMA = {
+  payable: {
+    label:'Payable / Loan', icon:'💳',
+    openFn: 'openAddPayable',
+    triggerWords: ['loan','payable','utang','debt','credit','bnpl','installment'],
+    fields: [
+      {id:'name',          label:'Name / Description', type:'text',   enabled:true,  keywords:['loan','for','named','called','it\'s'],       formField:'py-name'    },
+      {id:'totalAmount',   label:'Total Amount',        type:'number', enabled:true,  keywords:['total','amount','principal','worth'],         formField:'py-total'   },
+      {id:'paidAmount',    label:'Already Paid',        type:'number', enabled:false, keywords:['paid','already paid','existing','covered'],   formField:'py-paid'    },
+      {id:'monthlyPayment',label:'Monthly Payment',     type:'number', enabled:true,  keywords:['monthly','per month','installment','mo'],     formField:'py-monthly' },
+      {id:'interestRate',  label:'Interest Rate (%)',   type:'number', enabled:false, keywords:['interest','rate','percent'],                  formField:'py-interest'},
+      {id:'dueDay',        label:'Due Day (of month)',  type:'number', enabled:true,  keywords:['due','every','day','on the'],                 formField:'py-due-day' },
+      {id:'notes',         label:'Notes',               type:'text',   enabled:false, keywords:['note','memo','details','about'],              formField:'py-notes'   },
+    ]
+  },
+  goal: {
+    label:'Savings Goal', icon:'🎯',
+    openFn: 'openAddGoal',
+    triggerWords: ['goal','save','saving','target','fund','dream'],
+    fields: [
+      {id:'name',   label:'Goal Name',     type:'text',   enabled:true,  keywords:['goal','for','save','named','called'], formField:'goal-name'   },
+      {id:'target', label:'Target Amount', type:'number', enabled:true,  keywords:['target','need','total','amount'],     formField:'goal-target' },
+      {id:'saved',  label:'Already Saved', type:'number', enabled:false, keywords:['saved','have','existing','already'],  formField:'goal-saved'  },
+    ]
+  },
+  recurring: {
+    label:'Recurring Rule', icon:'🔄',
+    openFn: 'openAddRecurring',
+    triggerWords: ['recurring','repeat','monthly','every','subscription','auto','regular'],
+    fields: [
+      {id:'name',   label:'Rule Name', type:'text',   enabled:true,  keywords:['named','called','for'],               formField:'recur-name'   },
+      {id:'amount', label:'Amount',    type:'number', enabled:true,  keywords:['amount','cost','pay','charge'],        formField:'recur-amount' },
+      {id:'dueDay', label:'Due Day',   type:'number', enabled:true,  keywords:['due','every','day','on the','nth'],    formField:'recur-due-day'},
+    ]
+  },
+  planned: {
+    label:'Upcoming Event', icon:'📅',
+    openFn: 'openAddPlanned',
+    triggerWords: ['plan','planned','schedule','upcoming','event','future','bill'],
+    fields: [
+      {id:'amount', label:'Amount',      type:'number', enabled:true,  keywords:['amount','cost','pay'],         formField:'pl-amount'},
+      {id:'desc',   label:'Description', type:'text',   enabled:true,  keywords:['for','about','description'],   formField:'pl-desc'  },
+    ]
+  },
+  account: {
+    label:'Account', icon:'🏦',
+    openFn: 'openAddAccount',
+    triggerWords: ['account','wallet','bank','gcash','maya','savings','cash'],
+    fields: [
+      {id:'name',    label:'Account Name', type:'text',   enabled:true,  keywords:['account','named','called','bank'],    formField:'acc-name'   },
+      {id:'balance', label:'Balance',      type:'number', enabled:true,  keywords:['balance','opening','amount','worth'],  formField:'acc-balance'},
+    ]
+  }
+};
+
+// ── Runtime state ──────────────────────────────────────────────────
+let vaiCurrentTab   = 'payable';
+let vaiPendingResult = null;
+let vaiVoiceRecog   = null;
+let vaiListening    = false;
+let vaiCurrentScreen = null; // which screen the bar is active for
+
+// ── Config: get merged defaults+saved from db.settings ─────────────
+function getVAIConfig() {
+  const saved = db.settings.vaiConfig || {};
+  const merged = {};
+  for (const [rtype, schema] of Object.entries(VAI_SCHEMA)) {
+    const s = saved[rtype] || {};
+    merged[rtype] = {
+      ...schema,
+      triggerWords: s.triggerWords !== undefined ? s.triggerWords : [...schema.triggerWords],
+      fields: schema.fields.map(f => {
+        const sf = (s.fields||[]).find(x => x.id === f.id) || {};
+        return {
+          ...f,
+          enabled:  sf.enabled  !== undefined ? sf.enabled  : f.enabled,
+          keywords: sf.keywords !== undefined ? [...sf.keywords] : [...f.keywords],
+        };
+      })
+    };
+  }
+  return merged;
+}
+
+function persistVAIConfig(config) {
+  if (!db.settings.vaiConfig) db.settings.vaiConfig = {};
+  for (const [rtype, cfg] of Object.entries(config)) {
+    db.settings.vaiConfig[rtype] = {
+      triggerWords: cfg.triggerWords,
+      fields: cfg.fields.map(f => ({ id:f.id, enabled:f.enabled, keywords:[...f.keywords] }))
+    };
+  }
+  saveDB();
+}
+
+// ── SETTINGS MODAL ─────────────────────────────────────────────────
+function openVAISettings() {
+  vaiCurrentTab = 'payable';
+  document.querySelectorAll('#vai-type-tabs .vai-tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  if (!window._vaiDraft) window._vaiDraft = {};
+  openModal('modal-vai-settings');
+  renderVAITab('payable');
+}
+
+function switchVAITab(type, btn) {
+  _vaiSaveTabDraft(vaiCurrentTab);
+  vaiCurrentTab = type;
+  document.querySelectorAll('#vai-type-tabs .vai-tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderVAITab(type);
+}
+
+function renderVAITab(type) {
+  const config = getVAIConfig();
+  // Apply any in-progress draft
+  if (window._vaiDraft && window._vaiDraft[type]) {
+    const d = window._vaiDraft[type];
+    config[type].triggerWords = d.triggerWords;
+    config[type].fields = d.fields;
+  }
+  const def = config[type];
+  const panel = document.getElementById('vai-fields-panel');
+
+  const enabledCount = def.fields.filter(f=>f.enabled).length;
+  const exampleParts = [def.triggerWords[0]||''];
+  def.fields.filter(f=>f.enabled).slice(0,3).forEach(f=>{
+    exampleParts.push((f.keywords[0]||'')+(f.type==='number'?' [amount]':' [text]'));
+  });
+
+  let html = `
+    <div style="background:var(--bg3);border-radius:10px;padding:11px 12px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">🔑 Trigger Keywords
+        <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);font-size:10px"> — comma-separated words that identify this record type</span>
+      </div>
+      <input type="text" id="vai-triggers-${type}" class="vai-kw-input"
+        value="${def.triggerWords.join(', ')}"
+        placeholder="e.g. loan, payable, utang">
+    </div>
+
+    <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">
+      📋 Fields &amp; Keywords
+      <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(${enabledCount} active)</span>
+    </div>`;
+
+  def.fields.forEach(f => {
+    html += `
+    <div class="vai-field-row ${f.enabled?'enabled':''}" id="vai-row-${type}-${f.id}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:${f.enabled?'8px':'0'}">
+        <label class="toggle-switch" style="flex-shrink:0">
+          <input type="checkbox" id="vai-chk-${type}-${f.id}" ${f.enabled?'checked':''}
+            onchange="vaiToggleField('${type}','${f.id}',this.checked)">
+          <div class="toggle-track"></div>
+        </label>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:700;color:var(--text)">${f.label}</div>
+          <div style="font-size:9.5px;color:var(--text3);margin-top:1px">
+            Type: <b>${f.type}</b> · fills <code style="font-size:9px;background:var(--bg2);padding:0 4px;border-radius:3px">#${f.formField}</code>
+          </div>
+        </div>
+        <div id="vai-badge-${type}-${f.id}" style="font-size:9px;font-weight:700;border-radius:6px;padding:2px 8px;border:1px solid;
+          ${f.enabled
+            ? 'color:var(--emerald);background:var(--emerald-bg);border-color:rgba(16,185,129,.3)'
+            : 'color:var(--text3);background:var(--bg);border-color:var(--border)'}">
+          ${f.enabled?'ON':'OFF'}
+        </div>
+      </div>
+      <div id="vai-kw-row-${type}-${f.id}" style="${f.enabled?'':'display:none'}">
+        <div style="font-size:9px;color:var(--text3);margin-bottom:4px">
+          🔑 Keywords that signal <b>${f.label}</b> — the value after these words is extracted:
+        </div>
+        <input type="text" id="vai-kw-${type}-${f.id}" class="vai-kw-input"
+          value="${f.keywords.join(', ')}"
+          placeholder="e.g. total, amount, principal">
+      </div>
+    </div>`;
+  });
+
+  html += `
+    <div style="background:var(--blue-bg);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:10px 12px;margin-top:8px">
+      <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:4px">💡 Example phrase after saving</div>
+      <div style="font-size:10px;color:var(--text3);line-height:1.5;font-style:italic">"${exampleParts.join(' ')}"</div>
+    </div>`;
+
+  panel.innerHTML = html;
+}
+
+function vaiToggleField(type, fieldId, enabled) {
+  const kwRow  = document.getElementById(`vai-kw-row-${type}-${fieldId}`);
+  const badge  = document.getElementById(`vai-badge-${type}-${fieldId}`);
+  const row    = document.getElementById(`vai-row-${type}-${fieldId}`);
+  if (kwRow) kwRow.style.display = enabled ? '' : 'none';
+  if (badge) {
+    badge.textContent = enabled ? 'ON' : 'OFF';
+    badge.style.color        = enabled ? 'var(--emerald)' : 'var(--text3)';
+    badge.style.background   = enabled ? 'var(--emerald-bg)' : 'var(--bg)';
+    badge.style.borderColor  = enabled ? 'rgba(16,185,129,.3)' : 'var(--border)';
+  }
+  if (row) row.classList.toggle('enabled', enabled);
+}
+
+// Collect current tab's DOM values into draft buffer (called on tab switch & save)
+function _vaiSaveTabDraft(type) {
+  const trigEl = document.getElementById(`vai-triggers-${type}`);
+  if (!trigEl) return; // tab not rendered yet
+  const config = getVAIConfig();
+  if (window._vaiDraft && window._vaiDraft[type]) {
+    // already have draft fields structure; update it
+  }
+  if (!window._vaiDraft) window._vaiDraft = {};
+  window._vaiDraft[type] = {
+    triggerWords: trigEl.value.split(',').map(s=>s.trim()).filter(Boolean),
+    fields: VAI_SCHEMA[type].fields.map(f => {
+      const chk = document.getElementById(`vai-chk-${type}-${f.id}`);
+      const kw  = document.getElementById(`vai-kw-${type}-${f.id}`);
+      return {
+        ...f,
+        enabled:  chk ? chk.checked : f.enabled,
+        keywords: kw  ? kw.value.split(',').map(s=>s.trim()).filter(Boolean) : [...f.keywords],
+      };
+    })
+  };
+}
+
+function saveVAISettings() {
+  _vaiSaveTabDraft(vaiCurrentTab);
+  const config = getVAIConfig();
+  if (window._vaiDraft) {
+    for (const [type, draft] of Object.entries(window._vaiDraft)) {
+      if (config[type]) {
+        config[type].triggerWords = draft.triggerWords;
+        config[type].fields       = draft.fields;
+      }
+    }
+  }
+  persistVAIConfig(config);
+  window._vaiDraft = {};
+  closeModal('modal-vai-settings');
+  renderVAISettingsSummary();
+  showToast('✅ Voice AI settings saved!','success');
+}
+
+function renderVAISettingsSummary() {
+  const el = document.getElementById('vai-settings-summary');
+  if (!el) return;
+  const config = getVAIConfig();
+  el.innerHTML = Object.entries(config).map(([type, def]) => {
+    const n = def.fields.filter(f=>f.enabled).length;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:12px;font-weight:600">${def.icon} ${def.label}</div>
+      <div style="font-size:10px;font-weight:700;color:${n>0?'var(--emerald)':'var(--text3)'}">${n} field${n!==1?'s':''} active</div>
+    </div>`;
+  }).join('')
+  + `<div style="font-size:10px;color:var(--text3);margin-top:8px;line-height:1.5">
+       Tap <b>Configure Voice AI Fields</b> to customise. Then use the 🎤 bar on Payables or Goals screens.
+     </div>`;
+}
+
+// ── PARSER ─────────────────────────────────────────────────────────
+// Spoken number words → numeric value (reuses same logic as aiParseText)
+const VAI_NUM_WORDS={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90,hundred:100,thousand:1000,million:1000000};
+
+function vaiSpokenToNum(str){
+  // Try plain digit first
+  const dig=str.match(/^[\s,]*(\d[\d,\.]*)/);
+  if(dig) return parseFloat(dig[1].replace(/,/g,''));
+  // Word-based
+  const words=str.toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/);
+  let total=0,cur=0;
+  for(const w of words){
+    const v=VAI_NUM_WORDS[w];
+    if(v===undefined) break;
+    if(v===1000000){total=(total+cur)*v;cur=0;}
+    else if(v===1000){total=(total+cur)*1000;cur=0;}
+    else if(v===100){cur*=100;}
+    else cur+=v;
+  }
+  return total+cur;
+}
+
+function vaiExtractAllNums(str){
+  return [...str.matchAll(/(\d[\d,\.]*)/g)].map(m=>parseFloat(m[1].replace(/,/g,''))).filter(n=>n>0);
+}
+
+// Find position of next field keyword in remaining text (for bounding text fields)
+function vaiNextKeywordPos(str, enabledFields, currentId){
+  let min=str.length;
+  for(const f of enabledFields){
+    if(f.id===currentId) continue;
+    for(const kw of f.keywords){
+      const p=str.toLowerCase().indexOf(kw.toLowerCase());
+      if(p>0&&p<min) min=p;
+    }
+  }
+  return min;
+}
+
+function parseVAIText(rawText) {
+  const text  = rawText.trim();
+  const lower = text.toLowerCase();
+  const config = getVAIConfig();
+
+  // 1. Detect record type via trigger words (longest match wins)
+  let detectedType=null, bestScore=0;
+  for(const [rtype,def] of Object.entries(config)){
+    let score=0;
+    for(const kw of def.triggerWords){
+      if(lower.includes(kw.toLowerCase())) score+=kw.length;
+    }
+    if(score>bestScore){bestScore=score;detectedType=rtype;}
+  }
+  if(!detectedType||bestScore===0) return null;
+
+  const def           = config[detectedType];
+  const enabledFields = def.fields.filter(f=>f.enabled);
+  const parsedValues  = {};
+  const allNums       = vaiExtractAllNums(lower);
+  let   numIdx        = 0;           // fallback number cursor
+  let   totalScore    = 0;
+
+  // 2. Per-field extraction
+  for(const field of enabledFields){
+    let found=false;
+    for(const kw of field.keywords){
+      const kwL = kw.toLowerCase();
+      const idx = lower.indexOf(kwL);
+      if(idx===-1) continue;
+
+      const afterKw = text.slice(idx+kw.length).trimStart();
+
+      if(field.type==='number'){
+        const val=vaiSpokenToNum(afterKw);
+        if(val>0){ parsedValues[field.id]=val; totalScore+=1.2; found=true; break; }
+
+      }else if(field.type==='text'){
+        const bound  = vaiNextKeywordPos(afterKw, enabledFields, field.id);
+        const phrase = afterKw.slice(0,bound).trim().split(/\s+/).slice(0,6).join(' ');
+        if(phrase){ parsedValues[field.id]=phrase; totalScore+=0.9; found=true; break; }
+      }
+    }
+
+    // Fallback: for number fields, consume the next unused digit in the utterance
+    if(!found && field.type==='number'){
+      // Skip numbers already assigned
+      const used=new Set(Object.values(parsedValues).filter(v=>typeof v==='number'));
+      while(numIdx<allNums.length && used.has(allNums[numIdx])) numIdx++;
+      if(numIdx<allNums.length){ parsedValues[field.id]=allNums[numIdx++]; totalScore+=0.4; }
+    }
+  }
+
+  // 3. Confidence
+  const fillRatio   = enabledFields.length ? Object.keys(parsedValues).length/enabledFields.length : 0;
+  const trigBoost   = bestScore>0 ? 0.25 : 0;
+  const scoreBoost  = Math.min(0.15, totalScore*0.03);
+  const confidence  = Math.min(0.97, fillRatio*0.60+trigBoost+scoreBoost);
+
+  // 4. Unrecognised words (content words not in any keyword list)
+  const allKW = new Set([
+    ...def.triggerWords.flatMap(k=>k.toLowerCase().split(/\s+/)),
+    ...enabledFields.flatMap(f=>f.keywords.flatMap(k=>k.toLowerCase().split(/\s+/)))
+  ]);
+  const unrecognised = lower.split(/\s+/).filter(w=>{
+    const clean=w.replace(/[^a-z0-9]/g,'');
+    return clean.length>2 && !allKW.has(clean) && !/^\d/.test(clean);
+  }).filter((w,i,a)=>a.indexOf(w)===i).slice(0,5);
+
+  return { recordType:detectedType, fields:parsedValues, enabledFields, rawText:text, confidence, unrecognised, def };
+}
+
+// ── CONFIRM MODAL ──────────────────────────────────────────────────
+function showVAIConfirm(parsed) {
+  if(!parsed){ showToast('⚠️ Could not detect record type. Include words like "loan", "goal", "recurring"…','warn'); return; }
+  vaiPendingResult = parsed;
+  const pct = Math.round(parsed.confidence*100);
+
+  document.getElementById('vai-confirm-title').textContent = `${parsed.def.icon} Voice AI — ${parsed.def.label}`;
+
+  // Confidence bar
+  const bar = document.getElementById('vai-conf-bar');
+  bar.style.width      = pct+'%';
+  bar.style.background = pct>=70 ? 'var(--emerald)' : pct>=40 ? 'var(--amber)' : 'var(--rose)';
+  const pctEl = document.getElementById('vai-conf-pct');
+  pctEl.textContent  = pct+'%';
+  pctEl.style.color  = pct>=70 ? 'var(--emerald)' : pct>=40 ? 'var(--amber)' : 'var(--rose)';
+  document.getElementById('vai-raw-text').textContent = `"${parsed.rawText}"`;
+
+  // Fields
+  const container = document.getElementById('vai-confirm-fields');
+  container.innerHTML = parsed.enabledFields.map(f=>{
+    const val   = parsed.fields[f.id];
+    const hasVal = val!==undefined;
+    const disp  = hasVal ? (f.type==='number' ? fmt(val) : val) : '—';
+    return `<div class="vai-confirm-field ${hasVal?'filled':'empty'}">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">${f.label}</div>
+        <div style="font-size:14px;font-weight:700;color:${hasVal?'var(--text)':'var(--text3)'}">${disp}</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:1px">fills <code style="font-size:8.5px;background:var(--bg2);padding:0 4px;border-radius:3px">#${f.formField}</code> · keywords: ${f.keywords.slice(0,3).join(', ')}</div>
+      </div>
+      <div style="font-size:11px;font-weight:700;flex-shrink:0;margin-left:8px;color:${hasVal?'var(--emerald)':'var(--amber)'}">
+        ${hasVal?'✅ Parsed':'⚠️ Missing'}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Unrecognised hint
+  const unrecEl = document.getElementById('vai-unrecognised');
+  if(parsed.unrecognised&&parsed.unrecognised.length){
+    unrecEl.style.display='';
+    unrecEl.innerHTML=`⚠️ <b>Unrecognised words:</b> "${parsed.unrecognised.join('", "')}" —
+      add them as field keywords in <b>Voice AI Settings</b> to improve accuracy.`;
+  }else{
+    unrecEl.style.display='none';
+  }
+
+  openModal('modal-vai-confirm');
+}
+
+// ── EXECUTE CONFIRM → open target form pre-filled ─────────────────
+function executeVAIConfirm() {
+  const parsed = vaiPendingResult;
+  if(!parsed) return;
+  closeModal('modal-vai-confirm');
+  vaiPendingResult = null;
+  const {recordType:type, fields} = parsed;
+
+  setTimeout(()=>{
+    if(type==='payable'){
+      openAddPayable();
+      setTimeout(()=>{
+        if(fields.name)          setFld('py-name', fields.name);
+        if(fields.totalAmount)   setFldNum('py-total',   fields.totalAmount);
+        if(fields.paidAmount)    setFldNum('py-paid',    fields.paidAmount);
+        if(fields.monthlyPayment)setFldNum('py-monthly', fields.monthlyPayment);
+        if(fields.interestRate)  setFldNum('py-interest',fields.interestRate);
+        if(fields.dueDay)        setFld('py-due-day', fields.dueDay);
+        if(fields.notes)         setFld('py-notes',   fields.notes);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='goal'){
+      openAddGoal();
+      setTimeout(()=>{
+        if(fields.name)  setFld('goal-name',  fields.name);
+        if(fields.target)setFldNum('goal-target',fields.target);
+        if(fields.saved) setFldNum('goal-saved', fields.saved);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='recurring'){
+      openAddRecurring();
+      setTimeout(()=>{
+        if(fields.name)  setFld('recur-name',   fields.name);
+        if(fields.amount)setFldNum('recur-amount',fields.amount);
+        if(fields.dueDay)setFld('recur-due-day', fields.dueDay);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='planned'){
+      openAddPlanned();
+      setTimeout(()=>{
+        if(fields.amount)setFldNum('pl-amount',fields.amount);
+        if(fields.desc)  setFld('pl-desc',    fields.desc);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='account'){
+      openAddAccount();
+      setTimeout(()=>{
+        if(fields.name)   setFld('acc-name',    fields.name);
+        if(fields.balance)setFldNum('acc-balance',fields.balance);
+        vaiFormToast(fields);
+      },220);
+    }
+  },160);
+}
+
+function setFld(id,val){ const el=document.getElementById(id); if(el){el.value=val;el.dispatchEvent(new Event('input',{bubbles:true}));} }
+function setFldNum(id,val){ setFld(id,val); }
+function vaiFormToast(fields){ showToast(`✨ Voice AI filled ${Object.keys(fields).length} field(s). Review &amp; save!`,'success'); }
+
+// ── FLOATING QUICK BAR ─────────────────────────────────────────────
+function showVAIBar(recordType){
+  vaiCurrentScreen = recordType;
+  const bar = document.getElementById('vai-quick-bar');
+  if(!bar) return;
+  bar.classList.add('show');
+  const inp  = document.getElementById('vai-quick-input');
+  const hint = document.getElementById('vai-bar-hint');
+  if(inp){
+    inp.value = '';
+    inp._vaiType = recordType;
+    const def    = getVAIConfig()[recordType]||{};
+    const eflds  = (def.fields||[]).filter(f=>f.enabled);
+    const ex     = [def.triggerWords?.[0]||'', ...eflds.slice(0,3).map(f=>`${f.keywords[0]||''} [${f.type==='number'?'0':'…'}]`)].join(' ');
+    inp.placeholder = eflds.length ? `e.g. "${ex}"` : 'Speak or type…';
+  }
+  if(hint) hint.textContent='';
+}
+
+function hideVAIBar(){
+  vaiCurrentScreen = null;
+  const bar = document.getElementById('vai-quick-bar');
+  if(bar) bar.classList.remove('show');
+  stopVAIVoice();
+}
+
+function onVAITextInput(text){
+  const hint = document.getElementById('vai-bar-hint');
+  if(!hint) return;
+  if(text.trim().length>3){
+    const parsed = parseVAIText(text);
+    if(parsed){
+      const pct=Math.round(parsed.confidence*100);
+      const col=pct>=60?'var(--emerald)':pct>=35?'var(--amber)':'var(--rose)';
+      hint.innerHTML=`${parsed.def.icon} <b>${parsed.def.label}</b> · ${Object.keys(parsed.fields).length} field(s) · <b style="color:${col}">${pct}% confidence</b>`;
+    }else{
+      hint.textContent='Add a trigger word: loan, goal, recurring, plan, account…';
+    }
+  }else{
+    hint.textContent='';
+  }
+}
+
+function parseAndConfirmVAI(text, source){
+  if(!text.trim()){ showToast('⚠️ Please speak or type a command first.','warn'); return; }
+  const parsed = parseVAIText(text);
+  showVAIConfirm(parsed);
+}
+
+// ── VOICE RECORDING for quick bar ─────────────────────────────────
+function toggleVAIVoice(){
+  if(!('SpeechRecognition' in window)&&!('webkitSpeechRecognition' in window)){
+    showToast('Voice input not supported on this browser. Try Chrome.','error'); return;
+  }
+  if(vaiListening){ stopVAIVoice(); return; }
+
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  vaiVoiceRecog=new SR();
+  vaiVoiceRecog.lang='en-US';
+  vaiVoiceRecog.continuous=false;
+  vaiVoiceRecog.interimResults=true;
+  vaiVoiceRecog.maxAlternatives=1;
+  vaiListening=true;
+
+  const micBtn=document.getElementById('vai-mic-btn');
+  const inp   =document.getElementById('vai-quick-input');
+  const hint  =document.getElementById('vai-bar-hint');
+  if(micBtn) micBtn.classList.add('listening');
+  if(hint)   hint.textContent='🎙️ Listening… speak now';
+
+  vaiVoiceRecog.onresult=e=>{
+    const transcript=Array.from(e.results).map(r=>r[0].transcript).join('');
+    if(inp) inp.value=transcript;
+    onVAITextInput(transcript);
+    if(e.results[e.results.length-1].isFinal){
+      stopVAIVoice();
+      parseAndConfirmVAI(transcript,'voice');
+    }
+  };
+  vaiVoiceRecog.onerror=ev=>{
+    stopVAIVoice();
+    if(ev.error==='not-allowed') showToast('Microphone access denied.','error');
+    else if(ev.error==='no-speech') showToast('No speech detected. Try again.','warn');
+    else showToast('Voice error: '+ev.error,'error');
+  };
+  vaiVoiceRecog.onend=()=>stopVAIVoice();
+  try{ vaiVoiceRecog.start(); }
+  catch(e){ stopVAIVoice(); showToast('Cannot start mic. Check permissions.','error'); }
+}
+
+function stopVAIVoice(){
+  vaiListening=false;
+  const micBtn=document.getElementById('vai-mic-btn');
+  if(micBtn) micBtn.classList.remove('listening');
+  if(vaiVoiceRecog){ try{vaiVoiceRecog.stop();}catch(e){} vaiVoiceRecog=null; }
+}
+
+// ── Hook VAI bar into screen navigation ───────────────────────────
+// Patching is done after the original showScreen exists (see INIT below)
+const VAI_SCREENS={payables:'payable', goals:'goal'};
+function _vaiOnScreenChange(name){
+  if(VAI_SCREENS[name]) showVAIBar(VAI_SCREENS[name]);
+  else hideVAIBar();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+
 // ===== INIT =====
 loadDB();
 initTheme();
 cleanDismissedAlerts();
-applyDueRecurring();
-saveDB();
+applyDueRecurring(); // auto-apply any due recurring transactions
+saveDB(); // save any auto-applied transactions
 updateOverdueBadge();
 updatePayablesBadge();
 updateRecurringBadge();
@@ -8159,34 +8764,12 @@ loadPrivacyToggles();
 updateEyeBtn();
 const savedCurrEl=document.querySelector(`#currency-select option[value="${db.settings.currency||'₱|PHP'}"]`);
 if(savedCurrEl)document.getElementById('currency-display').textContent=savedCurrEl.textContent;
+// Export modal live preview
 document.getElementById('export-period')?.addEventListener('change',updateExportPreview);
 document.getElementById('export-type')?.addEventListener('change',updateExportPreview);
 renderHome();
 setTimeout(checkOnboarding,600);
-
-// ── Splash screen dismiss ──────────────────────────────────────
-(function dismissSplash(){
-  const splash = document.getElementById('splash-screen');
-  if(!splash) return;
-  // Minimum display time 1.8s so the animation feels intentional
-  const minTime = 1800;
-  const start   = Date.now();
-  function hide(){
-    const elapsed = Date.now() - start;
-    const delay   = Math.max(0, minTime - elapsed);
-    setTimeout(()=>{
-      splash.style.opacity  = '0';
-      splash.style.transform= 'scale(1.04)';
-      setTimeout(()=>{ splash.style.display='none'; }, 520);
-    }, delay);
-  }
-  // Hide as soon as DOM is ready (renderHome already ran above)
-  if(document.readyState === 'complete'){
-    hide();
-  } else {
-    window.addEventListener('load', hide, {once:true});
-  }
-})();
+renderVAISettingsSummary();
 </script>
 </body>
 </html>
