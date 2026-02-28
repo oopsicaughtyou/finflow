@@ -551,7 +551,62 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .acc-chip-type { font-size: 9px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
 .acc-chip-bal { font-family: var(--mono); font-size: 15px; font-weight: 600; }
 
-/* ── Mini report grid ── */
+/* ── Voice AI Settings ───────────────────────────── */
+.vai-field-row{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:8px;transition:border-color .2s}
+.vai-field-row.enabled{border-color:rgba(16,185,129,.35)}
+.vai-kw-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 9px;font-size:11px;color:var(--text);outline:none;margin-top:5px}
+.vai-kw-input:focus{border-color:var(--blue)}
+.vai-tab-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.vai-tab-btn{padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text3);font-size:10px;font-weight:700;cursor:pointer;transition:all .15s}
+.vai-tab-btn.active{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.vai-confirm-field{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);transition:all .2s;gap:8px}
+.vai-confirm-field.filled{background:var(--card);border-color:rgba(16,185,129,.3);box-shadow:0 2px 8px rgba(16,185,129,.07)}
+.vai-confirm-field.empty{background:var(--bg3);border-color:rgba(245,158,11,.2);opacity:.75}
+.vai-quick-bar{position:fixed;bottom:72px;left:0;right:0;z-index:900;padding:0 12px 6px;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.vai-quick-bar.show{pointer-events:auto;opacity:1;transform:translateY(0)}
+.vai-quick-inner{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;box-shadow:0 4px 24px rgba(0,0,0,.28)}
+.vai-quick-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text);outline:none}
+.vai-quick-input:focus{border-color:var(--violet)}
+.vai-mic-btn{width:38px;height:38px;border-radius:10px;background:var(--violet-bg);border:1px solid var(--violet);color:var(--violet);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+.vai-mic-btn.listening{background:var(--rose-bg);border-color:var(--rose);color:var(--rose);animation:pulse-ring 1.2s infinite}
+.vai-parse-btn{background:var(--violet);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.vai-parse-btn:active{opacity:.8}
+.vai-conf-bar-wrap{background:var(--bg3);border-radius:8px;padding:10px 12px;margin-bottom:12px}
+.vai-conf-bar-track{background:var(--bg);border-radius:99px;height:5px;overflow:hidden;margin-top:6px}
+.vai-conf-bar-fill{height:100%;border-radius:99px;background:var(--emerald);transition:width .4s}
+
+/* ── Form VAI Smart Input (embedded in forms) ── */
+.form-vai-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:16px}
+.form-vai-header{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.form-vai-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;background:var(--violet-bg);color:var(--violet);text-transform:uppercase}
+.form-vai-bar{display:flex;gap:6px;align-items:center}
+.form-vai-input{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--text);outline:none;transition:border-color .15s}
+.form-vai-input:focus{border-color:var(--violet)}
+.form-vai-input::placeholder{color:var(--text3)}
+.form-vai-mic{width:36px;height:36px;border-radius:9px;background:var(--violet-bg);border:1px solid var(--violet);color:var(--violet);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+.form-vai-mic.listening{background:var(--rose-bg);border-color:var(--rose);color:var(--rose);animation:pulse-ring 1.2s infinite}
+.form-vai-result{background:var(--card);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:10px 12px;margin-top:8px;display:none}
+.form-vai-result.show{display:block}
+.form-vai-result-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.form-vai-result-lbl{font-size:10px;font-weight:700;color:var(--emerald);display:flex;align-items:center;gap:5px}
+.form-vai-conf-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--emerald-bg);color:var(--emerald)}
+.form-vai-conf-badge.mid{background:var(--amber-bg);color:var(--amber)}
+.form-vai-conf-badge.low{background:var(--rose-bg);color:var(--rose)}
+.form-vai-dismiss{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0;line-height:1}
+.form-vai-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.form-vai-field{background:var(--bg3);border-radius:7px;padding:6px 8px}
+.form-vai-field-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.form-vai-field-val{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.form-vai-field-val.empty{color:var(--text3);font-style:italic}
+.form-vai-meter{height:3px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.form-vai-meter-fill{height:100%;border-radius:99px;background:var(--emerald);transition:width .35s}
+.form-vai-actions{display:flex;gap:6px}
+.form-vai-apply{flex:1;background:var(--emerald);color:#fff;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.form-vai-apply:active{opacity:.8}
+.form-vai-edit{background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.form-vai-hint{font-size:10px;color:var(--text3);margin-top:6px;min-height:14px}
+
+
 .mini-report-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 16px; margin-bottom: 8px; }
 .mrc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 10px; text-align: center; }
 .mrc-val { font-family: var(--mono); font-size: 13px; font-weight: 600; }
@@ -828,6 +883,33 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .recur-btn.apply { background: var(--emerald-bg); border-color: rgba(0,200,150,.3); color: var(--emerald); }
 .recur-btn.pause { background: var(--amber-bg); border-color: rgba(255,176,32,.3); color: var(--amber); }
 .recur-btn.del { background: var(--rose-bg); border-color: rgba(255,77,106,.3); color: var(--rose); }
+.recur-btn.sched { background: var(--blue-bg); border-color: rgba(59,130,246,.3); color: var(--blue); }
+
+/* ══════════════════════════════
+   REPAYMENT / RECURRING SCHEDULE TABLE
+══════════════════════════════ */
+.schedule-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+.schedule-table { width: 100%; border-collapse: collapse; min-width: 320px; }
+.schedule-table thead tr { background: var(--bg3); }
+.schedule-table th { padding: 8px 10px; text-align: left; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text3); white-space: nowrap; }
+.schedule-table td { padding: 9px 10px; border-top: 1px solid var(--border); font-size: 11px; vertical-align: middle; }
+.schedule-table tr.sched-paid td { opacity: .6; }
+.schedule-table tr.sched-current td { background: rgba(245,158,11,.07); }
+.schedule-table tr.sched-overdue td { background: rgba(225,29,72,.05); }
+.sched-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 99px; font-size: 9px; font-weight: 700; white-space: nowrap; }
+.sched-badge.paid     { background: var(--emerald-bg); color: var(--emerald); }
+.sched-badge.applied  { background: var(--emerald-bg); color: var(--emerald); }
+.sched-badge.upcoming { background: var(--blue-bg); color: var(--blue); }
+.sched-badge.current  { background: var(--amber-bg); color: var(--amber); }
+.sched-badge.overdue  { background: var(--rose-bg); color: var(--rose); }
+.sched-badge.missed   { background: var(--rose-bg); color: var(--rose); }
+.sched-badge.paused   { background: var(--bg3); color: var(--text3); }
+.sched-summary { background: var(--bg3); border-radius: 12px; padding: 12px 14px; display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; text-align: center; margin-bottom: 12px; }
+.sched-sum-val { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+.sched-sum-lbl { font-size: 9px; color: var(--text3); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+.sched-progress-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.sched-progress-bar-wrap { flex: 1; background: var(--bg3); border-radius: 99px; height: 6px; overflow: hidden; }
+.sched-progress-bar { height: 100%; border-radius: 99px; transition: width .5s; }
 
 /* ══════════════════════════════
    BUDGET
@@ -1234,6 +1316,34 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 }
 .theme-card.selected .check-badge { display: flex; }
 
+/* ══════════════════════════════
+   PLANNED CALENDAR (previously missing)
+══════════════════════════════ */
+.cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.cal-nav button { background:var(--bg3); border:1px solid var(--border); border-radius:8px; width:30px; height:30px; color:var(--text); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
+.cal-nav button:active { background:var(--blue-bg); color:var(--blue); }
+.cal-month { font-size:14px; font-weight:700; color:var(--text); }
+.cal-day-labels { display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:4px; }
+.cal-dl { text-align:center; font-size:9px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.5px; padding:3px 0; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.cal-cell { display:flex; flex-direction:column; align-items:center; border-radius:7px; padding:3px 2px; min-height:50px; cursor:pointer; border:1px solid transparent; transition:background .1s; }
+.cal-cell:active { background:var(--blue-bg) !important; }
+.cal-cell.today { background:rgba(124,131,253,.10); border-color:rgba(124,131,253,.4); }
+.cal-cell.selected { background:var(--blue-bg); border-color:var(--blue); }
+.cal-cell.empty { pointer-events:none; }
+.cal-cell.empty-day { opacity:.4; }
+.cal-num { font-size:11px; font-weight:700; line-height:22px; width:22px; height:22px; text-align:center; display:flex; align-items:center; justify-content:center; flex-shrink:0; border-radius:50%; }
+.cal-cell.today .cal-num { background:var(--blue); color:#fff; }
+.cal-exp { font-size:8px; font-weight:700; color:var(--rose); line-height:1.2; text-align:center; }
+.cal-inc { font-size:8px; font-weight:700; color:var(--emerald); line-height:1.2; text-align:center; }
+.cal-dot { width:5px; height:5px; border-radius:50%; margin:1px 1px 0; display:inline-block; }
+.cal-dot.overdue { background:var(--rose); }
+.cal-dot.planned { background:var(--amber); }
+.day-detail-panel { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; margin-top:10px; }
+.day-detail-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.day-detail-close { background:var(--bg3); border:1px solid var(--border); border-radius:8px; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; color:var(--text2); }
+.day-detail-close:active { background:var(--blue-bg); color:var(--blue); }
+
 /* ══ UPGRADED SETTINGS SCREEN ══ */
 .settings-card {
   background: var(--card); border: 1px solid var(--border);
@@ -1292,7 +1402,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         🔔<span class="bell-badge" id="bell-badge" style="display:none;position:absolute;top:-2px;right:-2px;background:var(--rose);color:#fff;font-size:7px;font-weight:700;min-width:14px;height:14px;border-radius:99px;display:none;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid var(--bg)"></span>
       </button>
       <button class="icon-btn" id="global-eye-btn" onclick="toggleGlobalPrivacy()" title="Toggle visibility">👁️</button>
-      <button class="icon-btn" onclick="showScreen('settings')" title="Settings" style="font-size:15px">⚙️</button>
+
     </div>
   </div>
 
@@ -1736,6 +1846,48 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
     </div>
 
+    <!-- ── VOICE AI ── -->
+    <div class="settings-card">
+      <div class="settings-card-header">
+        <div class="settings-card-icon" style="background:var(--violet-bg)">🎙️</div>
+        <div>
+          <div class="settings-card-title">Voice AI — Record Settings</div>
+          <div class="settings-card-sub">Configure smart voice fields per record type</div>
+        </div>
+      </div>
+      <div class="settings-card-body" style="padding-bottom:8px">
+        <div style="font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:12px">
+          Choose which fields voice AI recognises when adding Payables, Goals, Recurring Rules, Planned Events, and Accounts.
+          Assign keywords per field so the parser knows exactly what you mean.
+        </div>
+        <div id="vai-settings-summary"></div>
+        <button class="btn-primary btn-secondary" style="width:100%;margin-top:10px" onclick="openVAISettings()">⚙️ Configure Voice AI Fields</button>
+      </div>
+    </div>
+
+    <!-- ── DEMO DATA ── -->
+    <div class="settings-card">
+      <div class="settings-card-header">
+        <div class="settings-card-icon" style="background:var(--emerald-bg)">🧪</div>
+        <div>
+          <div class="settings-card-title">Demo / Sample Data</div>
+          <div class="settings-card-sub" id="demo-data-status">For QA, UI/UX review &amp; feature testing</div>
+        </div>
+      </div>
+      <div class="settings-card-body">
+        <div style="font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:12px">
+          Load pre-built sample data covering all features: accounts, transactions, payables, goals, recurring rules, budgets and planned events. Your real data is safely preserved and restored when demo mode is turned off.
+        </div>
+        <div id="demo-mode-indicator" style="display:none;background:var(--amber-bg);border:1px solid var(--amber);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:11px;color:var(--amber);font-weight:600;text-align:center">
+          🧪 DEMO MODE ACTIVE — All data shown is sample data
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="demo-on-btn" class="btn-primary" style="flex:1;background:var(--emerald)" onclick="enableDemoMode()">🚀 Load Demo Data</button>
+          <button id="demo-off-btn" class="btn-primary btn-secondary" style="flex:1;display:none" onclick="disableDemoMode()">↩ Restore My Data</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ── ABOUT ── -->
     <div class="settings-card" style="margin-bottom:24px">
       <div style="padding:22px;text-align:center">
@@ -1907,7 +2059,79 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </div>
 
 <!-- ACCOUNT DETAIL MODAL -->
-<div class="modal-overlay" id="modal-account-detail">
+<!-- ▸ VOICE AI SETTINGS MODAL ──────────────────────────── -->
+<div class="modal-overlay" id="modal-vai-settings">
+  <div class="modal">
+    <div class="modal-title">🎙️ Voice AI Field Settings</div>
+    <div style="font-size:11px;color:var(--text3);text-align:center;margin:-10px 0 14px;line-height:1.6">
+      Pick which fields voice recognises per record type.<br>
+      Set keywords so the AI maps what you say to each field.
+    </div>
+
+    <!-- Record-type tab bar -->
+    <div class="vai-tab-bar" id="vai-type-tabs">
+      <button class="vai-tab-btn" onclick="switchVAITab('payable',this)">💳 Payable</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('goal',this)">🎯 Goal</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('recurring',this)">🔄 Recurring</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('planned',this)">📅 Event</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('account',this)">🏦 Account</button>
+      <button class="vai-tab-btn" onclick="switchVAITab('budget',this)">📊 Budget</button>
+    </div>
+
+    <div id="vai-fields-panel" style="max-height:54vh;overflow-y:auto"></div>
+
+    <button class="btn-primary" style="margin-top:14px" onclick="saveVAISettings()">💾 Save Settings</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-vai-settings')">Cancel</button>
+  </div>
+</div>
+
+<!-- ▸ VOICE AI CONFIRM MODAL ────────────────────────────── -->
+<div class="modal-overlay" id="modal-vai-confirm">
+  <div class="modal">
+    <div class="modal-title" id="vai-confirm-title">🎙️ Voice AI — Confirm</div>
+    <div style="font-size:11px;color:var(--text3);text-align:center;margin:-10px 0 14px;line-height:1.5">
+      Review what the AI parsed from your voice input,<br>then confirm to pre-fill the form.
+    </div>
+
+    <!-- Confidence -->
+    <div class="vai-conf-bar-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px">AI Confidence</span>
+        <span id="vai-conf-pct" style="font-size:12px;font-weight:800">—</span>
+      </div>
+      <div class="vai-conf-bar-track">
+        <div class="vai-conf-bar-fill" id="vai-conf-bar" style="width:0%"></div>
+      </div>
+      <div id="vai-raw-text" style="font-size:9px;color:var(--text3);margin-top:6px;font-style:italic;word-break:break-word"></div>
+    </div>
+
+    <!-- Parsed fields list -->
+    <div id="vai-confirm-fields" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
+
+    <!-- Unrecognised words hint -->
+    <div id="vai-unrecognised" style="display:none;background:var(--amber-bg);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:8px 10px;font-size:10px;color:var(--amber);margin-bottom:10px;line-height:1.5"></div>
+
+    <button class="btn-primary btn-success" onclick="executeVAIConfirm()">✅ Confirm &amp; Open Form</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-vai-confirm')">✕ Dismiss</button>
+  </div>
+</div>
+
+<!-- ▸ VOICE AI FLOATING QUICK-BAR ──────────────────────── -->
+<div class="vai-quick-bar" id="vai-quick-bar">
+  <div class="vai-quick-inner">
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="vai-mic-btn" id="vai-mic-btn" onclick="toggleVAIVoice()" title="Voice input">🎤</button>
+      <input class="vai-quick-input" id="vai-quick-input" type="text"
+        placeholder="Speak or type…"
+        oninput="onVAITextInput(this.value)"
+        onkeydown="if(event.key==='Enter'){parseAndConfirmVAI(this.value,'manual')}">
+      <button class="vai-parse-btn" onclick="parseAndConfirmVAI(document.getElementById('vai-quick-input').value,'manual')">Parse ›</button>
+    </div>
+    <div id="vai-bar-hint" style="font-size:9.5px;color:var(--text3);margin-top:5px;min-height:14px"></div>
+  </div>
+</div>
+
+
   <div class="modal" style="padding-bottom:24px">
     <div class="modal-handle"></div>
     <div id="account-detail-content"></div>
@@ -1923,9 +2147,45 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-account-title">Add Account</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="account-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="account-vai-input"
+          placeholder='e.g. "GCash wallet balance 5000" or "BDO savings 20000"'
+          oninput="onFormVAI('account',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('account')">
+        <button class="form-vai-mic" id="account-vai-mic" onclick="toggleFormVAIVoice('account')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="account-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('account')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="account-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="account-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('account')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="account-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="account-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('account')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('account-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="account-vai-hint">🏦 Account — speak or type to pre-fill the form</div>
+    </div>
     <div class="form-group">
       <label class="form-label">Account Name *</label>
-      <input type="text" class="form-input" id="acc-name" placeholder="e.g. BDO Savings, GCash, Cash Wallet">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="acc-name" placeholder="e.g. BDO Savings, GCash, Cash Wallet" style="flex:1">
+        <button type="button" class="voice-btn" id="acc-voice-btn" onclick="genericVoice('acc-voice-btn','acc-name',null,'acc-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="acc-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
     </div>
     <div class="form-group">
       <label class="form-label">Account Type *</label>
@@ -1967,6 +2227,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-planned-title">Add Planned Activity</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="planned-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="planned-vai-input"
+          placeholder='e.g. "plan transport 500 March 18" or "bill food 150 for next week"'
+          oninput="onFormVAI('planned',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('planned')">
+        <button class="form-vai-mic" id="planned-vai-mic" onclick="toggleFormVAIVoice('planned')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="planned-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('planned')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="planned-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="planned-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('planned')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="planned-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="planned-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('planned')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('planned-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="planned-vai-hint">📅 Upcoming Event — speak or type to pre-fill the form</div>
+    </div>
     <div class="type-tabs">
       <button class="type-tab active expense" onclick="setPlannedType('expense',this)">💸 Expense</button>
       <button class="type-tab income" onclick="setPlannedType('income',this)">💰 Income</button>
@@ -2095,9 +2387,45 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-payable-title">Add Payable</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="payable-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="payable-vai-input"
+          placeholder='e.g. "BDO loan total 15000 monthly 3000 due 5"'
+          oninput="onFormVAI('payable',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('payable')">
+        <button class="form-vai-mic" id="payable-vai-mic" onclick="toggleFormVAIVoice('payable')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="payable-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('payable')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="payable-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="payable-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('payable')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="payable-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="payable-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('payable')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('payable-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="payable-vai-hint">💳 Payable / Loan — speak or type to pre-fill the form</div>
+    </div>
     <div class="form-group">
       <label class="form-label">Payable Name *</label>
-      <input type="text" class="form-input" id="py-name" placeholder="e.g. BDO Credit Card, SSS Loan">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="py-name" placeholder="e.g. BDO Credit Card, SSS Loan" style="flex:1">
+        <button type="button" class="voice-btn" id="py-voice-btn" onclick="genericVoice('py-voice-btn','py-name',null,'py-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="py-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
     </div>
     <div class="form-group">
       <label class="form-label">Type *</label>
@@ -2275,6 +2603,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-budget-title">Add Budget Limit</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="budget-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="budget-vai-input"
+          placeholder='e.g. "budget food 5000 monthly" or "set limit 3000"'
+          oninput="onFormVAI('budget',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('budget')">
+        <button class="form-vai-mic" id="budget-vai-mic" onclick="toggleFormVAIVoice('budget')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="budget-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('budget')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="budget-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="budget-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('budget')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="budget-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="budget-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('budget')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('budget-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="budget-vai-hint">📊 Budget — speak or type to pre-fill the form</div>
+    </div>
     <div class="form-group">
       <label class="form-label">Category *</label>
       <select class="form-input" id="budget-category"></select>
@@ -2309,13 +2669,52 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-goal-title">New Savings Goal</div>
-    <div class="form-group">
-      <label class="form-label">Goal Name *</label>
-      <input type="text" class="form-input" id="goal-name" placeholder="e.g. Vacation, New Phone, Emergency Fund">
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="goal-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="goal-vai-input"
+          placeholder='e.g. "goal vacation 50000" or "save for new phone 25000"'
+          oninput="onFormVAI('goal',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('goal')">
+        <button class="form-vai-mic" id="goal-vai-mic" onclick="toggleFormVAIVoice('goal')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="goal-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('goal')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="goal-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="goal-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('goal')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="goal-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="goal-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('goal')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('goal-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="goal-vai-hint">🎯 Savings Goal — speak or type to pre-fill the form</div>
     </div>
     <div class="form-group">
-      <label class="form-label">Emoji Icon</label>
-      <input type="text" class="form-input" id="goal-emoji" placeholder="🎯" maxlength="4" style="font-size:22px;text-align:center">
+      <label class="form-label">Goal Name *</label>
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="goal-name" placeholder="e.g. Vacation, New Phone, Emergency Fund" style="flex:1">
+        <button type="button" class="voice-btn" id="goal-voice-btn" onclick="genericVoice('goal-voice-btn','goal-name',null,'goal-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="goal-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Icon</label>
+      <input type="hidden" id="goal-emoji" value="🎯">
+      <div id="goal-icon-picker" style="display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px">
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:4px">Tap to select an icon for your goal</div>
     </div>
     <div class="form-group">
       <label class="form-label">Target Amount *</label>
@@ -2399,13 +2798,49 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-recur-title">New Recurring Transaction</div>
+    <!-- Form VAI Smart Input -->
+    <div class="form-vai-wrap" id="recurring-vai-wrap">
+      <div class="form-vai-header">🎙️ Smart Input <span class="form-vai-badge">AI</span></div>
+      <div class="form-vai-bar">
+        <input type="text" class="form-vai-input" id="recurring-vai-input"
+          placeholder='e.g. "Netflix subscription 299 monthly" or "rent 8000 every 5th"'
+          oninput="onFormVAI('recurring',this.value)"
+          onkeydown="if(event.key==='Enter')applyFormVAI('recurring')">
+        <button class="form-vai-mic" id="recurring-vai-mic" onclick="toggleFormVAIVoice('recurring')" title="Voice input">🎤</button>
+      </div>
+      <div class="voice-status-bar" id="recurring-vai-voice-status">
+        <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+        <span>Listening… speak clearly</span>
+        <button onclick="stopFormVAIVoice('recurring')" style="margin-left:auto;background:none;border:none;color:var(--rose);cursor:pointer;font-size:13px">✕</button>
+      </div>
+      <div class="form-vai-result" id="recurring-vai-result">
+        <div class="form-vai-result-hdr">
+          <div class="form-vai-result-lbl">✨ AI Detected</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="form-vai-conf-badge" id="recurring-vai-conf">--</span>
+            <button class="form-vai-dismiss" onclick="dismissFormVAI('recurring')">✕</button>
+          </div>
+        </div>
+        <div class="form-vai-fields" id="recurring-vai-fields"></div>
+        <div class="form-vai-meter"><div class="form-vai-meter-fill" id="recurring-vai-meter" style="width:0%"></div></div>
+        <div class="form-vai-actions">
+          <button class="form-vai-apply" onclick="applyFormVAI('recurring')">✓ Apply to Form</button>
+          <button class="form-vai-edit" onclick="document.getElementById('recurring-vai-input').focus()">✏️ Edit</button>
+        </div>
+      </div>
+      <div class="form-vai-hint" id="recurring-vai-hint">🔄 Recurring Rule — speak or type to pre-fill the form</div>
+    </div>
     <div class="type-tabs">
       <button class="type-tab active expense" onclick="setRecurType('expense',this)">💸 Expense</button>
       <button class="type-tab income" onclick="setRecurType('income',this)">💰 Income</button>
     </div>
     <div class="form-group">
       <label class="form-label">Name / Description *</label>
-      <input type="text" class="form-input" id="recur-name" placeholder="e.g. Netflix, Salary, Rent">
+      <div style="display:flex;gap:8px;align-items:flex-start">
+        <input type="text" class="form-input" id="recur-name" placeholder="e.g. Netflix, Salary, Rent" style="flex:1">
+        <button type="button" class="voice-btn" id="recur-voice-btn" onclick="genericVoice('recur-voice-btn','recur-name',null,'recur-voice-status')" title="Voice input">🎤</button>
+      </div>
+      <div id="recur-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
     </div>
     <div class="form-group">
       <label class="form-label">Amount *</label>
@@ -2432,6 +2867,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <label class="form-label">Start Date *</label>
       <input type="date" class="form-input" id="recur-start">
     </div>
+    <div class="form-group" id="recur-due-day-group">
+      <label class="form-label">Due Day of Month <span style="font-size:10px;color:var(--text3);font-weight:400">(Monthly only — leave blank to use start date day)</span></label>
+      <input type="number" class="form-input" id="recur-due-day" placeholder="e.g. 25" min="1" max="31">
+    </div>
     <div class="form-group">
       <label class="form-label">End Date (optional)</label>
       <input type="date" class="form-input" id="recur-end" placeholder="Leave blank for no end">
@@ -2439,6 +2878,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <button class="btn-primary" id="recur-save-btn" onclick="saveRecurring()">Save Rule</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-recur')">Cancel</button>
     <button class="btn-primary btn-danger" id="recur-delete-btn" style="display:none;margin-top:8px" onclick="deleteRecurring()">Delete Rule</button>
+  </div>
+</div>
+
+<!-- PAYABLE REPAYMENT SCHEDULE MODAL -->
+<div class="modal-overlay" id="modal-payable-schedule">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="payable-schedule-title">📅 Repayment Schedule</div>
+    <div id="payable-schedule-summary"></div>
+    <div id="payable-schedule-progress" style="margin-bottom:12px"></div>
+    <div id="payable-schedule-table"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn-primary btn-success" id="payable-schedule-pay-btn" onclick="" style="flex:1">💰 Record Payment</button>
+      <button class="btn-primary btn-secondary" style="flex:1" onclick="closeModal('modal-payable-schedule')">Close</button>
+    </div>
+    <button class="btn-primary btn-secondary" id="payable-schedule-edit-btn" style="margin-top:8px" onclick="">✏️ Edit Payable</button>
+  </div>
+</div>
+
+<!-- RECURRING SCHEDULE MODAL -->
+<div class="modal-overlay" id="modal-recur-schedule">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="recur-schedule-title">📅 Recurring Schedule</div>
+    <div id="recur-schedule-summary"></div>
+    <div id="recur-schedule-table"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn-primary btn-success" id="recur-schedule-apply-btn" onclick="" style="flex:1">▶ Apply Now</button>
+      <button class="btn-primary btn-secondary" style="flex:1" onclick="closeModal('modal-recur-schedule')">Close</button>
+    </div>
+    <button class="btn-primary btn-secondary" id="recur-schedule-pause-btn" style="margin-top:8px" onclick="">⏸ Pause Rule</button>
+    <button class="btn-primary btn-secondary" id="recur-schedule-edit-btn" style="margin-top:8px" onclick="">✏️ Edit Rule</button>
   </div>
 </div>
 
@@ -2702,6 +3173,9 @@ function maskSpan(n,isHidden,extraStyle=''){
 function getCurrency(){return(db.settings.currency||'₱|PHP').split('|')[0];}
 function fmt(n){const s=getCurrency();return s+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function today(){return new Date().toISOString().split('T')[0];}
+// localDate: convert a Date to YYYY-MM-DD using LOCAL timezone (avoids UTC shift for UTC+8 etc.)
+function localDate(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function localMonthEnd(year,month){return localDate(new Date(year,month+1,0));} // last day of given month
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
 function fmtDate(d){return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 function fmtShort(d){return new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});}
@@ -2711,7 +3185,7 @@ function getDateRange(period){
   const d=new Date();let start,end;
   if(period==='daily'){start=end=d.toISOString().split('T')[0];}
   else if(period==='weekly'){const day=d.getDay();const s=new Date(d);s.setDate(d.getDate()-day);const e=new Date(s);e.setDate(s.getDate()+6);start=s.toISOString().split('T')[0];end=e.toISOString().split('T')[0];}
-  else if(period==='monthly'){const y=d.getFullYear(),m=d.getMonth();start=new Date(y,m,1).toISOString().split('T')[0];end=new Date(y,m+1,0).toISOString().split('T')[0];}
+  else if(period==='monthly'){const y=d.getFullYear(),m=d.getMonth();start=new Date(y,m,1).toISOString().split('T')[0];end=localMonthEnd(y,m);}
   else{const y=d.getFullYear();start=`${y}-01-01`;end=`${y}-12-31`;}
   return{start,end};
 }
@@ -2739,6 +3213,7 @@ function showScreen(name){
   else if(name==='payables'){renderPayables();updatePayablesBadge();}
   else if(name==='budget'){renderBudgetScreen();}
   else if(name==='settings'){loadPrivacyToggles();renderBudgetSettings();updateThemeUI();}
+  if(typeof _vaiOnScreenChange==='function') _vaiOnScreenChange(name);
 }
 function showReportsTab(tab,btn){
   currentReportsTab=tab;
@@ -3059,6 +3534,32 @@ function viewTx(id){
     if(tx.receipt.startsWith('data:image/'))receiptHtml=`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:6px">RECEIPT</div><img src="${tx.receipt}" style="width:100%;border-radius:8px;max-height:220px;object-fit:cover"></div>`;
     else receiptHtml=`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:4px">ATTACHMENT</div><div style="font-size:13px;color:var(--accent)">📎 File attached</div></div>`;
   }
+
+  // Payable multi-month badge
+  let payableHtml='';
+  if(tx.payableId){
+    const py=db.payables.find(p=>p.id===tx.payableId);
+    if(py){
+      // Find the payment record for this transaction
+      const payRec=(py.payments||[]).find(p=>p.id&&tx.desc&&tx.desc.includes(py.name)&&p.date===tx.date)||
+                   (py.payments||[]).slice().reverse().find(p=>p.date===tx.date);
+      const months=payRec?payRec.months||1:
+        (tx.desc&&tx.desc.match(/\((\d+) months?\)/)?parseInt(tx.desc.match(/\((\d+) months?\)/)[1]):1);
+      const ordinal=n=>n===1?'st':n===2?'nd':n===3?'rd':'th';
+      const remainAfter=fmt(py.remaining||0);
+      payableHtml=`<div class="card-sm" style="background:var(--violet-bg);border-color:rgba(20,184,166,.25)">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">💳 Payable Payment</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="font-size:13px;font-weight:700">${py.name}</div>
+          ${months>1?`<span style="font-size:10px;font-weight:700;background:var(--amber-bg);color:var(--amber);border-radius:6px;padding:2px 8px">${months} Months Advance</span>`:'<span style="font-size:10px;font-weight:700;background:var(--emerald-bg);color:var(--emerald);border-radius:6px;padding:2px 8px">1 Month</span>'}
+        </div>
+        ${months>1?`<div style="font-size:11px;color:var(--text2);margin-bottom:2px">⏩ Advance payment covering <strong>${months} billing cycle${months>1?'s':''}</strong></div>`:''}
+        <div style="font-size:11px;color:var(--text3)">Remaining balance after payment: <strong style="color:${py.remaining>0?'var(--expense)':'var(--emerald)'}">${remainAfter}</strong></div>
+        ${py.remaining<=0?`<div style="font-size:11px;font-weight:700;color:var(--emerald);margin-top:4px">🎉 Fully Paid Off!</div>`:''}
+      </div>`;
+    }
+  }
+
   document.getElementById('view-tx-content').innerHTML=`
     <div style="text-align:center;margin-bottom:16px">
       <div style="font-size:36px;margin-bottom:8px">${tx.category.split(' ')[0]}</div>
@@ -3071,6 +3572,7 @@ function viewTx(id){
       <div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:2px">DATE</div><div>${fmtDate(tx.date)}</div></div>
       ${tx.ref?`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:2px">REFERENCE</div><div>${tx.ref}</div></div>`:''}
       ${tx.desc?`<div class="card-sm"><div style="font-size:10px;color:var(--text3);margin-bottom:2px">DESCRIPTION</div><div>${tx.desc}</div></div>`:''}
+      ${payableHtml}
       ${receiptHtml}
     </div>
   `;
@@ -3100,6 +3602,8 @@ function openAddAccount(){
   document.getElementById('acc-savings').value='';
   document.getElementById('acc-delete-btn').style.display='none';
   document.getElementById('acc-save-btn').textContent='Save Account';
+  dismissFormVAI('account');
+  const vInp=document.getElementById('account-vai-input');if(vInp)vInp.value='';
   toggleAccFields();buildColorGrid('#7c83fd');openModal('modal-account');
 }
 function openEditAccount(id){
@@ -3522,7 +4026,7 @@ function cfCollectEvents(endDate) {
     const now = new Date();
     for (let m = 0; m < 3; m++) {
       const dueDate = new Date(now.getFullYear(), now.getMonth() + m, py.dueDay);
-      const ds = dueDate.toISOString().split('T')[0];
+      const ds = dueDate.getFullYear()+'-'+String(dueDate.getMonth()+1).padStart(2,'0')+'-'+String(dueDate.getDate()).padStart(2,'0');
       if (ds > todayStr && ds <= endDate) {
         // avoid double-counting with planned items that already exist for this payable
         const alreadyPlanned = events.some(e => e.source === 'planned' && e.date === ds && e.label.includes(py.name));
@@ -3888,7 +4392,7 @@ function renderHomeMiniReport(){
   const el=document.getElementById('home-mini-report');if(!el)return;
   const now=new Date();
   const ms=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];
-  const me=new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().split('T')[0];
+  const me=localMonthEnd(now.getFullYear(),now.getMonth());
   const txs=db.transactions.filter(t=>t.date>=ms&&t.date<=me);
   if(!txs.length){el.innerHTML='';return;}
   const income=txs.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
@@ -3925,7 +4429,6 @@ let homeMiniCalYear=null, homeMiniCalMonth=null;
 function renderHomeMiniCal(yearOverride, monthOverride){
   const el=document.getElementById('home-mini-cal');if(!el)return;
   const now=new Date();
-  // Use override if provided, else use current month; persist for nav
   if(yearOverride!==undefined)homeMiniCalYear=yearOverride;
   if(monthOverride!==undefined)homeMiniCalMonth=monthOverride;
   if(homeMiniCalYear===null)homeMiniCalYear=now.getFullYear();
@@ -3935,20 +4438,21 @@ function renderHomeMiniCal(yearOverride, monthOverride){
   const firstDay=new Date(year,month,1).getDay();
   const daysInMonth=new Date(year,month+1,0).getDate();
   const monthName=new Date(year,month,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
-  const isCurrentMonth=(year===now.getFullYear()&&month===now.getMonth());
 
   const ms=`${year}-${String(month+1).padStart(2,'0')}-01`;
-  const me=new Date(year,month+1,0).toISOString().split('T')[0];
+  const me=localMonthEnd(year,month);
   const plannedInMonth=db.planned.filter(p=>p.date>=ms&&p.date<=me);
   const txInMonth=db.transactions.filter(t=>t.date>=ms&&t.date<=me);
 
-  // Pre-aggregate per day for performance
+  // Transactions per day
   const dayData={};
   txInMonth.forEach(tx=>{
     if(!dayData[tx.date])dayData[tx.date]={exp:0,inc:0};
     if(tx.type==='expense')dayData[tx.date].exp+=tx.amount;
     else if(tx.type==='income')dayData[tx.date].inc+=tx.amount;
   });
+
+  // Planned/overdue per day
   const dayPlannedMap={};
   plannedInMonth.forEach(p=>{
     if(!dayPlannedMap[p.date])dayPlannedMap[p.date]={planned:0,overdue:0};
@@ -3956,19 +4460,44 @@ function renderHomeMiniCal(yearOverride, monthOverride){
     else if(p.status==='pending')dayPlannedMap[p.date].planned++;
   });
 
+  // Payable dots — ONLY unpaid (overdue/current/upcoming) due dates
+  const dayPayableMap={};
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    try {
+      const sched=generatePayableSchedule(py);
+      sched.filter(s=>s.status==='overdue'||s.status==='current'||s.status==='upcoming').forEach(s=>{
+        if(s.date>=ms&&s.date<=me) dayPayableMap[s.date]=(dayPayableMap[s.date]||0)+1;
+      });
+    } catch(e){}
+  });
+
+  // Recurring dots — ONLY unapplied/missed upcoming occurrences
+  const dayRecurMap={};
+  db.recurring.filter(r=>r.status!=='paused').forEach(r=>{
+    try {
+      const sched=generateRecurringSchedule(r);
+      sched.filter(s=>s.status==='upcoming'||s.status==='current'||s.status==='missed').forEach(s=>{
+        if(s.date>=ms&&s.date<=me) dayRecurMap[s.date]=(dayRecurMap[s.date]||0)+1;
+      });
+    } catch(e){}
+  });
+
+  // Goal deadline dates
+  const dayGoalMap={};
+  db.goals.filter(g=>g.targetDate&&g.status!=='achieved').forEach(g=>{
+    if(g.targetDate>=ms&&g.targetDate<=me) dayGoalMap[g.targetDate]=(dayGoalMap[g.targetDate]||0)+1;
+  });
+
   const days=['Su','Mo','Tu','We','Th','Fr','Sa'];
   let html=`<div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;overflow:hidden">
-    <!-- Nav header -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <button onclick="navHomeCal(-1)" style="background:var(--bg3);border:none;color:var(--text);width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">‹</button>
       <div style="font-size:13px;font-weight:700;color:var(--accent)">${monthName}</div>
       <button onclick="navHomeCal(1)" style="background:var(--bg3);border:none;color:var(--text);width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">›</button>
     </div>
-    <!-- Day headers -->
     <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px">
       ${days.map(d=>`<div style="text-align:center;font-size:9px;color:var(--text3);font-weight:700;padding:2px 0;text-transform:uppercase;letter-spacing:0.5px">${d}</div>`).join('')}
     </div>
-    <!-- Day cells -->
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px">`;
 
   for(let i=0;i<firstDay;i++)html+=`<div></div>`;
@@ -3979,27 +4508,35 @@ function renderHomeMiniCal(yearOverride, monthOverride){
     const isFuture=ds>todayStr;
     const data=dayData[ds]||{exp:0,inc:0};
     const pdMap=dayPlannedMap[ds]||{planned:0,overdue:0};
-    const hasActivity=data.exp>0||data.inc>0;
-    const hasPlanned=pdMap.planned>0;
     const hasOverdue=pdMap.overdue>0;
+    const hasPlanned=pdMap.planned>0;
+    const hasPayable=!!dayPayableMap[ds];
+    const hasRecur=!!dayRecurMap[ds];
+    const hasGoal=!!dayGoalMap[ds];
+    const hasAnyEvent=data.exp>0||data.inc>0||hasOverdue||hasPlanned||hasPayable||hasRecur||hasGoal;
 
-    // Number: today gets an accent circle on the date number only — amounts stay readable
     const numColor=isFuture?'var(--text3)':'var(--text)';
     const todayCircle=isToday?'background:var(--accent);border-radius:50%;color:#fff;width:22px;height:22px;':'';
-    const cellBg=isToday?'rgba(124,131,253,0.10)':hasOverdue?'rgba(255,107,107,0.08)':'transparent';
-    const cellBorder=isToday?'1.5px solid rgba(124,131,253,0.45)':hasOverdue?'1px solid rgba(255,107,107,0.3)':hasPlanned?'1px solid rgba(244,169,90,0.25)':'1px solid transparent';
+    const cellBg=isToday?'rgba(124,131,253,0.10)':hasOverdue?'rgba(225,29,72,0.07)':'transparent';
+    const cellBorder=isToday?'1.5px solid rgba(124,131,253,0.45)':
+      hasOverdue?'1px solid rgba(225,29,72,0.35)':
+      hasPayable?'1px solid rgba(245,158,11,0.30)':
+      hasPlanned?'1px solid rgba(244,169,90,0.25)':
+      hasGoal?'1px solid rgba(16,185,129,0.25)':
+      hasRecur?'1px solid rgba(20,184,166,0.20)':'1px solid transparent';
 
-    // Amount labels — always show in their colors
     const expLabel=data.exp>0?`<div style="font-size:8.5px;font-weight:700;color:var(--expense);line-height:1.2;text-align:center">-${fmtK(data.exp)}</div>`:'';
     const incLabel=data.inc>0?`<div style="font-size:8.5px;font-weight:700;color:var(--income);line-height:1.2;text-align:center">+${fmtK(data.inc)}</div>`:'';
 
-    // Planned / overdue indicator dots
     let dotHtml='';
     if(hasOverdue)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--overdue);display:inline-block;margin:0 1px"></div>`;
     if(hasPlanned)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--planned);display:inline-block;margin:0 1px"></div>`;
-    const dotsRow=dotHtml?`<div style="display:flex;justify-content:center;margin-top:1px">${dotHtml}</div>`:'';
+    if(hasPayable)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--amber);display:inline-block;margin:0 1px"></div>`;
+    if(hasGoal)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--emerald);display:inline-block;margin:0 1px"></div>`;
+    if(hasRecur)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--violet);display:inline-block;margin:0 1px"></div>`;
+    const dotsRow=dotHtml?`<div style="display:flex;justify-content:center;flex-wrap:wrap;margin-top:1px">${dotHtml}</div>`:'';
 
-    html+=`<div onclick="openHomeDayDetail('${ds}')" style="display:flex;flex-direction:column;align-items:center;border-radius:8px;padding:4px 2px;min-height:52px;cursor:pointer;background:${cellBg};border:${cellBorder};transition:background 0.15s">
+    html+=`<div onclick="openHomeDayDetail('${ds}')" style="display:flex;flex-direction:column;align-items:center;border-radius:8px;padding:4px 2px;min-height:52px;cursor:pointer;background:${cellBg};border:${cellBorder};transition:background 0.15s${!hasAnyEvent&&!isToday?';opacity:0.45':''}">
       <div style="font-size:11px;font-weight:700;line-height:22px;text-align:center;display:flex;align-items:center;justify-content:center;${todayCircle}color:${isToday?'#fff':numColor};flex-shrink:0">${d}</div>
       ${expLabel}
       ${incLabel}
@@ -4008,12 +4545,14 @@ function renderHomeMiniCal(yearOverride, monthOverride){
   }
 
   html+=`</div>
-    <!-- Legend -->
-    <div style="display:flex;gap:10px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="color:var(--expense);font-weight:700;font-size:9px">-Red</span> = Expenses</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="color:var(--income);font-weight:700;font-size:9px">+Green</span> = Income</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--planned);border-radius:50%"></span> Planned</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--overdue);border-radius:50%"></span> Overdue</span>
+    <div style="display:flex;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="color:var(--expense);font-weight:700">-</span>Expense</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="color:var(--income);font-weight:700">+</span>Income</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--overdue);border-radius:50%"></span>Overdue</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--amber);border-radius:50%"></span>Payable Due</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--planned);border-radius:50%"></span>Planned</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--violet);border-radius:50%"></span>Recurring</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--emerald);border-radius:50%"></span>Goal</span>
     </div>
   </div>`;
   el.innerHTML=html;
@@ -4030,27 +4569,134 @@ function navHomeCal(dir){
 function openHomeDayDetail(dateStr){
   const dayTxs=db.transactions.filter(t=>t.date===dateStr);
   const dayPlanned=db.planned.filter(p=>p.date===dateStr);
-  if(!dayTxs.length&&!dayPlanned.length){showToast('No activity on '+fmtDate(dateStr),'info');return;}
+  const todayStr=today();
+
+  // Payables: only show as upcoming if this date is an UNPAID due date
+  const dayPayables=[];
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    try {
+      const sched=generatePayableSchedule(py);
+      const thisEntry=sched.find(s=>s.date===dateStr&&(s.status==='overdue'||s.status==='current'||s.status==='upcoming'));
+      if(thisEntry) dayPayables.push({py,entry:thisEntry});
+    } catch(e){}
+  });
+
+  // Recurring: only show if this date has an upcoming/missed (not yet applied) occurrence
+  const dayRecurring=[];
+  db.recurring.filter(r=>r.status==='active').forEach(r=>{
+    try {
+      const sched=generateRecurringSchedule(r);
+      const thisEntry=sched.find(s=>s.date===dateStr&&(s.status==='upcoming'||s.status==='current'||s.status==='missed'));
+      if(thisEntry) dayRecurring.push({r,entry:thisEntry});
+    } catch(e){}
+  });
+
+  // Goals with target date matching
+  const dayGoals=db.goals.filter(g=>g.targetDate===dateStr&&g.status!=='achieved');
+
+  if(!dayTxs.length&&!dayPlanned.length&&!dayPayables.length&&!dayRecurring.length&&!dayGoals.length){
+    showToast('No activity on '+fmtDate(dateStr),'info');return;
+  }
   const label=fmtDate(dateStr);
   let html=`<div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px">📅 ${label}</div>`;
-  if(dayPlanned.length){
-    html+=`<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Planned (${dayPlanned.length})</div>`;
-    dayPlanned.forEach(p=>{
-      const tc=p.type==='expense'?'var(--expense)':p.type==='income'?'var(--income)':'var(--transfer)';
-      html+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <div><div style="font-size:12px;font-weight:600">${p.category}</div><span style="font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(244,169,90,0.12);color:var(--planned)">${p.status.toUpperCase()}</span></div>
-        <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:${tc}">${fmt(p.amount)}</div>
+
+  // Payables due (unpaid only)
+  if(dayPayables.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">💳 Payables Due (${dayPayables.length})</div>`;
+    dayPayables.forEach(({py,entry})=>{
+      const acc=py.linkedAccount?db.accounts.find(a=>a.id===py.linkedAccount):null;
+      const isOverdue=entry.status==='overdue';
+      const bg=isOverdue?'var(--rose-bg)':'var(--amber-bg)';
+      const border=isOverdue?'rgba(225,29,72,.2)':'rgba(245,158,11,.2)';
+      const statusBadge=isOverdue?`<span style="font-size:9px;font-weight:700;color:var(--rose)">⚠ OVERDUE</span>`:`<span style="font-size:9px;font-weight:700;color:var(--amber)">📅 DUE</span>`;
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:${bg};border:1px solid ${border};margin-bottom:6px" onclick="closeModal('modal-day-detail');setTimeout(()=>openPayableSchedule('${py.id}'),100)">
+        <div>
+          <div style="font-size:13px;font-weight:700">💳 ${py.name}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${PAYABLE_TYPES[py.type]||py.type}${acc?' · '+acc.name:''}</div>
+          <div style="margin-top:3px">${statusBadge} <span style="font-size:10px;color:var(--text3)">Remaining: ${fmt(py.remaining||0)}</span></div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--expense)">-${fmt(py.monthlyPayment)}</div>
+          <div style="font-size:9px;color:var(--text3);text-align:right;margin-top:2px">tap to pay</div>
+        </div>
       </div>`;
     });
   }
+
+  // Planned activities — exclude payable-linked items already shown in PAYABLES DUE above
+  const shownPayableIds = new Set(dayPayables.map(({py})=>py.id));
+  const filteredPlanned = dayPlanned.filter(p => !p.payableId || !shownPayableIds.has(p.payableId));
+  if(filteredPlanned.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📅 Planned (${filteredPlanned.length})</div>`;
+    filteredPlanned.forEach(p=>{
+      const tc=p.type==='expense'?'var(--expense)':p.type==='income'?'var(--income)':'var(--transfer)';
+      const acc=db.accounts.find(a=>a.id===p.accountId);
+      const statusColor=p.date<todayStr?'var(--rose)':p.date===todayStr?'var(--amber)':'var(--blue)';
+      const statusLabel=p.date<todayStr?'OVERDUE':p.date===todayStr?'TODAY':'UPCOMING';
+      const payable=p.payableId?db.payables.find(py=>py.id===p.payableId):null;
+      const nameToShow=payable?payable.name:(p.desc||p.category.replace(/^\S+\s/,''));
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);margin-bottom:6px;cursor:pointer" onclick="closeModal('modal-day-detail');setTimeout(()=>{ showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50); },50)">
+        <div>
+          <div style="font-size:13px;font-weight:700">${p.category.split(' ')[0]} ${nameToShow}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${p.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''}</div>
+          ${p.desc&&!payable?`<div style="font-size:10px;color:var(--text3)">${p.desc}</div>`:''}
+          <span style="font-size:9px;font-weight:700;color:${statusColor};background:${p.date<todayStr?'var(--rose-bg)':p.date===todayStr?'var(--amber-bg)':'var(--blue-bg)'};padding:1px 6px;border-radius:4px">${statusLabel}</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${fmt(p.amount)}</div>
+      </div>`;
+    });
+  }
+
+  // Upcoming/missed recurring (not yet applied)
+  if(dayRecurring.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:10px">🔄 Recurring (${dayRecurring.length})</div>`;
+    dayRecurring.forEach(({r,entry})=>{
+      const tc=r.type==='expense'?'var(--expense)':'var(--income)';
+      const acc=db.accounts.find(a=>a.id===r.accountId);
+      const isMissed=entry.status==='missed';
+      const bg=isMissed?'var(--rose-bg)':'var(--violet-bg)';
+      const border=isMissed?'rgba(225,29,72,.2)':'rgba(20,184,166,.2)';
+      const badge=isMissed?`<span style="font-size:9px;font-weight:700;color:var(--rose)">⚠ MISSED</span>`:`<span style="font-size:9px;font-weight:700;color:var(--violet)">🔄 ${entry.status==='current'?'TODAY':'UPCOMING'}</span>`;
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:${bg};border:1px solid ${border};margin-bottom:6px" onclick="closeModal('modal-day-detail');setTimeout(()=>openRecurringSchedule('${r.id}'),100)">
+        <div>
+          <div style="font-size:13px;font-weight:700">🔄 ${r.name}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${r.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''} · ${RECUR_FREQ_LABELS[r.frequency]}</div>
+          <div style="margin-top:3px">${badge}</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${r.type==='expense'?'-':'+'}${fmt(r.amount)}</div>
+      </div>`;
+    });
+  }
+
+  // Goals reaching target
+  if(dayGoals.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--emerald);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:10px">🎯 Goal Deadline (${dayGoals.length})</div>`;
+    dayGoals.forEach(g=>{
+      const pct=Math.min(100,(g.saved/g.target)*100);
+      html+=`<div style="padding:9px 10px;border-radius:10px;background:var(--emerald-bg);border:1px solid rgba(16,185,129,.2);margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;font-weight:700">${g.emoji||'🎯'} ${g.name}</div>
+          <div style="font-size:11px;font-weight:700;color:var(--emerald)">${pct.toFixed(0)}%</div>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">${fmt(g.saved)} saved of ${fmt(g.target)} target</div>
+        <div style="background:var(--bg3);border-radius:99px;height:3px;margin-top:5px;overflow:hidden"><div style="width:${pct.toFixed(1)}%;height:100%;background:var(--emerald);border-radius:99px"></div></div>
+      </div>`;
+    });
+  }
+
+  // Transactions (paid payables + applied recurring appear here as expenses/income naturally)
   if(dayTxs.length){
-    html+=`<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin:${dayPlanned.length?'12px 0 6px':'0 0 6px'}">Transactions (${dayTxs.length})</div>`;
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin:${(dayPlanned.length||dayPayables.length||dayRecurring.length||dayGoals.length)?'10px 0 6px':'0 0 6px'}">📊 Transactions (${dayTxs.length})</div>`;
     dayTxs.forEach(tx=>{
       const sign=tx.type==='expense'?'-':'+';
       const tc=tx.type==='expense'?'var(--expense)':tx.type==='income'?'var(--income)':'var(--transfer)';
-      html+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="closeModal('modal-day-detail');viewTx('${tx.id}')">
-        <div style="font-size:12px;font-weight:600">${tx.category.replace(/^\S+\s/,'')}</div>
-        <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:${tc}">${sign}${fmt(tx.amount)}</div>
+      const acc=db.accounts.find(a=>a.id===tx.accountId);
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="closeModal('modal-day-detail');viewTx('${tx.id}')">
+        <div>
+          <div style="font-size:12px;font-weight:600">${tx.category.split(' ')[0]} ${tx.category.replace(/^\S+\s/,'')}</div>
+          ${(tx.desc||acc)?`<div style="font-size:10px;color:var(--text3)">${acc?acc.name:''}${tx.desc?' · '+tx.desc:''}</div>`:''}
+        </div>
+        <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:${tc}">${sign}${fmt(tx.amount)}</div>
       </div>`;
     });
   }
@@ -4203,7 +4849,7 @@ function renderCalendar(container){
   const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-  // Build maps: date → {expense, income, hasPlanned, hasOverdue, hasPayable}
+  // Build maps
   const txMap={},plMap={};
   db.transactions.forEach(tx=>{
     const k=tx.date;
@@ -4212,20 +4858,46 @@ function renderCalendar(container){
     else if(tx.type==='income')txMap[k].inc+=tx.amount;
   });
   db.planned.filter(p=>p.status==='pending').forEach(p=>{
-    if(!plMap[p.date])plMap[p.date]={hasPlanned:false,hasOverdue:false,hasPayable:false};
+    if(!plMap[p.date])plMap[p.date]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
     plMap[p.date].hasPlanned=true;
     if(p.date<todayStr)plMap[p.date].hasOverdue=true;
-    if(p.payableId)plMap[p.date].hasPayable=true;
   });
-  // Also mark payable due dates (auto-calculated, not yet in planned)
-  db.payables.filter(p=>p.status==='active'&&p.dueDay).forEach(py=>{
-    for(let m=0;m<3;m++){
-      const d=new Date(calYear,calMonth+m,py.dueDay);
-      if(d.getMonth()===calMonth&&d.getFullYear()===calYear){
-        const ds=d.toISOString().split('T')[0];
-        if(!plMap[ds])plMap[ds]={hasPlanned:false,hasOverdue:false,hasPayable:false};
-        plMap[ds].hasPayable=true;
-      }
+
+  // Payable dots — only UNPAID scheduled dates
+  const ms2=`${calYear}-${String(calMonth+1).padStart(2,'0')}-01`;
+  const me2=localMonthEnd(calYear,calMonth);
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    try {
+      const sched=generatePayableSchedule(py);
+      sched.filter(s=>s.status==='overdue'||s.status==='current'||s.status==='upcoming').forEach(s=>{
+        if(s.date>=ms2&&s.date<=me2){
+          if(!plMap[s.date])plMap[s.date]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
+          plMap[s.date].hasPayable=true;
+          if(s.status==='overdue')plMap[s.date].hasOverdue=true;
+        }
+      });
+    } catch(e){}
+  });
+
+  // Recurring dots — only upcoming/missed occurrences
+  db.recurring.filter(r=>r.status!=='paused').forEach(r=>{
+    try {
+      const sched=generateRecurringSchedule(r);
+      sched.filter(s=>s.status==='upcoming'||s.status==='current'||s.status==='missed').forEach(s=>{
+        if(s.date>=ms2&&s.date<=me2){
+          if(!plMap[s.date])plMap[s.date]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
+          plMap[s.date].hasRecur=true;
+          if(s.status==='missed')plMap[s.date].hasOverdue=true;
+        }
+      });
+    } catch(e){}
+  });
+
+  // Goal target dates
+  db.goals.filter(g=>g.targetDate&&g.status!=='achieved').forEach(g=>{
+    if(g.targetDate>=ms2&&g.targetDate<=me2){
+      if(!plMap[g.targetDate])plMap[g.targetDate]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
+      plMap[g.targetDate].hasGoal=true;
     }
   });
 
@@ -4237,18 +4909,19 @@ function renderCalendar(container){
     const isSel=ds===calSelectedDate;
     const td=txMap[ds];
     const pd=plMap[ds];
-    let numClass='cal-num';
     let dotHtml='';
     if(pd){
-      if(pd.hasOverdue)dotHtml=`<div class="cal-dot overdue"></div>`;
-      else if(pd.hasPayable)dotHtml=`<div class="cal-dot" style="background:var(--amber)"></div>`;
-      else if(pd.hasPlanned)dotHtml=`<div class="cal-dot planned"></div>`;
+      if(pd.hasOverdue)dotHtml+=`<div class="cal-dot overdue"></div>`;
+      if(pd.hasPayable&&!pd.hasOverdue)dotHtml+=`<div class="cal-dot" style="background:var(--amber)"></div>`;
+      if(pd.hasPlanned)dotHtml+=`<div class="cal-dot planned"></div>`;
+      if(pd.hasGoal)dotHtml+=`<div class="cal-dot" style="background:var(--emerald)"></div>`;
+      if(pd.hasRecur&&!pd.hasOverdue)dotHtml+=`<div class="cal-dot" style="background:var(--violet)"></div>`;
     }
     cells+=`<div class="cal-cell${isToday?' today':''}${isSel?' selected':''} ${td||dotHtml?'':'empty-day'}" onclick="calCellClick('${ds}')">
-      <div class="${numClass}">${d}</div>
+      <div class="cal-num">${d}</div>
       ${td&&td.exp>0?`<div class="cal-exp">-${shortFmt(td.exp)}</div>`:''}
       ${td&&td.inc>0?`<div class="cal-inc">+${shortFmt(td.inc)}</div>`:''}
-      ${dotHtml}
+      <div style="display:flex;justify-content:center;flex-wrap:wrap">${dotHtml}</div>
     </div>`;
   }
 
@@ -4263,12 +4936,14 @@ function renderCalendar(container){
       </div>
       <div class="cal-day-labels">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(l=>`<div class="cal-dl">${l}</div>`).join('')}</div>
       <div class="cal-grid">${cells}</div>
-      <div style="display:flex;gap:12px;font-size:10px;color:var(--text3);margin-top:10px;flex-wrap:wrap">
-        <span style="color:var(--expense)">▪ Red = Expenses</span>
-        <span style="color:var(--income)">▪ Green = Income</span>
-        <span>🟠 Planned</span>
-        <span style="color:var(--amber)">🟡 Payable Due</span>
-        <span style="color:var(--overdue)">🔴 Overdue</span>
+      <div style="display:flex;gap:10px;font-size:10px;color:var(--text3);margin-top:10px;flex-wrap:wrap">
+        <span style="color:var(--expense)">▪ Expenses</span>
+        <span style="color:var(--income)">▪ Income</span>
+        <span style="color:var(--rose)">🔴 Overdue</span>
+        <span style="color:var(--amber)">🟡 Payable</span>
+        <span style="color:var(--planned)">🟠 Planned</span>
+        <span style="color:var(--emerald)">🟢 Goal</span>
+        <span style="color:var(--violet)">🔵 Recurring</span>
       </div>
     </div>
     ${dayDetailHtml}
@@ -4408,6 +5083,8 @@ function openAddPlanned(prefillDate){
   document.getElementById('pl-date').value=prefillDate||today();
   document.getElementById('pl-delete-btn').style.display='none';
   document.getElementById('pl-save-btn').textContent='Save Planned Activity';
+  dismissFormVAI('planned');
+  const vInp=document.getElementById('planned-vai-input');if(vInp)vInp.value='';
   setPlannedType('expense',document.querySelector('#modal-planned .type-tab.expense'));
   fillAccDropdowns();openModal('modal-planned');
 }
@@ -4609,7 +5286,7 @@ function renderIncomeReport(){
   const year=now.getFullYear();
   const monthlyData=months.map((m,i)=>{
     const ms=`${year}-${String(i+1).padStart(2,'0')}-01`;
-    const me=new Date(year,i+1,0).toISOString().split('T')[0];
+    const me=localMonthEnd(year,i);
     const txs=db.transactions.filter(t=>t.type==='income'&&t.date>=ms&&t.date<=me);
     const total=txs.reduce((s,t)=>s+t.amount,0);
     const bycat={};txs.forEach(t=>{bycat[t.category]=(bycat[t.category]||0)+t.amount;});
@@ -4769,14 +5446,42 @@ const PAYABLE_TYPES={loan:'🏦 Bank/Personal Loan',credit:'💳 Credit Card',sp
 const PAYABLE_COLORS={loan:'var(--accent)',credit:'var(--expense)',spl:'var(--planned)',other:'var(--text2)'};
 
 function updatePayablesBadge(){
-  const today_=today();
-  const due=db.payables.filter(p=>p.status==='active'&&p.dueDay).filter(p=>{
-    const nowDate=new Date();const dueDate=new Date(nowDate.getFullYear(),nowDate.getMonth(),p.dueDay);
-    const diff=(dueDate-nowDate)/(1000*60*60*24);
-    return diff<=3&&diff>=-1;
-  }).length;
+  // Count payables with overdue or current-month unpaid due dates (within next 3 days)
+  const todayStr=today();
+  const nowDate=new Date();
+  let dueSoon=0;
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    try {
+      const sched=generatePayableSchedule(py);
+      const urgent=sched.find(s=>{
+        if(s.status!=='overdue'&&s.status!=='current'&&s.status!=='upcoming') return false;
+        const diff=(new Date(s.date+'T00:00:00')-nowDate)/(1000*60*60*24);
+        return diff<=-1||diff<=3; // overdue or due within 3 days
+      });
+      if(urgent) dueSoon++;
+    } catch(e){}
+  });
   const badge=document.getElementById('payables-badge');
-  if(badge){if(due>0){badge.style.display='flex';badge.textContent=due;}else badge.style.display='none';}
+  if(badge){if(dueSoon>0){badge.style.display='flex';badge.textContent=dueSoon;}else badge.style.display='none';}
+}
+
+function updateRecurringBadge(){
+  const nowDate=new Date();
+  let dueSoon=0;
+  db.recurring.filter(r=>r.status==='active').forEach(r=>{
+    try {
+      const sched=generateRecurringSchedule(r);
+      const urgent=sched.find(s=>{
+        if(s.status!=='missed'&&s.status!=='current'&&s.status!=='upcoming') return false;
+        const diff=(new Date(s.date+'T00:00:00')-nowDate)/(1000*60*60*24);
+        return diff<=-1||diff<=3;
+      });
+      if(urgent) dueSoon++;
+    } catch(e){}
+  });
+  // Use the goals badge for recurring (since recurring is on Goals screen)
+  const badge=document.getElementById('recurring-badge');
+  if(badge){if(dueSoon>0){badge.style.display='flex';badge.textContent=dueSoon;}else badge.style.display='none';}
 }
 
 function openAddPayable(){
@@ -4793,6 +5498,9 @@ function openAddPayable(){
   document.getElementById('py-notes').value='';
   document.getElementById('py-delete-btn').style.display='none';
   document.getElementById('py-save-btn').textContent='Save Payable';
+  // Reset Form VAI
+  dismissFormVAI('payable');
+  const vInp=document.getElementById('payable-vai-input');if(vInp)vInp.value='';
   // fill account dropdown
   const opts='<option value="">-- No linked account --</option>'+db.accounts.map(a=>`<option value="${a.id}">${ACC_ICONS[a.type]} ${a.name}</option>`).join('');
   document.getElementById('py-account').innerHTML=opts;
@@ -4813,6 +5521,8 @@ function openEditPayable(id){
   document.getElementById('py-notes').value=py.notes||'';
   document.getElementById('py-delete-btn').style.display='';
   document.getElementById('py-save-btn').textContent='Update Payable';
+  dismissFormVAI('payable');
+  const vInp=document.getElementById('payable-vai-input');if(vInp)vInp.value='';
   const opts='<option value="">-- No linked account --</option>'+db.accounts.map(a=>`<option value="${a.id}"${a.id===py.linkedAccount?' selected':''}>${ACC_ICONS[a.type]} ${a.name}</option>`).join('');
   document.getElementById('py-account').innerHTML=opts;
   openModal('modal-payable');
@@ -4863,7 +5573,7 @@ function autoSchedulePayable(py){
   for(let i=0;i<3;i++){
     const d=new Date(now.getFullYear(),now.getMonth()+i,py.dueDay);
     if(d<now)continue; // skip past dates
-    const dateStr=d.toISOString().split('T')[0];
+    const dateStr=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     // Check if already scheduled
     const exists=db.planned.some(p=>p.payableId===py.id&&p.date===dateStr);
     if(!exists){
@@ -4879,7 +5589,288 @@ function autoSchedulePayable(py){
   }
 }
 
-// Record payment
+// ─── PAYABLE REPAYMENT SCHEDULE ENGINE ────────────────────────
+/**
+ * Generates a complete repayment schedule for a payable.
+ * Handles advance multi-month payments correctly.
+ * Returns array of { date, monthKey, amount, status, paymentRef }
+ */
+function generatePayableSchedule(py) {
+  if(!py.dueDay||!py.monthlyPayment) return [];
+  const todayStr=today();
+  const schedule=[];
+
+  // Build set of "month keys" covered by payments
+  // Each payment.months tells how many consecutive months starting from its due month
+  const coveredMonths=new Map(); // 'YYYY-MM' → payment object
+  (py.payments||[]).forEach(pay=>{
+    const months=pay.months||1;
+    const payDate=new Date(pay.date+'T00:00:00');
+    // Find which due month this payment covers (the next due date at or after payment date)
+    let dueMo=new Date(payDate.getFullYear(),payDate.getMonth(),py.dueDay);
+    if(dueMo<payDate) dueMo=new Date(payDate.getFullYear(),payDate.getMonth()+1,py.dueDay);
+    for(let m=0;m<months;m++){
+      const d=new Date(dueMo.getFullYear(),dueMo.getMonth()+m,py.dueDay);
+      const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+      if(!coveredMonths.has(key)) coveredMonths.set(key,pay);
+    }
+  });
+
+  // Determine start: earliest covered month OR first upcoming due date
+  let startDate;
+  if(py.createdAt){
+    const cd=new Date(py.createdAt);
+    startDate=new Date(cd.getFullYear(),cd.getMonth(),py.dueDay);
+    if(startDate<cd) startDate=new Date(cd.getFullYear(),cd.getMonth()+1,py.dueDay);
+  } else {
+    const now=new Date();
+    startDate=new Date(now.getFullYear(),now.getMonth(),py.dueDay);
+    if(startDate<now) startDate=new Date(now.getFullYear(),now.getMonth()+1,py.dueDay);
+  }
+  // Also consider earliest covered month
+  coveredMonths.forEach((_,key)=>{
+    const[y,m]=key.split('-').map(Number);
+    const d=new Date(y,m-1,py.dueDay);
+    if(d<startDate) startDate=d;
+  });
+
+  // Row count based on REMAINING (not totalAmount) so schedule shows only what's left
+  const remaining = Math.max(0, py.remaining||0);
+  const futureInstall = py.monthlyPayment>0 ? Math.ceil(remaining/py.monthlyPayment) : 0;
+  const totalRows = coveredMonths.size + futureInstall;
+  if(!totalRows) return [];
+
+  let iter=new Date(startDate);
+  let futureCount=0;
+
+  for(let i=0;i<Math.min(totalRows+2,120);i++){
+    // Use local date parts to avoid UTC timezone shift (e.g. UTC+8 would show day-1 with toISOString)
+    const dateStr=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0')+'-'+String(iter.getDate()).padStart(2,'0');
+    const monthKey=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0');
+    const isPaid=coveredMonths.has(monthKey);
+    const payRef=isPaid?coveredMonths.get(monthKey):null;
+
+    let rowAmount;
+    if(isPaid){
+      rowAmount=py.monthlyPayment;
+    } else {
+      if(futureCount>=futureInstall) break; // all future slots filled
+      const alreadyAllocated=futureCount*py.monthlyPayment;
+      rowAmount=Math.min(py.monthlyPayment, Math.max(0, remaining-alreadyAllocated));
+      if(rowAmount<=0) break;
+      futureCount++;
+    }
+
+    let status;
+    if(isPaid) status='paid';
+    else if(dateStr<todayStr) status='overdue';
+    else if(dateStr===todayStr) status='current';
+    else status='upcoming';
+
+    schedule.push({date:dateStr,monthKey,amount:rowAmount,status,payRef});
+    if(!isPaid && futureCount>=futureInstall) break;
+    iter=new Date(iter.getFullYear(),iter.getMonth()+1,py.dueDay);
+  }
+  return schedule;
+}
+
+function openPayableSchedule(id){
+  const py=db.payables.find(p=>p.id===id);if(!py)return;
+  const color=PAYABLE_COLORS[py.type]||'var(--text2)';
+  const schedule=generatePayableSchedule(py);
+  const paidCount=schedule.filter(s=>s.status==='paid').length;
+  const overdueCount=schedule.filter(s=>s.status==='overdue').length;
+  const totalCount=schedule.length;
+  const pct=py.totalAmount>0?Math.min(100,((py.paidAmount||0)/py.totalAmount)*100):0;
+
+  document.getElementById('payable-schedule-title').textContent='📅 '+py.name+' — Repayment Schedule';
+
+  // Summary cards
+  document.getElementById('payable-schedule-summary').innerHTML=`
+    <div class="sched-summary">
+      <div><div class="sched-sum-val" style="color:${color}">${fmt(py.remaining||0)}</div><div class="sched-sum-lbl">Remaining</div></div>
+      <div><div class="sched-sum-val" style="color:var(--income)">${fmt(py.paidAmount||0)}</div><div class="sched-sum-lbl">Paid</div></div>
+      <div><div class="sched-sum-val">${paidCount}/${totalCount}</div><div class="sched-sum-lbl">Installments</div></div>
+    </div>`;
+
+  // Progress bar
+  const progressColor=pct>=80?'var(--income)':pct>=40?'var(--planned)':'var(--expense)';
+  document.getElementById('payable-schedule-progress').innerHTML=`
+    <div style="margin-bottom:8px">
+      <div class="sched-progress-row">
+        <div class="sched-progress-bar-wrap">
+          <div class="sched-progress-bar" style="width:${pct.toFixed(1)}%;background:${progressColor}"></div>
+        </div>
+        <span style="font-size:11px;font-weight:700;color:${progressColor};min-width:36px">${pct.toFixed(0)}%</span>
+      </div>
+      ${overdueCount>0?`<div style="font-size:11px;color:var(--rose);font-weight:600">⚠️ ${overdueCount} payment${overdueCount>1?'s':''} overdue — please record payment to stay on track.</div>`:''}
+      ${py.interestRate>0?`<div style="font-size:10px;color:var(--text3);margin-top:4px">Interest rate: ${py.interestRate}% per year</div>`:''}
+    </div>`;
+
+  // Schedule table
+  if(schedule.length){
+    const rows=schedule.map((s,i)=>{
+      const acc=s.payRef?(db.accounts.find(a=>a.id===s.payRef.accountId)||null):null;
+      let badge='',rowClass='';
+      if(s.status==='paid'){badge=`<span class="sched-badge paid">✓ Paid</span>`;rowClass='sched-paid';}
+      else if(s.status==='current'){badge=`<span class="sched-badge current">📅 Due Today</span>`;rowClass='sched-current';}
+      else if(s.status==='overdue'){badge=`<span class="sched-badge overdue">⚠ Overdue</span>`;rowClass='sched-overdue';}
+      else{badge=`<span class="sched-badge upcoming">${i===schedule.filter(x=>x.status!=='paid').findIndex(x=>x.status==='upcoming')+paidCount?'Next':'⏳ Upcoming'}</span>`;}
+
+      const payNote=s.payRef?`<div style="font-size:9px;color:var(--text3);margin-top:2px">${fmtDate(s.payRef.date)}${acc?' · '+acc.name:''}${s.payRef.months>1?' · '+s.payRef.months+'mo advance':''}</div>`:'';
+      return`<tr class="${rowClass}">
+        <td><div style="font-weight:600">#${i+1}</div></td>
+        <td><div style="font-weight:600">${fmtDate(s.date)}</div></td>
+        <td><div style="font-family:var(--mono);font-weight:700;color:var(--expense)">-${fmt(s.amount)}</div>${payNote}</td>
+        <td>${badge}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('payable-schedule-table').innerHTML=`
+      <div class="schedule-wrap">
+        <table class="schedule-table">
+          <thead><tr><th>#</th><th>Due Date</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  } else {
+    document.getElementById('payable-schedule-table').innerHTML=`<div style="text-align:center;color:var(--text3);padding:16px;font-size:12px">No schedule to display. Add a due day and monthly payment to generate a forecast.</div>`;
+  }
+
+  // Wire up buttons
+  document.getElementById('payable-schedule-pay-btn').onclick=()=>{closeModal('modal-payable-schedule');openPayPayable(id);};
+  document.getElementById('payable-schedule-edit-btn').onclick=()=>{closeModal('modal-payable-schedule');openEditPayable(id);};
+  openModal('modal-payable-schedule');
+}
+
+// ─── RECURRING SCHEDULE ENGINE ────────────────────────────────
+/**
+ * Generates occurrence list for a recurring rule.
+ * Compares against db.transactions (recurringId match) to determine applied status.
+ * Returns array of { date, status: 'applied'|'missed'|'current'|'upcoming'|'paused' }
+ */
+function generateRecurringSchedule(r) {
+  const todayStr=today();
+  const schedule=[];
+  const start=new Date(r.startDate+'T00:00:00');
+  const endDate=r.endDate;
+  const MAX=48; // max 48 occurrences to show
+
+  // Build set of dates where this recurring has been applied
+  const appliedDates=new Set(
+    db.transactions.filter(tx=>tx.recurringId===r.id).map(tx=>tx.date)
+  );
+
+  // Helper: get day of month (use dueDay if set and monthly, else startDate day)
+  const dayOfMonth=(r.frequency==='monthly'&&r.dueDay)?r.dueDay:start.getDate();
+
+  // Generate all occurrence dates
+  let iter=new Date(start);
+  // For monthly with dueDay, align to the dueDay
+  if(r.frequency==='monthly'&&r.dueDay){
+    iter=new Date(start.getFullYear(),start.getMonth(),r.dueDay);
+    if(iter<start) iter=new Date(start.getFullYear(),start.getMonth()+1,r.dueDay);
+  }
+
+  for(let i=0;i<MAX;i++){
+    const dateStr=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0')+'-'+String(iter.getDate()).padStart(2,'0');
+    if(endDate&&dateStr>endDate) break;
+
+    const isApplied=appliedDates.has(dateStr);
+    // Also check if any transaction in this month has the recurringId (for auto-applied)
+    const monthKey=dateStr.substring(0,7);
+    const isAppliedThisMonth=!isApplied&&[...appliedDates].some(d=>d.startsWith(monthKey));
+
+    let status;
+    if(isApplied||isAppliedThisMonth) status='applied';
+    else if(r.status==='paused') status='paused';
+    else if(dateStr<todayStr) status='missed';
+    else if(dateStr===todayStr) status='current';
+    else status='upcoming';
+
+    schedule.push({date:dateStr,status});
+
+    // Advance to next occurrence
+    if(r.frequency==='daily') iter=new Date(iter.getTime()+86400000);
+    else if(r.frequency==='weekly') iter=new Date(iter.getTime()+7*86400000);
+    else if(r.frequency==='monthly') iter=new Date(iter.getFullYear(),iter.getMonth()+1,dayOfMonth);
+    else if(r.frequency==='yearly') iter=new Date(iter.getFullYear()+1,iter.getMonth(),iter.getDate());
+    else break;
+
+    // Stop if no endDate and we have enough future ones
+    if(!endDate){
+      const futureCount=schedule.filter(s=>s.status==='upcoming'||s.status==='current').length;
+      if(futureCount>=12) break;
+    }
+  }
+  return schedule;
+}
+
+function openRecurringSchedule(id){
+  const r=db.recurring.find(r=>r.id===id);if(!r)return;
+  const acc=db.accounts.find(a=>a.id===r.accountId);
+  const schedule=generateRecurringSchedule(r);
+  const appliedCount=schedule.filter(s=>s.status==='applied').length;
+  const missedCount=schedule.filter(s=>s.status==='missed').length;
+  const upcomingCount=schedule.filter(s=>s.status==='upcoming'||s.status==='current').length;
+  const amtColor=r.type==='income'?'var(--income)':'var(--expense)';
+  const amtSign=r.type==='income'?'+':'-';
+  const isPaused=r.status==='paused';
+
+  document.getElementById('recur-schedule-title').textContent='🔄 '+r.name+' — Schedule';
+
+  // Summary
+  document.getElementById('recur-schedule-summary').innerHTML=`
+    <div class="sched-summary" style="margin-bottom:12px">
+      <div><div class="sched-sum-val" style="color:${amtColor}">${amtSign}${fmt(r.amount)}</div><div class="sched-sum-lbl">Per ${RECUR_FREQ_LABELS[r.frequency]}</div></div>
+      <div><div class="sched-sum-val" style="color:var(--income)">${appliedCount}</div><div class="sched-sum-lbl">Applied</div></div>
+      <div><div class="sched-sum-val" style="color:${missedCount>0?'var(--rose)':'var(--text3)'}">${missedCount}</div><div class="sched-sum-lbl">Missed</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:10px;background:var(--bg3);border-radius:10px;padding:10px 12px;line-height:1.6">
+      <strong>${r.category.replace(/^\S+\s/,'')}</strong>${acc?' · '+acc.name:''} · ${RECUR_FREQ_LABELS[r.frequency]}
+      ${r.startDate?`<br>Started: ${fmtDate(r.startDate)}`:''}
+      ${r.endDate?`<br>Ends: ${fmtDate(r.endDate)}`:'<br>No end date'}
+      ${isPaused?'<br><strong style="color:var(--amber)">⏸ Currently Paused</strong>':''}
+      ${missedCount>0?`<br><strong style="color:var(--rose)">⚠️ ${missedCount} missed occurrence${missedCount>1?'s':''} — apply now to catch up</strong>`:''}
+    </div>`;
+
+  // Table
+  if(schedule.length){
+    const rows=schedule.map((s,i)=>{
+      let badge='',rowClass='';
+      if(s.status==='applied'){badge=`<span class="sched-badge applied">✓ Applied</span>`;rowClass='sched-paid';}
+      else if(s.status==='current'){badge=`<span class="sched-badge current">📅 Due Today</span>`;rowClass='sched-current';}
+      else if(s.status==='missed'){badge=`<span class="sched-badge missed">⚠ Missed</span>`;rowClass='sched-overdue';}
+      else if(s.status==='paused'){badge=`<span class="sched-badge paused">⏸ Paused</span>`;}
+      else{badge=`<span class="sched-badge upcoming">⏳ Upcoming</span>`;}
+      // Find the applied transaction for this date
+      const tx=db.transactions.find(t=>t.recurringId===r.id&&t.date.startsWith(s.date.substring(0,7)));
+      const txNote=tx?`<div style="font-size:9px;color:var(--text3);margin-top:1px">${fmtDate(tx.date)}</div>`:'';
+      return`<tr class="${rowClass}">
+        <td><div style="font-weight:600">#${i+1}</div></td>
+        <td><div style="font-weight:600">${fmtDate(s.date)}</div></td>
+        <td><div style="font-family:var(--mono);font-weight:700;color:${amtColor}">${amtSign}${fmt(r.amount)}</div>${txNote}</td>
+        <td>${badge}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('recur-schedule-table').innerHTML=`
+      <div class="schedule-wrap">
+        <table class="schedule-table">
+          <thead><tr><th>#</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  } else {
+    document.getElementById('recur-schedule-table').innerHTML=`<div style="text-align:center;color:var(--text3);padding:16px;font-size:12px">No occurrences generated. Check the start date and frequency.</div>`;
+  }
+
+  // Wire buttons
+  document.getElementById('recur-schedule-apply-btn').onclick=()=>{closeModal('modal-recur-schedule');applyRecurringNow(id);};
+  document.getElementById('recur-schedule-pause-btn').textContent=isPaused?'▶ Resume Rule':'⏸ Pause Rule';
+  document.getElementById('recur-schedule-pause-btn').onclick=()=>{toggleRecurPause(id);closeModal('modal-recur-schedule');};
+  document.getElementById('recur-schedule-edit-btn').onclick=()=>{closeModal('modal-recur-schedule');openEditRecurring(id);};
+  openModal('modal-recur-schedule');
+}
+
 function openPayPayable(id){
   const py=db.payables.find(p=>p.id===id);if(!py)return;
   payingPayableId=id;
@@ -4966,8 +5957,20 @@ function executePayPayable(){
   if(py.remaining<=0)py.status='paid';
   if(!py.payments)py.payments=[];
   py.payments.push({id:uid(),amount,accountId:accId,date:payDate,ref,months,createdAt:Date.now()});
+  // Build multi-month coverage label for transaction description
+  let txDesc=`Payment: ${py.name}`;
+  if(months>1&&py.dueDay){
+    const now2=new Date();
+    let firstDue=new Date(now2.getFullYear(),now2.getMonth(),py.dueDay);
+    if(firstDue<now2)firstDue=new Date(now2.getFullYear(),now2.getMonth()+1,py.dueDay);
+    const lastDue=new Date(firstDue.getFullYear(),firstDue.getMonth()+months-1,py.dueDay);
+    const fmtD=d=>d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    txDesc+=` — Paid for ${fmtD(firstDue)} to ${fmtD(lastDue)}`;
+  } else if(months>1){
+    txDesc+=` (${months} months)`;
+  }
   // Create transaction record
-  const tx={id:uid(),type:'expense',amount,category:'💰 Bills',accountId:accId,date:payDate,ref,desc:`Payment: ${py.name}${months>1?' ('+months+' months)':''}`,receipt:null,createdAt:Date.now(),payableId:py.id};
+  const tx={id:uid(),type:'expense',amount,category:'💰 Bills',accountId:accId,date:payDate,ref,desc:txDesc,receipt:null,createdAt:Date.now(),payableId:py.id};
   db.transactions.unshift(tx);
   addLog('created',`Payable payment: ${py.name} ${fmt(amount)}${months>1?' ('+months+' months)':''}`,py.id,'payable');
 
@@ -4980,7 +5983,7 @@ function executePayPayable(){
     // Mark the upcoming 'months' planned entries as waived/completed
     for(let i=0;i<months;i++){
       const waiveDate=new Date(nextDue.getFullYear(),nextDue.getMonth()+i,py.dueDay);
-      const waiveDateStr=waiveDate.toISOString().split('T')[0];
+      const waiveDateStr=waiveDate.getFullYear()+'-'+String(waiveDate.getMonth()+1).padStart(2,'0')+'-'+String(waiveDate.getDate()).padStart(2,'0');
       // Find exact or close planned entry for this month
       const existingPl=db.planned.find(p=>p.payableId===py.id&&p.status==='pending'&&p.date===waiveDateStr);
       if(existingPl){
@@ -4996,7 +5999,7 @@ function executePayPayable(){
 
     // Schedule next due date after advance payment window
     const nextDueFuture=new Date(nextDue.getFullYear(),nextDue.getMonth()+months,py.dueDay);
-    const nextDueFutureStr=nextDueFuture.toISOString().split('T')[0];
+    const nextDueFutureStr=nextDueFuture.getFullYear()+'-'+String(nextDueFuture.getMonth()+1).padStart(2,'0')+'-'+String(nextDueFuture.getDate()).padStart(2,'0');
     const exists=db.planned.some(p=>p.payableId===py.id&&p.date===nextDueFutureStr&&p.status==='pending');
     if(!exists&&py.status!=='paid'){
       db.planned.push({id:uid(),type:'expense',amount:py.monthlyPayment||amount,category:'💰 Bills',accountId:accId,date:nextDueFutureStr,ref:'',desc:`Scheduled: ${py.name}`,status:'pending',originalDate:nextDueFutureStr,createdAt:Date.now(),payableId:py.id});
@@ -5018,7 +6021,7 @@ function openSchedulePayable(id){
   const tc=PAYABLE_COLORS[py.type]||'var(--text)';
   document.getElementById('schedule-payable-detail').innerHTML=`<div class="card-sm" style="text-align:center"><div style="font-size:13px;font-weight:700">${py.name}</div><div style="font-family:'Space Mono',monospace;font-size:16px;color:${tc};margin-top:4px">${fmt(py.remaining)} remaining</div></div>`;
   // Suggest next due date
-  if(py.dueDay){const d=new Date();d.setDate(py.dueDay);if(d<new Date())d.setMonth(d.getMonth()+1);document.getElementById('sched-date').value=d.toISOString().split('T')[0];}
+  if(py.dueDay){const d=new Date();d.setDate(py.dueDay);if(d<new Date())d.setMonth(d.getMonth()+1);document.getElementById('sched-date').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   else document.getElementById('sched-date').value=today();
   document.getElementById('sched-amount').value=py.monthlyPayment||'';
   document.getElementById('sched-notes').value='';
@@ -5089,33 +6092,43 @@ function renderActivePayables(container){
     const pct=Math.min(100,((py.paidAmount||0)/py.totalAmount)*100);
     const color=PAYABLE_COLORS[py.type]||'var(--text2)';
     const progressColor=pct>=80?'var(--income)':pct>=40?'var(--planned)':'var(--expense)';
+
+    // Calculate next unpaid due date
+    const todayStr=today();
+    const schedule=generatePayableSchedule(py);
+    const nextUnpaid=schedule.find(s=>s.status==='overdue'||s.status==='current'||s.status==='upcoming');
+    const overdueCount=schedule.filter(s=>s.status==='overdue').length;
+    const paidCount=schedule.filter(s=>s.status==='paid').length;
+    const totalInstallments=schedule.length;
+
     let dueHtml='';
-    if(py.dueDay){
-      const now=new Date();
-      const d=new Date(now.getFullYear(),now.getMonth(),py.dueDay);
-      const diff=Math.ceil((d-now)/(1000*60*60*24));
-      if(diff<0)dueHtml='<span style="color:var(--overdue);font-size:11px">⚠️ Overdue by '+Math.abs(diff)+' day'+(Math.abs(diff)>1?'s':'')+'</span>';
-      else if(diff<=3)dueHtml='<span style="color:var(--planned);font-size:11px">⏰ Due in '+diff+' day'+(diff!==1?'s':'')+'</span>';
-      else dueHtml='<span style="font-size:11px;color:var(--text3)">📅 Due '+py.dueDay+(py.dueDay===1?'st':py.dueDay===2?'nd':py.dueDay===3?'rd':'th')+' of month</span>';
+    if(nextUnpaid){
+      const daysUntil=Math.ceil((new Date(nextUnpaid.date+'T00:00:00')-new Date())/(1000*60*60*24));
+      if(nextUnpaid.status==='overdue')dueHtml=`<span style="color:var(--overdue);font-size:11px">⚠️ ${overdueCount} payment${overdueCount>1?'s':''} overdue</span>`;
+      else if(daysUntil<=3)dueHtml=`<span style="color:var(--planned);font-size:11px">⏰ Due in ${daysUntil===0?'today':daysUntil+' day'+(daysUntil!==1?'s':'')}</span>`;
+      else dueHtml=`<span style="font-size:11px;color:var(--text3)">📅 Next due: ${fmtDate(nextUnpaid.date)}</span>`;
+    } else if(py.dueDay){
+      dueHtml=`<span style="font-size:11px;color:var(--income)">✅ Fully paid off!</span>`;
     }
-    html+='<div class="payable-card" onclick="openEditPayable(\''+py.id+'\')">';
+
+    html+='<div class="payable-card" onclick="openPayableSchedule(\''+py.id+'\')">';
     html+='<div class="payable-header">';
     html+='<div><div class="payable-name">'+py.name+'</div>';
     html+='<span class="payable-type-badge '+py.type+'">'+PAYABLE_TYPES[py.type]+'</span></div>';
     html+='<div style="text-align:right">';
-    html+='<div style="font-family:\'Space Mono\',monospace;font-size:16px;font-weight:700;color:'+color+'">'+fmt(py.remaining||0)+'</div>';
+    html+='<div style="font-family:var(--mono);font-size:16px;font-weight:700;color:'+color+'">'+fmt(py.remaining||0)+'</div>';
     html+='<div style="font-size:10px;color:var(--text3)">remaining</div></div></div>';
     html+='<div style="font-size:11px;color:var(--text3);margin-bottom:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">';
     html+=dueHtml;
     if(py.monthlyPayment)html+='<span>Monthly: '+fmt(py.monthlyPayment)+'</span>';
+    if(totalInstallments>0)html+='<span style="color:var(--text3)">'+paidCount+'/'+totalInstallments+' paid</span>';
     html+='</div>';
     html+='<div class="payable-progress-wrap"><div class="payable-progress-bar" style="width:'+pct.toFixed(1)+'%;background:'+progressColor+'"></div></div>';
     html+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px">';
     html+='<span>Paid: '+fmt(py.paidAmount||0)+'</span><span>'+pct.toFixed(0)+'% done</span><span>Total: '+fmt(py.totalAmount)+'</span></div>';
     html+='<div class="payable-actions">';
     html+='<button type="button" class="payable-btn pay" onclick="event.stopPropagation();openPayPayable(\''+py.id+'\')">💰 Pay</button>';
-    html+='<button type="button" class="payable-btn schedule" onclick="event.stopPropagation();openSchedulePayable(\''+py.id+'\')">📅 Schedule</button>';
-    html+='<button type="button" class="payable-btn" style="background:rgba(124,131,253,0.1);border-color:var(--accent);color:var(--accent)" onclick="event.stopPropagation();openPayableHistory(\''+py.id+'\')">📜 History</button>';
+    html+='<button type="button" class="payable-btn" style="background:var(--blue-bg);border-color:rgba(59,130,246,.3);color:var(--blue)" onclick="event.stopPropagation();openPayableSchedule(\''+py.id+'\')">📊 Schedule</button>';
     html+='<button type="button" class="payable-btn edit" onclick="event.stopPropagation();openEditPayable(\''+py.id+'\')">✏️ Edit</button>';
     html+='</div></div>';
   });
@@ -5191,10 +6204,23 @@ function renderPayablesHistory(container){
         <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px">Recent Payments</div>
         ${payments.slice(0,3).map(pay=>{
           const acc=db.accounts.find(a=>a.id===pay.accountId);
-          return`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          const mths=pay.months||1;
+          let coverageLine='';
+          if(mths>1&&py.dueDay){
+            const payDate=new Date(pay.date+'T00:00:00');
+            let firstDue=new Date(payDate.getFullYear(),payDate.getMonth(),py.dueDay);
+            if(firstDue<payDate)firstDue=new Date(payDate.getFullYear(),payDate.getMonth()+1,py.dueDay);
+            const lastDue=new Date(firstDue.getFullYear(),firstDue.getMonth()+mths-1,py.dueDay);
+            const fd=firstDue.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+            const ld=lastDue.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+            coverageLine=`<div style="font-size:9px;color:var(--blue-l);font-weight:600">📅 ${fd} — ${ld}</div>`;
+          }
+          const mBadge=mths>1?`<span style="font-size:8px;font-weight:700;background:var(--blue-bg);color:var(--blue-l);padding:1px 5px;border-radius:4px;margin-left:4px">${mths}M</span>`:'';
+          return`<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border)">
             <div>
-              <div style="font-size:12px;font-weight:600;color:var(--income)">+${fmt(pay.amount)}</div>
+              <div style="font-size:12px;font-weight:600;color:var(--income)">+${fmt(pay.amount)}${mBadge}</div>
               <div style="font-size:10px;color:var(--text3)">${fmtDate(pay.date)}${acc?' · '+acc.name:''}${pay.ref?' · '+pay.ref:''}</div>
+              ${coverageLine}
             </div>
             <div style="font-size:10px;color:var(--income)">✓ Paid</div>
           </div>`;
@@ -5221,14 +6247,31 @@ function openPayableHistory(id){
   } else {
     document.getElementById('payable-history-list').innerHTML=`<div class="card" style="margin-top:0">${payments.map(pay=>{
       const acc=db.accounts.find(a=>a.id===pay.accountId);
-      return`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)">
-        <div>
-          <div style="font-size:13px;font-weight:700;color:var(--income)">${fmt(pay.amount)}</div>
+      const months=pay.months||1;
+      // Build coverage label for multi-month payments
+      let coverageHtml='';
+      if(months>1&&py.dueDay){
+        const payDate=new Date(pay.date+'T00:00:00');
+        let firstDue=new Date(payDate.getFullYear(),payDate.getMonth(),py.dueDay);
+        if(firstDue<payDate)firstDue=new Date(payDate.getFullYear(),payDate.getMonth()+1,py.dueDay);
+        const lastDue=new Date(firstDue.getFullYear(),firstDue.getMonth()+months-1,py.dueDay);
+        const fmtD=d=>d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+        coverageHtml=`<div style="font-size:10px;color:var(--blue-l);margin-top:3px;font-weight:600">📅 Covers: ${fmtD(firstDue)} — ${fmtD(lastDue)}</div>`;
+      }
+      const monthsBadge=months>1?`<span style="font-size:9px;font-weight:700;background:var(--blue-bg);color:var(--blue-l);padding:2px 7px;border-radius:6px;margin-left:6px">${months} Months Advance</span>`:'';
+      return`<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+            <div style="font-size:13px;font-weight:700;color:var(--income)">+${fmt(pay.amount)}</div>
+            ${monthsBadge}
+          </div>
           <div style="font-size:11px;color:var(--text3);margin-top:2px">${fmtDate(pay.date)}${acc?' · '+acc.name:''}</div>
+          ${coverageHtml}
           ${pay.ref?`<div style="font-size:10px;color:var(--text3)">Ref: ${pay.ref}</div>`:''}
         </div>
-        <div style="text-align:right">
-          <div style="font-size:10px;color:var(--income)">✓ Paid</div>
+        <div style="text-align:right;flex-shrink:0;margin-left:10px">
+          <div style="font-size:10px;color:var(--income);font-weight:700">✓ Paid</div>
+          ${months>1?`<div style="font-size:9px;color:var(--text3);margin-top:2px">${months} cycles</div>`:''}
         </div>
       </div>`;
     }).join('')}</div>`;
@@ -5550,10 +6593,10 @@ function getBudgetSpend(category, period, targetMonth){
   } else if(targetMonth){
     const [y,m]=targetMonth.split('-').map(Number);
     ms=new Date(y,m-1,1).toISOString().split('T')[0];
-    me=new Date(y,m,0).toISOString().split('T')[0];
+    me=localDate(new Date(y,m,0));
   } else {
     ms=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];
-    me=new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().split('T')[0];
+    me=localMonthEnd(now.getFullYear(),now.getMonth());
   }
   return db.transactions.filter(t=>t.type==='expense'&&t.category===category&&t.date>=ms&&t.date<=me).reduce((s,t)=>s+t.amount,0);
 }
@@ -5591,6 +6634,8 @@ function openAddBudget(){
   document.getElementById('budget-month-selector-group').style.display='';
   populateBudgetMonthOptions();
   document.getElementById('budget-target-month').value='';
+  dismissFormVAI('budget');
+  const vInp=document.getElementById('budget-vai-input');if(vInp)vInp.value='';
   // Category dropdown — only expense cats not already budgeted (for current/default)
   const budgetedCats=db.budgets.filter(b=>!b.targetMonth).map(b=>b.category);
   const available=EXPENSE_CATS.filter(c=>!budgetedCats.includes(c));
@@ -5643,6 +6688,13 @@ function saveBudget(){
   editingBudgetId=null;
   renderBudgetSettings();
   renderBudgetHomePanel();
+  // If currently viewing budget screen, refresh it immediately
+  if(document.getElementById('screen-budget')&&document.getElementById('screen-budget').classList.contains('active')){
+    renderBudgetScreen();
+  } else {
+    // Always re-render so next visit shows updated data
+    renderBudgetScreen();
+  }
 }
 function deleteBudget(){
   showConfirm('Remove Budget?','This budget limit will be removed.',()=>{
@@ -5723,18 +6775,23 @@ function renderBudgetScreen(){
   // Update label
   const labelEl=document.getElementById('budget-screen-month-label');
   if(labelEl)labelEl.textContent=`${MONTHS[budgetScreenMonth]} ${budgetScreenYear}`;
-  // Render month quick-tabs (current ±3 months)
+  // Render month quick-tabs: all 12 months for the current year, Jan→Dec, scrollable
   const tabsEl=document.getElementById('budget-screen-month-tabs');
   if(tabsEl){
     let tabs='';
-    for(let i=-2;i<=3;i++){
-      let m=now.getMonth()+i, y=now.getFullYear();
-      while(m<0){m+=12;y--;}while(m>11){m-=12;y++;}
+    for(let m=0;m<12;m++){
+      const y=budgetScreenYear;
       const isActive=m===budgetScreenMonth&&y===budgetScreenYear;
       const isCurrent=m===now.getMonth()&&y===now.getFullYear();
-      tabs+=`<button onclick="setBudgetScreenMonth(${y},${m})" style="flex-shrink:0;padding:6px 14px;border-radius:99px;border:1px solid ${isActive?'var(--blue)':'var(--border)'};background:${isActive?'var(--blue)':isCurrent?'var(--bg3)':'var(--bg2)'};color:${isActive?'#fff':isCurrent?'var(--blue)':'var(--text3)'};font-size:11px;font-weight:700;cursor:pointer;transition:all .15s">${SHORT[m]}${isCurrent?' ·':''}</button>`;
+      // Dot if any budget data exists for that month
+      const ymCheck=`${y}-${String(m+1).padStart(2,'0')}`;
+      const hasBudget=db.budgets.some(b=>!b.targetMonth||b.targetMonth===ymCheck);
+      tabs+=`<button onclick="setBudgetScreenMonth(${y},${m})" style="flex-shrink:0;padding:6px 14px;border-radius:99px;border:1.5px solid ${isActive?'var(--blue)':'var(--border)'};background:${isActive?'var(--blue)':'var(--bg2)'};color:${isActive?'#fff':isCurrent?'var(--blue)':'var(--text3)'};font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;position:relative">${SHORT[m]}${isCurrent&&!isActive?'<span style="position:absolute;top:2px;right:2px;width:5px;height:5px;background:var(--blue);border-radius:50%"></span>':''}</button>`;
     }
     tabsEl.innerHTML=tabs;
+    // Scroll active tab into view
+    const activeBtn=tabsEl.querySelector('[style*="var(--blue)"]');
+    if(activeBtn)setTimeout(()=>activeBtn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}),50);
   }
   // Get budgets for this month
   const ymStr=`${budgetScreenYear}-${String(budgetScreenMonth+1).padStart(2,'0')}`;
@@ -5747,7 +6804,7 @@ function renderBudgetScreen(){
     return b.targetMonth===ymStr;
   });
   const ms=`${budgetScreenYear}-${String(budgetScreenMonth+1).padStart(2,'0')}-01`;
-  const me=new Date(budgetScreenYear,budgetScreenMonth+1,0).toISOString().split('T')[0];
+  const me=localMonthEnd(budgetScreenYear,budgetScreenMonth);
   const totalSpent=db.transactions.filter(t=>t.type==='expense'&&t.date>=ms&&t.date<=me).reduce((s,t)=>s+t.amount,0);
   const totalBudgeted=monthBudgets.reduce((s,b)=>s+b.monthlyLimit,0);
   const overallPct=totalBudgeted>0?Math.min(100,(totalSpent/totalBudgeted)*100):0;
@@ -5885,7 +6942,7 @@ function renderBudgetReport(){
     const year=now.getFullYear();
     const tableRows=months.map((m,idx)=>{
       const ms=`${year}-${String(idx+1).padStart(2,'0')}-01`;
-      const me=new Date(year,idx+1,0).toISOString().split('T')[0];
+      const me=localMonthEnd(year,idx);
       const mSpent=allBudgets.reduce((s,b)=>{
         return s+db.transactions.filter(t=>t.type==='expense'&&t.category===b.category&&t.date>=ms&&t.date<=me).reduce((ss,t)=>ss+t.amount,0);
       },0);
@@ -6302,15 +7359,17 @@ function focusSmartInput() {
 // ── Smart Voice Input ─────────────────────────────────────────
 function toggleSmartVoice() {
   if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-    showToast('Voice input not supported on this browser','error'); return;
+    showToast('Voice input not supported on this browser. Try Chrome.','error'); return;
   }
   if (smartVoiceListening) { stopSmartVoice(); return; }
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   smartVoiceRecog = new SR();
-  smartVoiceRecog.lang = 'en-PH';
+  // Use en-US for best mobile support, fallback gracefully
+  smartVoiceRecog.lang = 'en-US';
   smartVoiceRecog.continuous = false;
   smartVoiceRecog.interimResults = true;
+  smartVoiceRecog.maxAlternatives = 1;
   smartVoiceListening = true;
 
   const btn = document.getElementById('smart-voice-btn');
@@ -6321,6 +7380,9 @@ function toggleSmartVoice() {
   if (bar) bar.classList.add('show');
   if (inputBar) inputBar.classList.add('listening');
 
+  smartVoiceRecog.onstart = () => {
+    if (txt) txt.textContent = '🎙️ Listening… speak now';
+  };
   smartVoiceRecog.onresult = e => {
     const interim = Array.from(e.results).map(r => r[0].transcript).join('');
     if (txt) txt.textContent = '🎙️ ' + interim;
@@ -6331,12 +7393,23 @@ function toggleSmartVoice() {
       stopSmartVoice();
     }
   };
-  smartVoiceRecog.onerror = () => {
+  smartVoiceRecog.onerror = (ev) => {
     stopSmartVoice();
-    showToast('Could not hear you. Try again.','error');
+    if (ev.error === 'not-allowed') {
+      showToast('Microphone access denied. Please allow mic in browser settings.','error');
+    } else if (ev.error === 'no-speech') {
+      showToast('No speech detected. Try again.','warn');
+    } else {
+      showToast('Voice error: ' + ev.error + '. Try again.','error');
+    }
   };
   smartVoiceRecog.onend = () => stopSmartVoice();
-  smartVoiceRecog.start();
+  try {
+    smartVoiceRecog.start();
+  } catch(e) {
+    stopSmartVoice();
+    showToast('Could not start voice input. Check mic permissions.','error');
+  }
 }
 
 function stopSmartVoice() {
@@ -6365,6 +7438,66 @@ function resetSmartInput() {
 // ── Keep old parseVoiceInput & toggleVoiceInput for compat ────
 function toggleVoiceInput() { toggleSmartVoice(); }
 function parseVoiceInput(text) { onSmartInput(text); }
+
+// ── Generic voice input for any field ─────────────────────────
+// Usage: genericVoice(btnId, targetFieldId, onResult, statusId)
+let genericVoiceRecog = null;
+let genericVoiceListening = false;
+function genericVoice(btnId, targetFieldId, onResult, statusId) {
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    showToast('Voice input not supported. Try Chrome.','error'); return;
+  }
+  if (genericVoiceListening) {
+    // Stop
+    if (genericVoiceRecog) { try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null; }
+    genericVoiceListening = false;
+    const btn = document.getElementById(btnId);
+    if (btn) btn.classList.remove('listening');
+    const st = statusId ? document.getElementById(statusId) : null;
+    if (st) st.style.display = 'none';
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  genericVoiceRecog = new SR();
+  genericVoiceRecog.lang = 'en-US';
+  genericVoiceRecog.continuous = false;
+  genericVoiceRecog.interimResults = true;
+  genericVoiceRecog.maxAlternatives = 1;
+  genericVoiceListening = true;
+  const btn = document.getElementById(btnId);
+  if (btn) btn.classList.add('listening');
+  const st = statusId ? document.getElementById(statusId) : null;
+  if (st) { st.style.display='flex'; st.textContent='🎙️ Listening…'; }
+
+  genericVoiceRecog.onresult = e => {
+    const text = Array.from(e.results).map(r=>r[0].transcript).join('');
+    const field = document.getElementById(targetFieldId);
+    if (field) field.value = text;
+    if (st) st.textContent = '🎙️ '+text;
+    if (e.results[e.results.length-1].isFinal) {
+      if (onResult) onResult(text);
+      genericVoiceListening = false;
+      if (btn) btn.classList.remove('listening');
+      if (genericVoiceRecog) {try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null;}
+      setTimeout(()=>{ if(st) st.style.display='none'; }, 1500);
+    }
+  };
+  genericVoiceRecog.onerror = (ev) => {
+    genericVoiceListening = false;
+    if (btn) btn.classList.remove('listening');
+    if (genericVoiceRecog) {try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null;}
+    if (st) st.style.display='none';
+    if (ev.error === 'not-allowed') showToast('Mic access denied. Allow mic in browser.','error');
+    else if (ev.error !== 'no-speech') showToast('Voice error. Try again.','warn');
+  };
+  genericVoiceRecog.onend = () => {
+    genericVoiceListening = false;
+    if (btn) btn.classList.remove('listening');
+    if (st) setTimeout(()=>{ if(st)st.style.display='none'; }, 800);
+  };
+  try { genericVoiceRecog.start(); }
+  catch(e) { genericVoiceListening=false; if(btn)btn.classList.remove('listening'); showToast('Cannot start voice.','error'); }
+}
 
 // ===== END AI CATEGORIZATION ENGINE ======
 
@@ -6501,7 +7634,16 @@ function cleanDismissedAlerts(){
 }
 
 // ===== SAVINGS GOALS =====
-const GOAL_EMOJIS=['🎯','✈️','🏠','🚗','📱','💻','💍','🎓','🏋️','🌴','🎸','🏖️','💰','🏆','🛒'];
+const GOAL_EMOJIS=['🎯','✈️','🏠','🚗','📱','💻','💍','🎓','🏋️','🌴','🎸','🏖️','💰','🏆','🛒','🍕','☕','🎮','📷','⌚','👗','👠','🏥','🌏','🛫','🏕️','🎉','🎁','🏦','💎','🚀','🐶','🏡','🌊','🎨','🎵'];
+
+function renderGoalIconPicker(selectedEmoji){
+  const el=document.getElementById('goal-icon-picker');if(!el)return;
+  el.innerHTML=GOAL_EMOJIS.map(e=>`<button type="button" onclick="selectGoalIcon('${e}')" style="width:36px;height:36px;border-radius:8px;border:2px solid ${e===selectedEmoji?'var(--blue)':'transparent'};background:${e===selectedEmoji?'var(--blue-bg)':'var(--bg3)'};font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;-webkit-appearance:none" id="gi-${e.codePointAt(0)}">${e}</button>`).join('');
+}
+function selectGoalIcon(emoji){
+  document.getElementById('goal-emoji').value=emoji;
+  renderGoalIconPicker(emoji);
+}
 
 function handleGoalsAdd(){
   if(currentGoalsTab==='recurring')openAddRecurring();
@@ -6514,6 +7656,8 @@ function showGoalsTab(tab,btn){
   if(btn)btn.classList.add('active');
   const addBtn=document.getElementById('goals-add-btn');
   if(addBtn)addBtn.textContent=tab==='recurring'?'➕':tab==='planned'?'➕':'➕';
+  // Update VAI bar context based on sub-tab — all forms now have embedded Smart Input
+  hideVAIBar();
   renderGoalsScreen();
 }
 function renderGoalsScreen(){
@@ -6725,6 +7869,9 @@ function openAddGoal(){
   document.getElementById('goal-notes').value='';
   const accOpts='<option value="">— No linked account —</option>'+db.accounts.map(a=>`<option value="${a.id}">${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('');
   document.getElementById('goal-linked-account').innerHTML=accOpts;
+  dismissFormVAI('goal');
+  const vInp=document.getElementById('goal-vai-input');if(vInp)vInp.value='';
+  renderGoalIconPicker('🎯');
   openModal('modal-goal');
 }
 function openEditGoal(id){
@@ -6741,6 +7888,7 @@ function openEditGoal(id){
   document.getElementById('goal-notes').value=g.notes||'';
   const accOpts='<option value="">— No linked account —</option>'+db.accounts.map(a=>`<option value="${a.id}"${a.id===g.linkedAccountId?' selected':''}>${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('');
   document.getElementById('goal-linked-account').innerHTML=accOpts;
+  renderGoalIconPicker(g.emoji||'🎯');
   openModal('modal-goal');
 }
 function saveGoal(){
@@ -6928,10 +8076,31 @@ function renderRecurringList(){
   }
   el.innerHTML=db.recurring.map(r=>{
     const acc=db.accounts.find(a=>a.id===r.accountId);
-    const nextDate=getNextRecurDate(r);
     const isPaused=r.status==='paused';
     const amtSign=r.type==='income'?'+':'-';
-    return`<div class="recur-card${isPaused?' paused':''}" onclick="openEditRecurring('${r.id}')">
+    const todayStr=today();
+
+    // Get upcoming occurrence info
+    const schedule=generateRecurringSchedule(r);
+    const nextDue=schedule.find(s=>s.status==='upcoming'||s.status==='current');
+    const overdueSched=schedule.filter(s=>s.status==='missed');
+    const appliedCount=schedule.filter(s=>s.status==='applied').length;
+
+    let dueBadge='';
+    if(isPaused){
+      dueBadge=`<span class="recur-badge" style="background:rgba(90,98,130,0.15);color:var(--text3)">⏸ Paused</span>`;
+    } else if(overdueSched.length>0){
+      dueBadge=`<span class="recur-badge" style="background:var(--rose-bg);color:var(--rose)">⚠️ ${overdueSched.length} missed</span>`;
+    } else if(nextDue){
+      const daysUntil=Math.ceil((new Date(nextDue.date+'T00:00:00')-new Date())/(1000*60*60*24));
+      if(daysUntil===0)dueBadge=`<span class="recur-badge" style="background:var(--amber-bg);color:var(--amber)">📅 Due Today</span>`;
+      else if(daysUntil<=3)dueBadge=`<span class="recur-badge" style="background:var(--amber-bg);color:var(--amber)">⏰ In ${daysUntil}d</span>`;
+      else dueBadge=`<span class="recur-badge next">Next: ${fmtDate(nextDue.date)}</span>`;
+    } else if(r.endDate&&todayStr>r.endDate){
+      dueBadge=`<span class="recur-badge" style="background:var(--emerald-bg);color:var(--emerald)">✅ Completed</span>`;
+    }
+
+    return`<div class="recur-card${isPaused?' paused':''}" onclick="openRecurringSchedule('${r.id}')">
       <div class="recur-hdr">
         <div class="recur-left">
           <div class="recur-icon ${r.type}" style="background:${r.type==='income'?'rgba(86,200,160,0.12)':'rgba(240,98,146,0.12)'}">${r.category.split(' ')[0]}</div>
@@ -6945,12 +8114,13 @@ function renderRecurringList(){
       <div class="recur-meta">
         <span class="recur-badge ${r.type}">${r.type==='income'?'↑ Income':'↓ Expense'}</span>
         <span class="recur-badge freq">🔄 ${RECUR_FREQ_LABELS[r.frequency]}</span>
-        ${nextDate?`<span class="recur-badge next">Next: ${nextDate}</span>`:''}
-        ${isPaused?`<span class="recur-badge" style="background:rgba(90,98,130,0.15);color:var(--text3)">⏸ Paused</span>`:''}
+        ${dueBadge}
         ${acc?`<span style="font-size:10px;color:var(--text3)">${ACC_ICONS[acc.type]} ${acc.name}</span>`:''}
+        ${appliedCount>0?`<span style="font-size:10px;color:var(--text3)">${appliedCount} applied</span>`:''}
       </div>
       <div class="recur-actions" onclick="event.stopPropagation()">
         <button class="recur-btn apply" onclick="applyRecurringNow('${r.id}')">▶ Apply Now</button>
+        <button class="recur-btn sched" onclick="openRecurringSchedule('${r.id}')">📊 Schedule</button>
         <button class="recur-btn pause" onclick="toggleRecurPause('${r.id}')">${isPaused?'▶ Resume':'⏸ Pause'}</button>
         <button class="recur-btn del" onclick="deleteRecurring('${r.id}')">🗑</button>
       </div>
@@ -6985,12 +8155,15 @@ function openAddRecurring(){
   document.getElementById('recur-freq').value='monthly';
   document.getElementById('recur-start').value=today();
   document.getElementById('recur-end').value='';
+  document.getElementById('recur-due-day').value='';
   const cats=EXPENSE_CATS;
   document.getElementById('recur-category').innerHTML=cats.map(c=>`<option value="${c}">${c}</option>`).join('');
   document.querySelector('#modal-recur .type-tab.expense').classList.add('active');
   document.querySelector('#modal-recur .type-tab.income').classList.remove('active');
   const accOpts=db.accounts.map(a=>`<option value="${a.id}">${ACC_ICONS[a.type]} ${a.name}</option>`).join('')||'<option value="">No accounts</option>';
   document.getElementById('recur-account').innerHTML=accOpts;
+  dismissFormVAI('recurring');
+  const vInp=document.getElementById('recurring-vai-input');if(vInp)vInp.value='';
   openModal('modal-recur');
 }
 function openEditRecurring(id){
@@ -7005,6 +8178,7 @@ function openEditRecurring(id){
   document.getElementById('recur-freq').value=r.frequency;
   document.getElementById('recur-start').value=r.startDate;
   document.getElementById('recur-end').value=r.endDate||'';
+  document.getElementById('recur-due-day').value=r.dueDay||'';
   const cats=r.type==='expense'?EXPENSE_CATS:INCOME_CATS;
   document.getElementById('recur-category').innerHTML=cats.map(c=>`<option value="${c}"${c===r.category?' selected':''}>${c}</option>`).join('');
   document.querySelectorAll('#modal-recur .type-tab').forEach(t=>t.classList.remove('active'));
@@ -7021,15 +8195,16 @@ function saveRecurring(){
   const frequency=document.getElementById('recur-freq').value;
   const startDate=document.getElementById('recur-start').value;
   const endDate=document.getElementById('recur-end').value||null;
+  const dueDay=parseInt(document.getElementById('recur-due-day').value)||null;
   if(!name){showToast('Please enter a name','error');return;}
   if(amount<=0){showToast('Please enter a valid amount','error');return;}
   if(!startDate){showToast('Please set a start date','error');return;}
   if(editingRecurId){
     const r=db.recurring.find(r=>r.id===editingRecurId);
-    if(r)Object.assign(r,{name,amount,category,accountId,frequency,startDate,endDate,type:currentRecurType});
+    if(r)Object.assign(r,{name,amount,category,accountId,frequency,startDate,endDate,dueDay,type:currentRecurType});
     showToast('Recurring rule updated! 🔄','success');
   } else {
-    db.recurring.push({id:uid(),name,amount,category,accountId,frequency,startDate,endDate,type:currentRecurType,status:'active',lastApplied:null,createdAt:Date.now()});
+    db.recurring.push({id:uid(),name,amount,category,accountId,frequency,startDate,endDate,dueDay,type:currentRecurType,status:'active',lastApplied:null,createdAt:Date.now()});
     showToast('Recurring rule saved! 🔄','success');
   }
   saveDB();closeModal('modal-recur');editingRecurId=null;renderGoalsScreen();renderCashFlow();
@@ -7044,7 +8219,7 @@ function deleteRecurring(id){
 function toggleRecurPause(id){
   const r=db.recurring.find(r=>r.id===id);if(!r)return;
   r.status=r.status==='paused'?'active':'paused';
-  saveDB();renderGoalsScreen();
+  saveDB();renderGoalsScreen();updateRecurringBadge();
   showToast(r.status==='paused'?'Recurring paused ⏸':'Recurring resumed ▶','success');
 }
 function applyRecurringNow(id){
@@ -7105,8 +8280,8 @@ function updateExportPreview(){
 function getExportTxs(period,type){
   const now=new Date();
   let start,end;
-  if(period==='month'){start=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];end=new Date(now.getFullYear(),now.getMonth()+1,0).toISOString().split('T')[0];}
-  else if(period==='lastmonth'){start=new Date(now.getFullYear(),now.getMonth()-1,1).toISOString().split('T')[0];end=new Date(now.getFullYear(),now.getMonth(),0).toISOString().split('T')[0];}
+  if(period==='month'){start=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];end=localMonthEnd(now.getFullYear(),now.getMonth());}
+  else if(period==='lastmonth'){start=localDate(new Date(now.getFullYear(),now.getMonth()-1,1));end=localDate(new Date(now.getFullYear(),now.getMonth(),0));}
   else if(period==='year'){start=`${now.getFullYear()}-01-01`;end=`${now.getFullYear()}-12-31`;}
   else{start='1970-01-01';end='2099-12-31';}
   let txs=db.transactions.filter(t=>t.date>=start&&t.date<=end);
@@ -7318,14 +8493,1007 @@ function exportAllCSV(){
   showToast('Exported 4 CSV files! 🗂️','success');
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// VOICE AI SETTINGS  –  per-record field configuration & smart parser
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Schema: field definitions per record type ──────────────────────
+// formField: the real DOM id that will be filled on confirm
+const VAI_SCHEMA = {
+  payable: {
+    label:'Payable / Loan', icon:'💳',
+    openFn: 'openAddPayable',
+    triggerWords: ['loan','payable','utang','debt','credit','bnpl','installment'],
+    fields: [
+      {id:'name',          label:'Name / Description', type:'text',   enabled:true,  keywords:['loan','for','named','called','it\'s'],       formField:'py-name'    },
+      {id:'totalAmount',   label:'Total Amount',        type:'number', enabled:true,  keywords:['total','amount','principal','worth'],         formField:'py-total'   },
+      {id:'paidAmount',    label:'Already Paid',        type:'number', enabled:false, keywords:['paid','already paid','existing','covered'],   formField:'py-paid'    },
+      {id:'monthlyPayment',label:'Monthly Payment',     type:'number', enabled:true,  keywords:['monthly','per month','installment','mo'],     formField:'py-monthly' },
+      {id:'interestRate',  label:'Interest Rate (%)',   type:'number', enabled:false, keywords:['interest','rate','percent'],                  formField:'py-interest'},
+      {id:'dueDay',        label:'Due Day (of month)',  type:'number', enabled:true,  keywords:['due','every','day','on the'],                 formField:'py-due-day' },
+      {id:'notes',         label:'Notes',               type:'text',   enabled:false, keywords:['note','memo','details','about'],              formField:'py-notes'   },
+    ]
+  },
+  goal: {
+    label:'Savings Goal', icon:'🎯',
+    openFn: 'openAddGoal',
+    triggerWords: ['goal','save','saving','target','fund','dream'],
+    fields: [
+      {id:'name',   label:'Goal Name',     type:'text',   enabled:true,  keywords:['goal','for','save','named','called'], formField:'goal-name'   },
+      {id:'target', label:'Target Amount', type:'number', enabled:true,  keywords:['target','need','total','amount'],     formField:'goal-target' },
+      {id:'saved',  label:'Already Saved', type:'number', enabled:false, keywords:['saved','have','existing','already'],  formField:'goal-saved'  },
+    ]
+  },
+  recurring: {
+    label:'Recurring Rule', icon:'🔄',
+    openFn: 'openAddRecurring',
+    triggerWords: ['recurring','repeat','monthly','every','subscription','auto','regular'],
+    fields: [
+      {id:'name',   label:'Rule Name', type:'text',   enabled:true,  keywords:['named','called','for'],               formField:'recur-name'   },
+      {id:'amount', label:'Amount',    type:'number', enabled:true,  keywords:['amount','cost','pay','charge'],        formField:'recur-amount' },
+      {id:'dueDay', label:'Due Day',   type:'number', enabled:true,  keywords:['due','every','day','on the','nth'],    formField:'recur-due-day'},
+    ]
+  },
+  planned: {
+    label:'Upcoming Event', icon:'📅',
+    openFn: 'openAddPlanned',
+    triggerWords: ['plan','planned','schedule','upcoming','event','future','bill'],
+    fields: [
+      {id:'amount', label:'Amount',      type:'number', enabled:true,  keywords:['amount','cost','pay'],         formField:'pl-amount'},
+      {id:'desc',   label:'Description', type:'text',   enabled:true,  keywords:['for','about','description'],   formField:'pl-desc'  },
+    ]
+  },
+  account: {
+    label:'Account', icon:'🏦',
+    openFn: 'openAddAccount',
+    triggerWords: ['account','wallet','bank','gcash','maya','savings','cash'],
+    fields: [
+      {id:'name',    label:'Account Name', type:'text',   enabled:true,  keywords:['account','named','called','bank'],    formField:'acc-name'   },
+      {id:'balance', label:'Balance',      type:'number', enabled:true,  keywords:['balance','opening','amount','worth'],  formField:'acc-balance'},
+    ]
+  },
+  budget: {
+    label:'Budget Limit', icon:'📊',
+    openFn: 'openAddBudget',
+    triggerWords: ['budget','limit','cap','spending','set budget','monthly limit'],
+    fields: [
+      {id:'amount', label:'Budget Amount', type:'number', enabled:true,  keywords:['budget','limit','cap','amount','set'],    formField:'budget-limit-amount'},
+    ]
+  }
+};
+
+// ── Runtime state ──────────────────────────────────────────────────
+let vaiCurrentTab   = 'payable';
+let vaiPendingResult = null;
+let vaiVoiceRecog   = null;
+let vaiListening    = false;
+let vaiCurrentScreen = null; // which screen the bar is active for
+
+// ── Config: get merged defaults+saved from db.settings ─────────────
+function getVAIConfig() {
+  const saved = db.settings.vaiConfig || {};
+  const merged = {};
+  for (const [rtype, schema] of Object.entries(VAI_SCHEMA)) {
+    const s = saved[rtype] || {};
+    merged[rtype] = {
+      ...schema,
+      triggerWords: s.triggerWords !== undefined ? s.triggerWords : [...schema.triggerWords],
+      fields: schema.fields.map(f => {
+        const sf = (s.fields||[]).find(x => x.id === f.id) || {};
+        return {
+          ...f,
+          enabled:  sf.enabled  !== undefined ? sf.enabled  : f.enabled,
+          keywords: sf.keywords !== undefined ? [...sf.keywords] : [...f.keywords],
+        };
+      })
+    };
+  }
+  return merged;
+}
+
+function persistVAIConfig(config) {
+  if (!db.settings.vaiConfig) db.settings.vaiConfig = {};
+  for (const [rtype, cfg] of Object.entries(config)) {
+    db.settings.vaiConfig[rtype] = {
+      triggerWords: cfg.triggerWords,
+      fields: cfg.fields.map(f => ({ id:f.id, enabled:f.enabled, keywords:[...f.keywords] }))
+    };
+  }
+  saveDB();
+}
+
+// ── SETTINGS MODAL ─────────────────────────────────────────────────
+function openVAISettings() {
+  vaiCurrentTab = 'payable';
+  document.querySelectorAll('#vai-type-tabs .vai-tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  if (!window._vaiDraft) window._vaiDraft = {};
+  openModal('modal-vai-settings');
+  renderVAITab('payable');
+}
+
+function switchVAITab(type, btn) {
+  _vaiSaveTabDraft(vaiCurrentTab);
+  vaiCurrentTab = type;
+  document.querySelectorAll('#vai-type-tabs .vai-tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderVAITab(type);
+}
+
+function renderVAITab(type) {
+  const config = getVAIConfig();
+  // Apply any in-progress draft
+  if (window._vaiDraft && window._vaiDraft[type]) {
+    const d = window._vaiDraft[type];
+    config[type].triggerWords = d.triggerWords;
+    config[type].fields = d.fields;
+  }
+  const def = config[type];
+  const panel = document.getElementById('vai-fields-panel');
+
+  const enabledCount = def.fields.filter(f=>f.enabled).length;
+  const exampleParts = [def.triggerWords[0]||''];
+  def.fields.filter(f=>f.enabled).slice(0,3).forEach(f=>{
+    exampleParts.push((f.keywords[0]||'')+(f.type==='number'?' [amount]':' [text]'));
+  });
+
+  let html = `
+    <div style="background:var(--bg3);border-radius:10px;padding:11px 12px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">🔑 Trigger Keywords
+        <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);font-size:10px"> — comma-separated words that identify this record type</span>
+      </div>
+      <input type="text" id="vai-triggers-${type}" class="vai-kw-input"
+        value="${def.triggerWords.join(', ')}"
+        placeholder="e.g. loan, payable, utang">
+    </div>
+
+    <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">
+      📋 Fields &amp; Keywords
+      <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(${enabledCount} active)</span>
+    </div>`;
+
+  def.fields.forEach(f => {
+    html += `
+    <div class="vai-field-row ${f.enabled?'enabled':''}" id="vai-row-${type}-${f.id}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:${f.enabled?'8px':'0'}">
+        <label class="toggle-switch" style="flex-shrink:0">
+          <input type="checkbox" id="vai-chk-${type}-${f.id}" ${f.enabled?'checked':''}
+            onchange="vaiToggleField('${type}','${f.id}',this.checked)">
+          <div class="toggle-track"></div>
+        </label>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:700;color:var(--text)">${f.label}</div>
+          <div style="font-size:9.5px;color:var(--text3);margin-top:1px">
+            Type: <b>${f.type}</b> · fills <code style="font-size:9px;background:var(--bg2);padding:0 4px;border-radius:3px">#${f.formField}</code>
+          </div>
+        </div>
+        <div id="vai-badge-${type}-${f.id}" style="font-size:9px;font-weight:700;border-radius:6px;padding:2px 8px;border:1px solid;
+          ${f.enabled
+            ? 'color:var(--emerald);background:var(--emerald-bg);border-color:rgba(16,185,129,.3)'
+            : 'color:var(--text3);background:var(--bg);border-color:var(--border)'}">
+          ${f.enabled?'ON':'OFF'}
+        </div>
+      </div>
+      <div id="vai-kw-row-${type}-${f.id}" style="${f.enabled?'':'display:none'}">
+        <div style="font-size:9px;color:var(--text3);margin-bottom:4px">
+          🔑 Keywords that signal <b>${f.label}</b> — the value after these words is extracted:
+        </div>
+        <input type="text" id="vai-kw-${type}-${f.id}" class="vai-kw-input"
+          value="${f.keywords.join(', ')}"
+          placeholder="e.g. total, amount, principal">
+      </div>
+    </div>`;
+  });
+
+  html += `
+    <div style="background:var(--blue-bg);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:10px 12px;margin-top:8px">
+      <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:4px">💡 Example phrase after saving</div>
+      <div style="font-size:10px;color:var(--text3);line-height:1.5;font-style:italic">"${exampleParts.join(' ')}"</div>
+    </div>`;
+
+  panel.innerHTML = html;
+}
+
+function vaiToggleField(type, fieldId, enabled) {
+  const kwRow  = document.getElementById(`vai-kw-row-${type}-${fieldId}`);
+  const badge  = document.getElementById(`vai-badge-${type}-${fieldId}`);
+  const row    = document.getElementById(`vai-row-${type}-${fieldId}`);
+  if (kwRow) kwRow.style.display = enabled ? '' : 'none';
+  if (badge) {
+    badge.textContent = enabled ? 'ON' : 'OFF';
+    badge.style.color        = enabled ? 'var(--emerald)' : 'var(--text3)';
+    badge.style.background   = enabled ? 'var(--emerald-bg)' : 'var(--bg)';
+    badge.style.borderColor  = enabled ? 'rgba(16,185,129,.3)' : 'var(--border)';
+  }
+  if (row) row.classList.toggle('enabled', enabled);
+}
+
+// Collect current tab's DOM values into draft buffer (called on tab switch & save)
+function _vaiSaveTabDraft(type) {
+  const trigEl = document.getElementById(`vai-triggers-${type}`);
+  if (!trigEl) return; // tab not rendered yet
+  const config = getVAIConfig();
+  if (window._vaiDraft && window._vaiDraft[type]) {
+    // already have draft fields structure; update it
+  }
+  if (!window._vaiDraft) window._vaiDraft = {};
+  window._vaiDraft[type] = {
+    triggerWords: trigEl.value.split(',').map(s=>s.trim()).filter(Boolean),
+    fields: VAI_SCHEMA[type].fields.map(f => {
+      const chk = document.getElementById(`vai-chk-${type}-${f.id}`);
+      const kw  = document.getElementById(`vai-kw-${type}-${f.id}`);
+      return {
+        ...f,
+        enabled:  chk ? chk.checked : f.enabled,
+        keywords: kw  ? kw.value.split(',').map(s=>s.trim()).filter(Boolean) : [...f.keywords],
+      };
+    })
+  };
+}
+
+function saveVAISettings() {
+  _vaiSaveTabDraft(vaiCurrentTab);
+  const config = getVAIConfig();
+  if (window._vaiDraft) {
+    for (const [type, draft] of Object.entries(window._vaiDraft)) {
+      if (config[type]) {
+        config[type].triggerWords = draft.triggerWords;
+        config[type].fields       = draft.fields;
+      }
+    }
+  }
+  persistVAIConfig(config);
+  window._vaiDraft = {};
+  closeModal('modal-vai-settings');
+  renderVAISettingsSummary();
+  showToast('✅ Voice AI settings saved!','success');
+}
+
+function renderVAISettingsSummary() {
+  const el = document.getElementById('vai-settings-summary');
+  if (!el) return;
+  const config = getVAIConfig();
+  el.innerHTML = Object.entries(config).map(([type, def]) => {
+    const n = def.fields.filter(f=>f.enabled).length;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:12px;font-weight:600">${def.icon} ${def.label}</div>
+      <div style="font-size:10px;font-weight:700;color:${n>0?'var(--emerald)':'var(--text3)'}">${n} field${n!==1?'s':''} active</div>
+    </div>`;
+  }).join('')
+  + `<div style="font-size:10px;color:var(--text3);margin-top:8px;line-height:1.5">
+       Tap <b>Configure Voice AI Fields</b> to customise. Then use the 🎤 bar on Payables or Goals screens.
+     </div>`;
+}
+
+// ── PARSER ─────────────────────────────────────────────────────────
+// Spoken number words → numeric value (reuses same logic as aiParseText)
+const VAI_NUM_WORDS={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90,hundred:100,thousand:1000,million:1000000};
+
+function vaiSpokenToNum(str){
+  // Try plain digit first
+  const dig=str.match(/^[\s,]*(\d[\d,\.]*)/);
+  if(dig) return parseFloat(dig[1].replace(/,/g,''));
+  // Word-based
+  const words=str.toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/);
+  let total=0,cur=0;
+  for(const w of words){
+    const v=VAI_NUM_WORDS[w];
+    if(v===undefined) break;
+    if(v===1000000){total=(total+cur)*v;cur=0;}
+    else if(v===1000){total=(total+cur)*1000;cur=0;}
+    else if(v===100){cur*=100;}
+    else cur+=v;
+  }
+  return total+cur;
+}
+
+function vaiExtractAllNums(str){
+  return [...str.matchAll(/(\d[\d,\.]*)/g)].map(m=>parseFloat(m[1].replace(/,/g,''))).filter(n=>n>0);
+}
+
+// Find position of next field keyword in remaining text (for bounding text fields)
+function vaiNextKeywordPos(str, enabledFields, currentId){
+  let min=str.length;
+  for(const f of enabledFields){
+    if(f.id===currentId) continue;
+    for(const kw of f.keywords){
+      const p=str.toLowerCase().indexOf(kw.toLowerCase());
+      if(p>0&&p<min) min=p;
+    }
+  }
+  return min;
+}
+
+function parseVAIText(rawText, hintType=null) {
+  const text  = rawText.trim();
+  const lower = text.toLowerCase();
+  const config = getVAIConfig();
+
+  // 1. Detect record type via trigger words (longest match wins)
+  //    If hintType is provided, use it directly (called from a form context)
+  let detectedType=hintType||null, bestScore=hintType?1:0;
+  if(!hintType){
+    for(const [rtype,def] of Object.entries(config)){
+      let score=0;
+      for(const kw of def.triggerWords){
+        if(lower.includes(kw.toLowerCase())) score+=kw.length;
+      }
+      if(score>bestScore){bestScore=score;detectedType=rtype;}
+    }
+  }
+  if(!detectedType||bestScore===0) return null;
+
+  const def           = config[detectedType];
+  const enabledFields = def.fields.filter(f=>f.enabled);
+  const parsedValues  = {};
+  const allNums       = vaiExtractAllNums(lower);
+  let   numIdx        = 0;           // fallback number cursor
+  let   totalScore    = 0;
+
+  // 2. Per-field extraction
+  for(const field of enabledFields){
+    let found=false;
+    for(const kw of field.keywords){
+      const kwL = kw.toLowerCase();
+      const idx = lower.indexOf(kwL);
+      if(idx===-1) continue;
+
+      const afterKw = text.slice(idx+kw.length).trimStart();
+
+      if(field.type==='number'){
+        const val=vaiSpokenToNum(afterKw);
+        if(val>0){ parsedValues[field.id]=val; totalScore+=1.2; found=true; break; }
+
+      }else if(field.type==='text'){
+        const bound  = vaiNextKeywordPos(afterKw, enabledFields, field.id);
+        const phrase = afterKw.slice(0,bound).trim().split(/\s+/).slice(0,6).join(' ');
+        if(phrase){ parsedValues[field.id]=phrase; totalScore+=0.9; found=true; break; }
+      }
+    }
+
+    // Fallback: for number fields, consume the next unused digit in the utterance
+    if(!found && field.type==='number'){
+      // Skip numbers already assigned
+      const used=new Set(Object.values(parsedValues).filter(v=>typeof v==='number'));
+      while(numIdx<allNums.length && used.has(allNums[numIdx])) numIdx++;
+      if(numIdx<allNums.length){ parsedValues[field.id]=allNums[numIdx++]; totalScore+=0.4; }
+    }
+  }
+
+  // 3. Confidence
+  const fillRatio   = enabledFields.length ? Object.keys(parsedValues).length/enabledFields.length : 0;
+  const trigBoost   = bestScore>0 ? 0.25 : 0;
+  const scoreBoost  = Math.min(0.15, totalScore*0.03);
+  const confidence  = Math.min(0.97, fillRatio*0.60+trigBoost+scoreBoost);
+
+  // 4. Unrecognised words (content words not in any keyword list)
+  const allKW = new Set([
+    ...def.triggerWords.flatMap(k=>k.toLowerCase().split(/\s+/)),
+    ...enabledFields.flatMap(f=>f.keywords.flatMap(k=>k.toLowerCase().split(/\s+/)))
+  ]);
+  const unrecognised = lower.split(/\s+/).filter(w=>{
+    const clean=w.replace(/[^a-z0-9]/g,'');
+    return clean.length>2 && !allKW.has(clean) && !/^\d/.test(clean);
+  }).filter((w,i,a)=>a.indexOf(w)===i).slice(0,5);
+
+  return { recordType:detectedType, fields:parsedValues, enabledFields, rawText:text, confidence, unrecognised, def };
+}
+
+// ── CONFIRM MODAL ──────────────────────────────────────────────────
+function showVAIConfirm(parsed) {
+  if(!parsed){ showToast('⚠️ Could not detect record type. Include words like "loan", "goal", "recurring"…','warn'); return; }
+  vaiPendingResult = parsed;
+  const pct = Math.round(parsed.confidence*100);
+
+  document.getElementById('vai-confirm-title').textContent = `${parsed.def.icon} Voice AI — ${parsed.def.label}`;
+
+  // Confidence bar
+  const bar = document.getElementById('vai-conf-bar');
+  bar.style.width      = pct+'%';
+  bar.style.background = pct>=70 ? 'var(--emerald)' : pct>=40 ? 'var(--amber)' : 'var(--rose)';
+  const pctEl = document.getElementById('vai-conf-pct');
+  pctEl.textContent  = pct+'%';
+  pctEl.style.color  = pct>=70 ? 'var(--emerald)' : pct>=40 ? 'var(--amber)' : 'var(--rose)';
+  document.getElementById('vai-raw-text').textContent = `"${parsed.rawText}"`;
+
+  // Fields
+  const container = document.getElementById('vai-confirm-fields');
+  container.innerHTML = parsed.enabledFields.map(f=>{
+    const val   = parsed.fields[f.id];
+    const hasVal = val!==undefined;
+    const disp  = hasVal ? (f.type==='number' ? fmt(val) : val) : '—';
+    return `<div class="vai-confirm-field ${hasVal?'filled':'empty'}">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">${f.label}</div>
+        <div style="font-size:15px;font-weight:700;color:${hasVal?'var(--text)':'var(--text3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${disp}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;margin-left:10px">
+        ${hasVal
+          ? `<span style="font-size:11px;font-weight:700;color:var(--emerald);background:var(--emerald-bg);border-radius:6px;padding:3px 9px">✓ Filled</span>`
+          : `<span style="font-size:11px;font-weight:700;color:var(--amber);background:var(--amber-bg);border-radius:6px;padding:3px 9px">Missing</span>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+
+  // Unrecognised hint
+  const unrecEl = document.getElementById('vai-unrecognised');
+  if(parsed.unrecognised&&parsed.unrecognised.length){
+    unrecEl.style.display='';
+    unrecEl.innerHTML=`⚠️ <b>Unrecognised words:</b> "${parsed.unrecognised.join('", "')}" —
+      add them as field keywords in <b>Voice AI Settings</b> to improve accuracy.`;
+  }else{
+    unrecEl.style.display='none';
+  }
+
+  openModal('modal-vai-confirm');
+}
+
+// ── EXECUTE CONFIRM → open target form pre-filled ─────────────────
+function executeVAIConfirm() {
+  const parsed = vaiPendingResult;
+  if(!parsed) return;
+  closeModal('modal-vai-confirm');
+  vaiPendingResult = null;
+  const {recordType:type, fields} = parsed;
+
+  setTimeout(()=>{
+    if(type==='payable'){
+      openAddPayable();
+      setTimeout(()=>{
+        if(fields.name)          setFld('py-name', fields.name);
+        if(fields.totalAmount)   setFldNum('py-total',   fields.totalAmount);
+        if(fields.paidAmount)    setFldNum('py-paid',    fields.paidAmount);
+        if(fields.monthlyPayment)setFldNum('py-monthly', fields.monthlyPayment);
+        if(fields.interestRate)  setFldNum('py-interest',fields.interestRate);
+        if(fields.dueDay)        setFld('py-due-day', fields.dueDay);
+        if(fields.notes)         setFld('py-notes',   fields.notes);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='goal'){
+      openAddGoal();
+      setTimeout(()=>{
+        if(fields.name)  setFld('goal-name',  fields.name);
+        if(fields.target)setFldNum('goal-target',fields.target);
+        if(fields.saved) setFldNum('goal-saved', fields.saved);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='recurring'){
+      openAddRecurring();
+      setTimeout(()=>{
+        if(fields.name)  setFld('recur-name',   fields.name);
+        if(fields.amount)setFldNum('recur-amount',fields.amount);
+        if(fields.dueDay)setFld('recur-due-day', fields.dueDay);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='planned'){
+      openAddPlanned();
+      setTimeout(()=>{
+        if(fields.amount)setFldNum('pl-amount',fields.amount);
+        if(fields.desc)  setFld('pl-desc',    fields.desc);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='account'){
+      openAddAccount();
+      setTimeout(()=>{
+        if(fields.name)   setFld('acc-name',    fields.name);
+        if(fields.balance)setFldNum('acc-balance',fields.balance);
+        vaiFormToast(fields);
+      },220);
+
+    }else if(type==='budget'){
+      openAddBudget();
+      setTimeout(()=>{
+        if(fields.amount)setFldNum('budget-limit-amount',fields.amount);
+        vaiFormToast(fields);
+      },220);
+    }
+  },160);
+}
+
+function setFld(id,val){ const el=document.getElementById(id); if(el){el.value=val;el.dispatchEvent(new Event('input',{bubbles:true}));} }
+function setFldNum(id,val){ setFld(id,val); }
+function vaiFormToast(fields){ showToast(`✨ Voice AI filled ${Object.keys(fields).length} field(s). Review &amp; save!`,'success'); }
+
+// ══════════════════════════════════════════════════════════════
+// ── FORM-LEVEL VAI SMART INPUT ────────────────────────────────
+// Embedded smart voice/text input inside each form
+// ══════════════════════════════════════════════════════════════
+const _fvaiState   = {};   // parsed result per formType
+const _fvaiRecog   = {};   // speech recognition instances
+const _fvaiActive  = {};   // is voice listening per formType
+
+// Map formType key → how to fill the form
+const FORM_VAI_FILL = {
+  payable: (fields) => {
+    if(fields.name)          setFld('py-name',    fields.name);
+    if(fields.totalAmount)   setFldNum('py-total',   fields.totalAmount);
+    if(fields.paidAmount)    setFldNum('py-paid',    fields.paidAmount);
+    if(fields.monthlyPayment)setFldNum('py-monthly', fields.monthlyPayment);
+    if(fields.interestRate)  setFldNum('py-interest',fields.interestRate);
+    if(fields.dueDay)        setFld('py-due-day', String(fields.dueDay));
+    if(fields.notes)         setFld('py-notes',   fields.notes);
+  },
+  account: (fields) => {
+    if(fields.name)    setFld('acc-name',    fields.name);
+    if(fields.balance) setFldNum('acc-balance',fields.balance);
+  },
+  budget: (fields) => {
+    if(fields.amount) setFldNum('budget-limit', fields.amount);
+  },
+  goal: (fields) => {
+    if(fields.name)   setFld('goal-name',   fields.name);
+    if(fields.target) setFldNum('goal-target', fields.target);
+    if(fields.saved)  setFldNum('goal-saved',  fields.saved);
+  },
+  recurring: (fields) => {
+    if(fields.name)   setFld('recur-name',    fields.name);
+    if(fields.amount) setFldNum('recur-amount', fields.amount);
+    if(fields.dueDay) setFld('recur-due-day',  String(fields.dueDay));
+  },
+  planned: (fields) => {
+    if(fields.amount) setFldNum('pl-amount', fields.amount);
+    if(fields.desc)   setFld('pl-desc',    fields.desc);
+  }
+};
+
+// Parse text using VAI config for the specific form type (no trigger word needed — we know the type)
+function parseFormVAIText(text, formType) {
+  const config  = getVAIConfig();
+  const def     = config[formType];
+  if (!def) return null;
+  const lower   = text.trim().toLowerCase();
+  const enabledFields = def.fields.filter(f => f.enabled);
+  const parsedValues  = {};
+  const allNums = vaiExtractAllNums(lower);
+  let numIdx    = 0;
+  let totalScore = 0;
+
+  for (const field of enabledFields) {
+    let found = false;
+    for (const kw of field.keywords) {
+      const kwL = kw.toLowerCase();
+      const idx = lower.indexOf(kwL);
+      if (idx === -1) continue;
+      const afterKw = text.trim().slice(idx + kw.length).trimStart();
+      if (field.type === 'number') {
+        const val = vaiSpokenToNum(afterKw);
+        if (val > 0) { parsedValues[field.id] = val; totalScore += 1.2; found = true; break; }
+      } else if (field.type === 'text') {
+        const bound  = vaiNextKeywordPos(afterKw, enabledFields, field.id);
+        const phrase = afterKw.slice(0, bound).trim().split(/\s+/).slice(0, 6).join(' ');
+        if (phrase) { parsedValues[field.id] = phrase; totalScore += 0.9; found = true; break; }
+      }
+    }
+    if (!found && field.type === 'number') {
+      const used = new Set(Object.values(parsedValues).filter(v => typeof v === 'number'));
+      while (numIdx < allNums.length && used.has(allNums[numIdx])) numIdx++;
+      if (numIdx < allNums.length) { parsedValues[field.id] = allNums[numIdx++]; totalScore += 0.4; }
+    }
+  }
+
+  const fillRatio  = enabledFields.length ? Object.keys(parsedValues).length / enabledFields.length : 0;
+  const confidence = Math.min(0.97, fillRatio * 0.70 + Math.min(0.15, totalScore * 0.03));
+
+  return { recordType: formType, fields: parsedValues, enabledFields, rawText: text.trim(), confidence, def };
+}
+
+function onFormVAI(formType, text) {
+  if (!text.trim()) { dismissFormVAI(formType); return; }
+  const parsed = parseFormVAIText(text, formType);
+  if (parsed && Object.keys(parsed.fields).length > 0) {
+    _fvaiState[formType] = parsed;
+    _renderFormVAIResult(formType, parsed);
+  } else {
+    dismissFormVAI(formType);
+    const hint = document.getElementById(formType+'-vai-hint');
+    if (hint) hint.textContent = '⚠️ No fields detected. Check your VAI settings or add more keywords.';
+  }
+}
+
+function _renderFormVAIResult(formType, parsed) {
+  const card      = document.getElementById(formType+'-vai-result');
+  const flds      = document.getElementById(formType+'-vai-fields');
+  const confBadge = document.getElementById(formType+'-vai-conf');
+  const meter     = document.getElementById(formType+'-vai-meter');
+  if (!card) return;
+
+  const pct = Math.round(parsed.confidence * 100);
+  const col = pct >= 60 ? 'var(--emerald)' : pct >= 35 ? 'var(--amber)' : 'var(--rose)';
+  const cls = pct >= 60 ? '' : pct >= 35 ? 'mid' : 'low';
+
+  confBadge.textContent = pct + '%';
+  confBadge.className   = 'form-vai-conf-badge ' + cls;
+  meter.style.width     = pct + '%';
+  meter.style.background = col;
+
+  flds.innerHTML = parsed.enabledFields.map(f => {
+    const val    = parsed.fields[f.id];
+    const hasVal = val !== undefined;
+    const disp   = hasVal ? (f.type === 'number' ? fmt(val) : val) : '—';
+    return `<div class="form-vai-field">
+      <div class="form-vai-field-lbl">${f.label}</div>
+      <div class="form-vai-field-val ${hasVal ? '' : 'empty'}">${disp}</div>
+    </div>`;
+  }).join('');
+
+  card.classList.add('show');
+  const hint = document.getElementById(formType+'-vai-hint');
+  if (hint) hint.textContent = `${pct}% confidence · ${Object.keys(parsed.fields).length} field(s) detected`;
+}
+
+function applyFormVAI(formType) {
+  const parsed = _fvaiState[formType];
+  if (!parsed || !Object.keys(parsed.fields).length) {
+    showToast('⚠️ Nothing to apply. Speak or type a command first.', 'warn'); return;
+  }
+  const filler = FORM_VAI_FILL[formType];
+  if (filler) filler(parsed.fields);
+  showToast(`✨ Voice AI filled ${Object.keys(parsed.fields).length} field(s). Review & save!`, 'success');
+  dismissFormVAI(formType);
+  const inp = document.getElementById(formType+'-vai-input');
+  if (inp) inp.value = '';
+}
+
+function dismissFormVAI(formType) {
+  const card = document.getElementById(formType+'-vai-result');
+  if (card) card.classList.remove('show');
+  _fvaiState[formType] = null;
+  const hint = document.getElementById(formType+'-vai-hint');
+  if (hint) {
+    const labels = {payable:'💳 Payable / Loan',account:'🏦 Account',budget:'📊 Budget',goal:'🎯 Savings Goal',recurring:'🔄 Recurring Rule'};
+    hint.textContent = (labels[formType]||'') + ' — speak or type to pre-fill the form';
+  }
+}
+
+function toggleFormVAIVoice(formType) {
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    showToast('Voice input not supported on this browser. Try Chrome.', 'error'); return;
+  }
+  if (_fvaiActive[formType]) { stopFormVAIVoice(formType); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  _fvaiRecog[formType] = new SR();
+  _fvaiRecog[formType].lang = 'en-US';
+  _fvaiRecog[formType].continuous = false;
+  _fvaiRecog[formType].interimResults = true;
+  _fvaiActive[formType] = true;
+  const mic    = document.getElementById(formType+'-vai-mic');
+  const vsBar  = document.getElementById(formType+'-vai-voice-status');
+  if (mic)   mic.classList.add('listening');
+  if (vsBar) vsBar.classList.add('show');
+  _fvaiRecog[formType].onresult = e => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+    const inp = document.getElementById(formType+'-vai-input');
+    if (inp) { inp.value = transcript; onFormVAI(formType, transcript); }
+    if (e.results[e.results.length-1].isFinal) stopFormVAIVoice(formType);
+  };
+  _fvaiRecog[formType].onerror = ev => {
+    stopFormVAIVoice(formType);
+    if (ev.error === 'not-allowed') showToast('Microphone access denied.', 'error');
+    else if (ev.error === 'no-speech') showToast('No speech detected. Try again.', 'warn');
+    else showToast('Voice error: '+ev.error, 'error');
+  };
+  _fvaiRecog[formType].onend = () => stopFormVAIVoice(formType);
+  try { _fvaiRecog[formType].start(); }
+  catch(e) { stopFormVAIVoice(formType); showToast('Cannot start mic. Check permissions.', 'error'); }
+}
+
+function stopFormVAIVoice(formType) {
+  _fvaiActive[formType] = false;
+  const mic   = document.getElementById(formType+'-vai-mic');
+  const vsBar = document.getElementById(formType+'-vai-voice-status');
+  if (mic)   mic.classList.remove('listening');
+  if (vsBar) vsBar.classList.remove('show');
+  if (_fvaiRecog[formType]) { try { _fvaiRecog[formType].stop(); } catch(e) {} _fvaiRecog[formType] = null; }
+}
+
+// ── FLOATING QUICK BAR ─────────────────────────────────────────────
+function showVAIBar(recordType){
+  vaiCurrentScreen = recordType;
+  const bar = document.getElementById('vai-quick-bar');
+  if(!bar) return;
+  bar.classList.add('show');
+  const inp  = document.getElementById('vai-quick-input');
+  const hint = document.getElementById('vai-bar-hint');
+  if(inp){
+    inp.value = '';
+    inp._vaiType = recordType;
+    const def    = getVAIConfig()[recordType]||{};
+    const eflds  = (def.fields||[]).filter(f=>f.enabled);
+    const ex     = [def.triggerWords?.[0]||'', ...eflds.slice(0,3).map(f=>`${f.keywords[0]||''} [${f.type==='number'?'0':'…'}]`)].join(' ');
+    inp.placeholder = eflds.length ? `e.g. "${ex}"` : 'Speak or type…';
+  }
+  // Show context label
+  if(hint){
+    const def = getVAIConfig()[recordType]||{};
+    const ctxLabel = def.icon && def.label ? `${def.icon} <b style="color:var(--blue)">${def.label}</b> — speak or type to pre-fill the form` : '';
+    hint.innerHTML = ctxLabel;
+  }
+}
+
+function hideVAIBar(){
+  vaiCurrentScreen = null;
+  const bar = document.getElementById('vai-quick-bar');
+  if(bar) bar.classList.remove('show');
+  stopVAIVoice();
+}
+
+function onVAITextInput(text){
+  const hint = document.getElementById('vai-bar-hint');
+  if(!hint) return;
+  if(text.trim().length>3){
+    const parsed = parseVAIText(text);
+    if(parsed){
+      const pct=Math.round(parsed.confidence*100);
+      const col=pct>=60?'var(--emerald)':pct>=35?'var(--amber)':'var(--rose)';
+      hint.innerHTML=`${parsed.def.icon} <b>${parsed.def.label}</b> · ${Object.keys(parsed.fields).length} field(s) · <b style="color:${col}">${pct}% confidence</b>`;
+    }else{
+      hint.innerHTML='<span style="color:var(--amber)">⚠️ Add a trigger word: loan, goal, recurring, plan, account…</span>';
+    }
+  }else{
+    // Restore context hint when cleared
+    if(vaiCurrentScreen){
+      const def = getVAIConfig()[vaiCurrentScreen]||{};
+      hint.innerHTML = def.icon && def.label ? `${def.icon} <b style="color:var(--blue)">${def.label}</b> — speak or type to pre-fill the form` : '';
+    }else{
+      hint.textContent='';
+    }
+  }
+}
+
+function parseAndConfirmVAI(text, source){
+  if(!text.trim()){ showToast('⚠️ Please speak or type a command first.','warn'); return; }
+  const parsed = parseVAIText(text);
+  showVAIConfirm(parsed);
+}
+
+// ── VOICE RECORDING for quick bar ─────────────────────────────────
+function toggleVAIVoice(){
+  if(!('SpeechRecognition' in window)&&!('webkitSpeechRecognition' in window)){
+    showToast('Voice input not supported on this browser. Try Chrome.','error'); return;
+  }
+  if(vaiListening){ stopVAIVoice(); return; }
+
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  vaiVoiceRecog=new SR();
+  vaiVoiceRecog.lang='en-US';
+  vaiVoiceRecog.continuous=false;
+  vaiVoiceRecog.interimResults=true;
+  vaiVoiceRecog.maxAlternatives=1;
+  vaiListening=true;
+
+  const micBtn=document.getElementById('vai-mic-btn');
+  const inp   =document.getElementById('vai-quick-input');
+  const hint  =document.getElementById('vai-bar-hint');
+  if(micBtn) micBtn.classList.add('listening');
+  if(hint)   hint.textContent='🎙️ Listening… speak now';
+
+  vaiVoiceRecog.onresult=e=>{
+    const transcript=Array.from(e.results).map(r=>r[0].transcript).join('');
+    if(inp) inp.value=transcript;
+    onVAITextInput(transcript);
+    if(e.results[e.results.length-1].isFinal){
+      stopVAIVoice();
+      parseAndConfirmVAI(transcript,'voice');
+    }
+  };
+  vaiVoiceRecog.onerror=ev=>{
+    stopVAIVoice();
+    if(ev.error==='not-allowed') showToast('Microphone access denied.','error');
+    else if(ev.error==='no-speech') showToast('No speech detected. Try again.','warn');
+    else showToast('Voice error: '+ev.error,'error');
+  };
+  vaiVoiceRecog.onend=()=>stopVAIVoice();
+  try{ vaiVoiceRecog.start(); }
+  catch(e){ stopVAIVoice(); showToast('Cannot start mic. Check permissions.','error'); }
+}
+
+function stopVAIVoice(){
+  vaiListening=false;
+  const micBtn=document.getElementById('vai-mic-btn');
+  if(micBtn) micBtn.classList.remove('listening');
+  if(vaiVoiceRecog){ try{vaiVoiceRecog.stop();}catch(e){} vaiVoiceRecog=null; }
+}
+
+// ── Hook VAI bar into screen navigation ───────────────────────────
+// Patching is done after the original showScreen exists (see INIT below)
+const VAI_SCREENS={};  // All forms now have embedded Smart Input — floating bar disabled for cleanliness
+function _vaiOnScreenChange(name){
+  // Always hide the floating bar — each form has its own embedded Smart Input
+  hideVAIBar();
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// ── DEMO / SAMPLE DATA MODE ───────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+function buildDemoData() {
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+  const ld = (yr,mo,d) => `${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const todayStr = today();
+  const prev = (days) => { const d=new Date(now); d.setDate(d.getDate()-days); return localDate(d); };
+  const next = (days) => { const d=new Date(now); d.setDate(d.getDate()+days); return localDate(d); };
+
+  const accBDO   = uid(); const accGCash = uid(); const accCash = uid(); const accMaya = uid();
+  const pyLoan   = uid(); const pyCC     = uid(); const pyHP   = uid();
+  const goalVac  = uid(); const goalPhone= uid(); const goalEF = uid();
+  const recNetflix=uid(); const recRent  = uid(); const recSal = uid();
+  const budFood  = uid(); const budTrans = uid(); const budEntm = uid();
+
+  const accounts = [
+    {id:accBDO,  name:'BDO Savings',    type:'bank',    balance:42500,  savingsReserve:5000, color:'#3B82F6', accountNumber:'****4821', holderName:'Juan Dela Cruz', createdAt:Date.now()-30*864e5},
+    {id:accGCash,name:'GCash',          type:'ewallet', balance:3200,   savingsReserve:500,  color:'#10B981', accountNumber:'09171234567', holderName:'Juan Dela Cruz', createdAt:Date.now()-30*864e5},
+    {id:accCash,  name:'Cash on Hand',  type:'cash',    balance:1800,   savingsReserve:0,    color:'#F59E0B', createdAt:Date.now()-30*864e5},
+    {id:accMaya,  name:'Maya Wallet',   type:'ewallet', balance:6800,   savingsReserve:1000, color:'#8B5CF6', accountNumber:'09281234567', holderName:'Juan Dela Cruz', createdAt:Date.now()-20*864e5},
+  ];
+
+  const payables = [
+    {id:pyLoan, name:'BDO Personal Loan', type:'loan',   totalAmount:120000, paidAmount:36000, remaining:84000, monthlyPayment:5000, interestRate:12, dueDay:15, allowOverpay:false, linkedAccount:accBDO,  notes:'3-year loan, started Jan 2024', status:'active', payments:[
+      {id:uid(),amount:5000,accountId:accBDO,date:prev(45),ref:'AUTO-001',months:1,createdAt:Date.now()-45*864e5},
+      {id:uid(),amount:5000,accountId:accBDO,date:prev(15),ref:'AUTO-002',months:1,createdAt:Date.now()-15*864e5},
+      {id:uid(),amount:15000,accountId:accBDO,date:prev(5), ref:'ADVANCE-003',months:3,createdAt:Date.now()-5*864e5},
+    ], createdAt:Date.now()-400*864e5},
+    {id:pyCC,   name:'BDO Credit Card',   type:'credit', totalAmount:28000,  paidAmount:8000,  remaining:20000, monthlyPayment:3500, interestRate:24, dueDay:20, allowOverpay:false, linkedAccount:accBDO,  notes:'Mastercard ending 9832', status:'active', payments:[
+      {id:uid(),amount:3500,accountId:accBDO,date:prev(30),ref:'CC-MIN-001',months:1,createdAt:Date.now()-30*864e5},
+      {id:uid(),amount:4500,accountId:accBDO,date:prev(8), ref:'CC-MIN-002',months:1,createdAt:Date.now()-8*864e5},
+    ], createdAt:Date.now()-90*864e5},
+    {id:pyHP,   name:'Home Credit',       type:'spl',    totalAmount:10000,  paidAmount:1500,  remaining:8500,  monthlyPayment:900,  interestRate:0,  dueDay:24, allowOverpay:false, linkedAccount:accGCash,'notes':'Samsung phone installment', status:'active', payments:[
+      {id:uid(),amount:900, accountId:accGCash,date:prev(20),ref:'HC-001',months:1,createdAt:Date.now()-20*864e5},
+      {id:uid(),amount:600, accountId:accGCash,date:prev(5), ref:'HC-ADV',months:1,createdAt:Date.now()-5*864e5},
+    ], createdAt:Date.now()-60*864e5},
+  ];
+
+  const goals = [
+    {id:goalVac, name:'Palawan Vacation', emoji:'✈️', target:50000, saved:12500, targetDate:ld(y,m+5,15), linkedAccount:accBDO,  notes:'Flights + hotel for 4 nights', status:'active', createdAt:Date.now()-60*864e5},
+    {id:goalPhone,name:'New iPhone 16',   emoji:'📱', target:75000, saved:31000, targetDate:ld(y,m+3,1),  linkedAccount:accMaya, notes:'iPhone 16 Pro 256GB', status:'active', createdAt:Date.now()-45*864e5},
+    {id:goalEF,  name:'Emergency Fund',   emoji:'🛡️', target:100000,saved:85000, targetDate:ld(y,m+2,1),  linkedAccount:accBDO,  notes:'6 months of expenses', status:'active', createdAt:Date.now()-180*864e5},
+  ];
+
+  const recurring = [
+    {id:recNetflix,name:'Netflix',        type:'expense',amount:299,  frequency:'monthly',startDate:ld(y-1,0,5),  dueDay:5,  category:'🎬 Entertainment',accountId:accGCash,status:'active', createdAt:Date.now()-365*864e5},
+    {id:recRent,   name:'House Rent',     type:'expense',amount:8000, frequency:'monthly',startDate:ld(y-1,0,1),  dueDay:1,  category:'🏠 Housing',     accountId:accBDO,  status:'active', createdAt:Date.now()-365*864e5},
+    {id:recSal,    name:'Monthly Salary', type:'income', amount:45000,frequency:'monthly',startDate:ld(y-1,0,25), dueDay:25, category:'💼 Salary',      accountId:accBDO,  status:'active', createdAt:Date.now()-365*864e5},
+    {id:uid(),     name:'PhilHealth',     type:'expense',amount:500,  frequency:'monthly',startDate:ld(y-1,0,15), dueDay:15, category:'🏥 Healthcare', accountId:accBDO,  status:'active', createdAt:Date.now()-200*864e5},
+    {id:uid(),     name:'SSS Contribution',type:'expense',amount:1125,frequency:'monthly',startDate:ld(y-1,0,15), dueDay:15, category:'💼 Salary',      accountId:accBDO,  status:'active', createdAt:Date.now()-200*864e5},
+  ];
+
+  const budgets = [
+    {id:budFood, category:'🍔 Food',         monthlyLimit:8000, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:budTrans,category:'🚌 Transport',     monthlyLimit:3000, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:budEntm, category:'🎬 Entertainment', monthlyLimit:1500, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:uid(),   category:'🛒 Shopping',      monthlyLimit:5000, period:'monthly', createdAt:Date.now()-30*864e5},
+    {id:uid(),   category:'💊 Health',        monthlyLimit:2000, period:'monthly', createdAt:Date.now()-30*864e5},
+  ];
+
+  const transactions = [
+    // Current month income & expenses
+    {id:uid(),type:'income', amount:45000,category:'💼 Salary',      accountId:accBDO,  date:ld(y,m,25), desc:'Monthly Salary — Employer Inc.',ref:'SAL-'+m,createdAt:Date.now()-5*864e5},
+    {id:uid(),type:'expense',amount:8000, category:'🏠 Housing',     accountId:accBDO,  date:ld(y,m,1),  desc:'House Rent - February',ref:'',createdAt:Date.now()-27*864e5},
+    {id:uid(),type:'expense',amount:2500, category:'🍔 Food',        accountId:accGCash,date:prev(2),     desc:'Groceries - SM Supermarket',ref:'GR-001',createdAt:Date.now()-2*864e5},
+    {id:uid(),type:'expense',amount:850,  category:'🍔 Food',        accountId:accGCash,date:prev(3),     desc:'Jollibee - Family Meal',ref:'JB-456',createdAt:Date.now()-3*864e5},
+    {id:uid(),type:'expense',amount:299,  category:'🎬 Entertainment',accountId:accGCash,date:ld(y,m,5),  desc:'Netflix Subscription',ref:'NF-AUTO',createdAt:Date.now()-22*864e5},
+    {id:uid(),type:'expense',amount:1200, category:'🚌 Transport',   accountId:accCash, date:prev(4),     desc:'Grab rides — weekly',ref:'',createdAt:Date.now()-4*864e5},
+    {id:uid(),type:'expense',amount:650,  category:'🍔 Food',        accountId:accCash, date:prev(6),     desc:'Mang Inasal',ref:'',createdAt:Date.now()-6*864e5},
+    {id:uid(),type:'expense',amount:3500, category:'💳 Bills',       accountId:accBDO,  date:prev(8),     desc:'Payment: BDO Credit Card',ref:'CC-MIN-002',payableId:pyCC,createdAt:Date.now()-8*864e5},
+    {id:uid(),type:'expense',amount:500,  category:'💊 Health',      accountId:accGCash,date:prev(9),     desc:'Mercury Drug',ref:'',createdAt:Date.now()-9*864e5},
+    {id:uid(),type:'expense',amount:1800, category:'🛒 Shopping',    accountId:accGCash,date:prev(10),    desc:'Shopee Order - Clothes',ref:'SPE-002',createdAt:Date.now()-10*864e5},
+    {id:uid(),type:'transfer',amount:5000,category:'💸 Transfer',    accountId:accBDO,  date:prev(12),    desc:'Transfer to GCash',toAccountId:accGCash,ref:'',createdAt:Date.now()-12*864e5},
+    {id:uid(),type:'expense',amount:900,  category:'💳 Bills',       accountId:accGCash,date:prev(20),    desc:'Payment: Home Credit',ref:'HC-001',payableId:pyHP,createdAt:Date.now()-20*864e5},
+    // Last month
+    {id:uid(),type:'income', amount:45000,category:'💼 Salary',      accountId:accBDO,  date:ld(y,m-1,25),desc:'Monthly Salary',ref:'',createdAt:Date.now()-32*864e5},
+    {id:uid(),type:'expense',amount:8000, category:'🏠 Housing',     accountId:accBDO,  date:ld(y,m-1,1), desc:'House Rent',ref:'',createdAt:Date.now()-58*864e5},
+    {id:uid(),type:'expense',amount:5000, category:'💳 Bills',       accountId:accBDO,  date:prev(45),    desc:'Payment: BDO Personal Loan',ref:'AUTO-001',payableId:pyLoan,createdAt:Date.now()-45*864e5},
+    {id:uid(),type:'expense',amount:3500, category:'💳 Bills',       accountId:accBDO,  date:prev(30),    desc:'Payment: BDO Credit Card',ref:'CC-MIN-001',payableId:pyCC,createdAt:Date.now()-30*864e5},
+    {id:uid(),type:'expense',amount:2200, category:'🍔 Food',        accountId:accGCash,date:ld(y,m-1,18),desc:'Groceries',ref:'',createdAt:Date.now()-39*864e5},
+    {id:uid(),type:'expense',amount:1500, category:'🛒 Shopping',    accountId:accMaya, date:ld(y,m-1,12),desc:'Lazada purchase',ref:'LZD-003',createdAt:Date.now()-45*864e5},
+    // Advance payment transactions matching payable records
+    {id:uid(),type:'expense',amount:15000,category:'💳 Bills',       accountId:accBDO,  date:prev(5),     desc:'Payment: BDO Personal Loan — Paid for '+new Date(y,m,15).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+' to '+new Date(y,m+2,15).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),ref:'ADVANCE-003',payableId:pyLoan,createdAt:Date.now()-5*864e5},
+    {id:uid(),type:'expense',amount:600,  category:'💳 Bills',       accountId:accGCash,date:prev(5),     desc:'Payment: Home Credit',ref:'HC-ADV',payableId:pyHP,createdAt:Date.now()-5*864e5},
+    {id:uid(),type:'expense',amount:5000, category:'💳 Bills',       accountId:accBDO,  date:prev(15),    desc:'Payment: BDO Personal Loan',ref:'AUTO-002',payableId:pyLoan,createdAt:Date.now()-15*864e5},
+  ];
+
+  const planned = [
+    {id:uid(),type:'expense',amount:5000, category:'💳 Bills',       accountId:accBDO,  date:ld(y,m,15),  desc:'BDO Personal Loan',   status:'pending',originalDate:ld(y,m,15),  payableId:pyLoan,createdAt:Date.now()-60*864e5},
+    {id:uid(),type:'expense',amount:3500, category:'💳 Bills',       accountId:accBDO,  date:ld(y,m,20),  desc:'BDO Credit Card',     status:'pending',originalDate:ld(y,m,20),  payableId:pyCC, createdAt:Date.now()-90*864e5},
+    {id:uid(),type:'expense',amount:900,  category:'💳 Bills',       accountId:accGCash,date:ld(y,m,24),  desc:'Home Credit',         status:'pending',originalDate:ld(y,m,24),  payableId:pyHP, createdAt:Date.now()-60*864e5},
+    {id:uid(),type:'expense',amount:2500, category:'🛒 Shopping',    accountId:accGCash,date:next(5),      desc:'Birthday gift shopping',status:'pending',originalDate:next(5),  createdAt:Date.now()},
+    {id:uid(),type:'income', amount:5000, category:'💰 Freelance',   accountId:accMaya, date:next(10),     desc:'Web design project payment',status:'pending',originalDate:next(10),createdAt:Date.now()},
+    {id:uid(),type:'expense',amount:1500, category:'🏥 Healthcare',  accountId:accGCash,date:next(3),      desc:'Annual checkup',      status:'pending',originalDate:next(3),    createdAt:Date.now()},
+    {id:uid(),type:'expense',amount:18000,category:'✈️ Travel',      accountId:accBDO,  date:next(45),     desc:'Palawan trip deposit',status:'pending',originalDate:next(45),   createdAt:Date.now()},
+  ];
+
+  // Add goal fund transactions
+  transactions.push(
+    {id:uid(),type:'income',amount:12500,category:'🎯 Goal Deposit',accountId:accBDO,  date:prev(30),desc:'Goal: Palawan Vacation',goalId:goalVac,  ref:'',createdAt:Date.now()-30*864e5},
+    {id:uid(),type:'income',amount:31000,category:'🎯 Goal Deposit',accountId:accMaya, date:prev(45),desc:'Goal: New iPhone 16',   goalId:goalPhone,ref:'',createdAt:Date.now()-45*864e5},
+    {id:uid(),type:'income',amount:85000,category:'🎯 Goal Deposit',accountId:accBDO,  date:prev(90),desc:'Goal: Emergency Fund',  goalId:goalEF,   ref:'',createdAt:Date.now()-90*864e5},
+  );
+
+  const logs = [
+    {id:uid(),action:'created',desc:'Demo data loaded for QA testing',entityId:'demo',entityType:'system',createdAt:Date.now()},
+  ];
+
+  return {accounts, payables, goals, recurring, budgets, transactions, planned, logs};
+}
+
+let _preDemo = null; // stores real user data while demo is active
+
+function enableDemoMode(){
+  if(db.settings.demoMode){showToast('Demo mode already active','warn');return;}
+  showConfirm('Load Demo Data?','Your current data will be hidden (not deleted). You can restore it anytime from Settings.',()=>{
+    // Save real user data
+    _preDemo = JSON.parse(JSON.stringify(db));
+    localStorage.setItem('finflow_pre_demo', JSON.stringify(_preDemo));
+    // Load demo data
+    const demo = buildDemoData();
+    db.accounts     = demo.accounts;
+    db.transactions = demo.transactions;
+    db.payables     = demo.payables;
+    db.goals        = demo.goals;
+    db.recurring    = demo.recurring;
+    db.budgets      = demo.budgets;
+    db.planned      = demo.planned;
+    db.logs         = demo.logs;
+    db.settings.demoMode = true;
+    saveDB();
+    applyDueRecurring();
+    saveDB();
+    _updateDemoUI(true);
+    renderHome();
+    showToast('🧪 Demo data loaded! Explore all features freely.','success');
+  });
+}
+
+function disableDemoMode(){
+  if(!db.settings.demoMode){showToast('Demo mode is not active','warn');return;}
+  showConfirm('Restore Your Data?','Demo data will be removed and your original data restored.',()=>{
+    // Try restoring from memory first, then localStorage
+    const saved = _preDemo || JSON.parse(localStorage.getItem('finflow_pre_demo')||'null');
+    if(saved){
+      Object.assign(db, saved);
+      _preDemo = null;
+      localStorage.removeItem('finflow_pre_demo');
+    } else {
+      // No backup found — just clear demo data
+      db.accounts=[]; db.transactions=[]; db.payables=[]; db.goals=[];
+      db.recurring=[]; db.budgets=[]; db.planned=[]; db.logs=[];
+    }
+    db.settings.demoMode = false;
+    saveDB();
+    _updateDemoUI(false);
+    renderHome();
+    showToast('✅ Your data has been restored!','success');
+  });
+}
+
+function _updateDemoUI(isDemo){
+  const onBtn  = document.getElementById('demo-on-btn');
+  const offBtn = document.getElementById('demo-off-btn');
+  const status = document.getElementById('demo-data-status');
+  const indicator = document.getElementById('demo-mode-indicator');
+  if(onBtn)  onBtn.style.display  = isDemo ? 'none'  : '';
+  if(offBtn) offBtn.style.display = isDemo ? ''      : 'none';
+  if(status) status.textContent   = isDemo ? '🟢 Demo mode is ACTIVE' : 'For QA, UI/UX review & feature testing';
+  if(indicator) indicator.style.display = isDemo ? '' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+
 // ===== INIT =====
 loadDB();
 initTheme();
 cleanDismissedAlerts();
 applyDueRecurring(); // auto-apply any due recurring transactions
 saveDB(); // save any auto-applied transactions
+// Restore demo mode UI if app was reloaded during demo
+if(db.settings.demoMode) _updateDemoUI(true);
 updateOverdueBadge();
 updatePayablesBadge();
+updateRecurringBadge();
 checkDuePlanned();
 loadPrivacyToggles();
 updateEyeBtn();
@@ -7336,6 +9504,7 @@ document.getElementById('export-period')?.addEventListener('change',updateExport
 document.getElementById('export-type')?.addEventListener('change',updateExportPreview);
 renderHome();
 setTimeout(checkOnboarding,600);
+renderVAISettingsSummary();
 </script>
 </body>
 </html>
