@@ -828,6 +828,33 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .recur-btn.apply { background: var(--emerald-bg); border-color: rgba(0,200,150,.3); color: var(--emerald); }
 .recur-btn.pause { background: var(--amber-bg); border-color: rgba(255,176,32,.3); color: var(--amber); }
 .recur-btn.del { background: var(--rose-bg); border-color: rgba(255,77,106,.3); color: var(--rose); }
+.recur-btn.sched { background: var(--blue-bg); border-color: rgba(59,130,246,.3); color: var(--blue); }
+
+/* ══════════════════════════════
+   REPAYMENT / RECURRING SCHEDULE TABLE
+══════════════════════════════ */
+.schedule-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+.schedule-table { width: 100%; border-collapse: collapse; min-width: 320px; }
+.schedule-table thead tr { background: var(--bg3); }
+.schedule-table th { padding: 8px 10px; text-align: left; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text3); white-space: nowrap; }
+.schedule-table td { padding: 9px 10px; border-top: 1px solid var(--border); font-size: 11px; vertical-align: middle; }
+.schedule-table tr.sched-paid td { opacity: .6; }
+.schedule-table tr.sched-current td { background: rgba(245,158,11,.07); }
+.schedule-table tr.sched-overdue td { background: rgba(225,29,72,.05); }
+.sched-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 99px; font-size: 9px; font-weight: 700; white-space: nowrap; }
+.sched-badge.paid     { background: var(--emerald-bg); color: var(--emerald); }
+.sched-badge.applied  { background: var(--emerald-bg); color: var(--emerald); }
+.sched-badge.upcoming { background: var(--blue-bg); color: var(--blue); }
+.sched-badge.current  { background: var(--amber-bg); color: var(--amber); }
+.sched-badge.overdue  { background: var(--rose-bg); color: var(--rose); }
+.sched-badge.missed   { background: var(--rose-bg); color: var(--rose); }
+.sched-badge.paused   { background: var(--bg3); color: var(--text3); }
+.sched-summary { background: var(--bg3); border-radius: 12px; padding: 12px 14px; display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; text-align: center; margin-bottom: 12px; }
+.sched-sum-val { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+.sched-sum-lbl { font-size: 9px; color: var(--text3); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+.sched-progress-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.sched-progress-bar-wrap { flex: 1; background: var(--bg3); border-radius: 99px; height: 6px; overflow: hidden; }
+.sched-progress-bar { height: 100%; border-radius: 99px; transition: width .5s; }
 
 /* ══════════════════════════════
    BUDGET
@@ -1307,6 +1334,82 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </style>
 </head>
 <body>
+
+<!-- ▸ SPLASH SCREEN ──────────────────────────────────────────── -->
+<div id="splash-screen" style="
+  position:fixed;inset:0;z-index:99999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;
+  transition:opacity 0.5s ease, transform 0.5s ease;
+">
+  <!-- Glow blob behind logo -->
+  <div style="position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.18) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none"></div>
+
+  <!-- Logo mark -->
+  <div id="splash-logo-wrap" style="
+    display:flex;align-items:center;justify-content:center;
+    width:88px;height:88px;border-radius:26px;
+    background:linear-gradient(135deg,#1D4ED8,#3B82F6);
+    box-shadow:0 8px 40px rgba(59,130,246,0.45);
+    margin-bottom:22px;
+    animation:splashPop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+  ">
+    <span style="font-size:42px;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.3))">💸</span>
+  </div>
+
+  <!-- Brand name -->
+  <div style="
+    font-size:34px;font-weight:800;letter-spacing:-1px;
+    color:var(--text);
+    animation:splashFadeUp 0.5s 0.2s ease both;
+  ">Fin<span style="color:var(--blue)">Flow</span></div>
+
+  <!-- Tagline -->
+  <div style="
+    font-size:13px;color:var(--text3);font-weight:500;
+    margin-top:6px;letter-spacing:0.2px;
+    animation:splashFadeUp 0.5s 0.35s ease both;
+  ">Your Personal Money Tracker</div>
+
+  <!-- Loading dots -->
+  <div style="
+    display:flex;gap:7px;margin-top:40px;
+    animation:splashFadeUp 0.4s 0.5s ease both;
+  " id="splash-dots">
+    <div class="splash-dot" style="animation-delay:0s"></div>
+    <div class="splash-dot" style="animation-delay:0.18s"></div>
+    <div class="splash-dot" style="animation-delay:0.36s"></div>
+  </div>
+
+  <!-- Version -->
+  <div style="
+    position:absolute;bottom:32px;
+    font-size:10px;color:var(--text3);letter-spacing:0.3px;
+    animation:splashFadeUp 0.4s 0.6s ease both;
+  ">v3.0 · Powered by FinFlow</div>
+</div>
+
+<style>
+@keyframes splashPop {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+@keyframes splashFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes splashDot {
+  0%, 80%, 100% { transform: scale(0.5); opacity: 0.3; }
+  40%           { transform: scale(1);   opacity: 1; }
+}
+.splash-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--blue);
+  animation: splashDot 1.2s infinite ease-in-out both;
+}
+</style>
+
 <div id="app">
 
 <!-- ▸ HOME ─────────────────────────────────────────────────── -->
@@ -1401,7 +1504,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div id="home-mini-report"></div>
 
     <!-- Mini Calendar -->
-    <div class="sh"><span class="sh-label">📅 Calendar</span><span class="sh-link" onclick="showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50)">Full View →</span></div>
+    <div class="sh"><span class="sh-label">📅 Calendar</span><span class="sh-link" onclick="showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50)">Upcoming Events →</span></div>
     <div style="padding:0 16px;margin-bottom:16px"><div id="home-mini-cal"></div></div>
 
     <!-- Recent Transactions -->
@@ -1473,7 +1576,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <button class="screen-tab active" onclick="showGoalsTab('active',this)">🎯 Goals</button>
     <button class="screen-tab" onclick="showGoalsTab('achieved',this)">🏆 Achieved</button>
     <button class="screen-tab" onclick="showGoalsTab('recurring',this)">🔄 Recurring</button>
-    <button class="screen-tab" onclick="showGoalsTab('planned',this)">📅 Planned</button>
+    <button class="screen-tab" onclick="showGoalsTab('planned',this)">📋 Upcoming Events</button>
   </div>
   <div class="scroll-area" id="goals-content"></div>
 </div>
@@ -1998,7 +2101,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 <div class="modal-overlay" id="modal-planned">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="modal-planned-title">Add Planned Activity</div>
+    <div class="modal-title" id="modal-planned-title">Add Upcoming Event</div>
     <div class="type-tabs">
       <button class="type-tab active expense" onclick="setPlannedType('expense',this)">💸 Expense</button>
       <button class="type-tab income" onclick="setPlannedType('income',this)">💰 Income</button>
@@ -2046,7 +2149,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
       <div id="pl-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0;align-items:center;gap:6px"></div>
     </div>
-    <button class="btn-primary" id="pl-save-btn" onclick="savePlanned()">Save Planned Activity</button>
+    <button class="btn-primary" id="pl-save-btn" onclick="savePlanned()">Save Event</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-planned')">Cancel</button>
     <button class="btn-primary btn-danger" id="pl-delete-btn" style="display:none;margin-top:8px" onclick="deletePlanned()">Delete</button>
   </div>
@@ -2483,6 +2586,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <label class="form-label">Start Date *</label>
       <input type="date" class="form-input" id="recur-start">
     </div>
+    <div class="form-group" id="recur-due-day-group">
+      <label class="form-label">Due Day of Month <span style="font-size:10px;color:var(--text3);font-weight:400">(Monthly only — leave blank to use start date day)</span></label>
+      <input type="number" class="form-input" id="recur-due-day" placeholder="e.g. 25" min="1" max="31">
+    </div>
     <div class="form-group">
       <label class="form-label">End Date (optional)</label>
       <input type="date" class="form-input" id="recur-end" placeholder="Leave blank for no end">
@@ -2490,6 +2597,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <button class="btn-primary" id="recur-save-btn" onclick="saveRecurring()">Save Rule</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-recur')">Cancel</button>
     <button class="btn-primary btn-danger" id="recur-delete-btn" style="display:none;margin-top:8px" onclick="deleteRecurring()">Delete Rule</button>
+  </div>
+</div>
+
+<!-- PAYABLE REPAYMENT SCHEDULE MODAL -->
+<div class="modal-overlay" id="modal-payable-schedule">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="payable-schedule-title">📅 Repayment Schedule</div>
+    <div id="payable-schedule-summary"></div>
+    <div id="payable-schedule-progress" style="margin-bottom:12px"></div>
+    <div id="payable-schedule-table"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn-primary btn-success" id="payable-schedule-pay-btn" onclick="" style="flex:1">💰 Record Payment</button>
+      <button class="btn-primary btn-secondary" style="flex:1" onclick="closeModal('modal-payable-schedule')">Close</button>
+    </div>
+    <button class="btn-primary btn-secondary" id="payable-schedule-edit-btn" style="margin-top:8px" onclick="">✏️ Edit Payable</button>
+  </div>
+</div>
+
+<!-- RECURRING SCHEDULE MODAL -->
+<div class="modal-overlay" id="modal-recur-schedule">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="recur-schedule-title">📅 Recurring Schedule</div>
+    <div id="recur-schedule-summary"></div>
+    <div id="recur-schedule-table"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn-primary btn-success" id="recur-schedule-apply-btn" onclick="" style="flex:1">▶ Apply Now</button>
+      <button class="btn-primary btn-secondary" style="flex:1" onclick="closeModal('modal-recur-schedule')">Close</button>
+    </div>
+    <button class="btn-primary btn-secondary" id="recur-schedule-pause-btn" style="margin-top:8px" onclick="">⏸ Pause Rule</button>
+    <button class="btn-primary btn-secondary" id="recur-schedule-edit-btn" style="margin-top:8px" onclick="">✏️ Edit Rule</button>
   </div>
 </div>
 
@@ -3976,7 +4115,6 @@ let homeMiniCalYear=null, homeMiniCalMonth=null;
 function renderHomeMiniCal(yearOverride, monthOverride){
   const el=document.getElementById('home-mini-cal');if(!el)return;
   const now=new Date();
-  // Use override if provided, else use current month; persist for nav
   if(yearOverride!==undefined)homeMiniCalYear=yearOverride;
   if(monthOverride!==undefined)homeMiniCalMonth=monthOverride;
   if(homeMiniCalYear===null)homeMiniCalYear=now.getFullYear();
@@ -3986,20 +4124,21 @@ function renderHomeMiniCal(yearOverride, monthOverride){
   const firstDay=new Date(year,month,1).getDay();
   const daysInMonth=new Date(year,month+1,0).getDate();
   const monthName=new Date(year,month,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
-  const isCurrentMonth=(year===now.getFullYear()&&month===now.getMonth());
 
   const ms=`${year}-${String(month+1).padStart(2,'0')}-01`;
   const me=new Date(year,month+1,0).toISOString().split('T')[0];
   const plannedInMonth=db.planned.filter(p=>p.date>=ms&&p.date<=me);
   const txInMonth=db.transactions.filter(t=>t.date>=ms&&t.date<=me);
 
-  // Pre-aggregate per day for performance
+  // Transactions per day
   const dayData={};
   txInMonth.forEach(tx=>{
     if(!dayData[tx.date])dayData[tx.date]={exp:0,inc:0};
     if(tx.type==='expense')dayData[tx.date].exp+=tx.amount;
     else if(tx.type==='income')dayData[tx.date].inc+=tx.amount;
   });
+
+  // Planned/overdue per day
   const dayPlannedMap={};
   plannedInMonth.forEach(p=>{
     if(!dayPlannedMap[p.date])dayPlannedMap[p.date]={planned:0,overdue:0};
@@ -4007,19 +4146,44 @@ function renderHomeMiniCal(yearOverride, monthOverride){
     else if(p.status==='pending')dayPlannedMap[p.date].planned++;
   });
 
+  // Payable dots — ONLY unpaid (overdue/current/upcoming) due dates
+  const dayPayableMap={};
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    try {
+      const sched=generatePayableSchedule(py);
+      sched.filter(s=>s.status==='overdue'||s.status==='current'||s.status==='upcoming').forEach(s=>{
+        if(s.date>=ms&&s.date<=me) dayPayableMap[s.date]=(dayPayableMap[s.date]||0)+1;
+      });
+    } catch(e){}
+  });
+
+  // Recurring dots — ONLY unapplied/missed upcoming occurrences
+  const dayRecurMap={};
+  db.recurring.filter(r=>r.status!=='paused').forEach(r=>{
+    try {
+      const sched=generateRecurringSchedule(r);
+      sched.filter(s=>s.status==='upcoming'||s.status==='current'||s.status==='missed').forEach(s=>{
+        if(s.date>=ms&&s.date<=me) dayRecurMap[s.date]=(dayRecurMap[s.date]||0)+1;
+      });
+    } catch(e){}
+  });
+
+  // Goal deadline dates
+  const dayGoalMap={};
+  db.goals.filter(g=>g.targetDate&&g.status!=='achieved').forEach(g=>{
+    if(g.targetDate>=ms&&g.targetDate<=me) dayGoalMap[g.targetDate]=(dayGoalMap[g.targetDate]||0)+1;
+  });
+
   const days=['Su','Mo','Tu','We','Th','Fr','Sa'];
   let html=`<div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px;overflow:hidden">
-    <!-- Nav header -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <button onclick="navHomeCal(-1)" style="background:var(--bg3);border:none;color:var(--text);width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">‹</button>
       <div style="font-size:13px;font-weight:700;color:var(--accent)">${monthName}</div>
       <button onclick="navHomeCal(1)" style="background:var(--bg3);border:none;color:var(--text);width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">›</button>
     </div>
-    <!-- Day headers -->
     <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px">
       ${days.map(d=>`<div style="text-align:center;font-size:9px;color:var(--text3);font-weight:700;padding:2px 0;text-transform:uppercase;letter-spacing:0.5px">${d}</div>`).join('')}
     </div>
-    <!-- Day cells -->
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px">`;
 
   for(let i=0;i<firstDay;i++)html+=`<div></div>`;
@@ -4030,27 +4194,35 @@ function renderHomeMiniCal(yearOverride, monthOverride){
     const isFuture=ds>todayStr;
     const data=dayData[ds]||{exp:0,inc:0};
     const pdMap=dayPlannedMap[ds]||{planned:0,overdue:0};
-    const hasActivity=data.exp>0||data.inc>0;
-    const hasPlanned=pdMap.planned>0;
     const hasOverdue=pdMap.overdue>0;
+    const hasPlanned=pdMap.planned>0;
+    const hasPayable=!!dayPayableMap[ds];
+    const hasRecur=!!dayRecurMap[ds];
+    const hasGoal=!!dayGoalMap[ds];
+    const hasAnyEvent=data.exp>0||data.inc>0||hasOverdue||hasPlanned||hasPayable||hasRecur||hasGoal;
 
-    // Number: today gets an accent circle on the date number only — amounts stay readable
     const numColor=isFuture?'var(--text3)':'var(--text)';
     const todayCircle=isToday?'background:var(--accent);border-radius:50%;color:#fff;width:22px;height:22px;':'';
-    const cellBg=isToday?'rgba(124,131,253,0.10)':hasOverdue?'rgba(255,107,107,0.08)':'transparent';
-    const cellBorder=isToday?'1.5px solid rgba(124,131,253,0.45)':hasOverdue?'1px solid rgba(255,107,107,0.3)':hasPlanned?'1px solid rgba(244,169,90,0.25)':'1px solid transparent';
+    const cellBg=isToday?'rgba(124,131,253,0.10)':hasOverdue?'rgba(225,29,72,0.07)':'transparent';
+    const cellBorder=isToday?'1.5px solid rgba(124,131,253,0.45)':
+      hasOverdue?'1px solid rgba(225,29,72,0.35)':
+      hasPayable?'1px solid rgba(245,158,11,0.30)':
+      hasPlanned?'1px solid rgba(244,169,90,0.25)':
+      hasGoal?'1px solid rgba(16,185,129,0.25)':
+      hasRecur?'1px solid rgba(20,184,166,0.20)':'1px solid transparent';
 
-    // Amount labels — always show in their colors
     const expLabel=data.exp>0?`<div style="font-size:8.5px;font-weight:700;color:var(--expense);line-height:1.2;text-align:center">-${fmtK(data.exp)}</div>`:'';
     const incLabel=data.inc>0?`<div style="font-size:8.5px;font-weight:700;color:var(--income);line-height:1.2;text-align:center">+${fmtK(data.inc)}</div>`:'';
 
-    // Planned / overdue indicator dots
     let dotHtml='';
     if(hasOverdue)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--overdue);display:inline-block;margin:0 1px"></div>`;
     if(hasPlanned)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--planned);display:inline-block;margin:0 1px"></div>`;
-    const dotsRow=dotHtml?`<div style="display:flex;justify-content:center;margin-top:1px">${dotHtml}</div>`:'';
+    if(hasPayable)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--amber);display:inline-block;margin:0 1px"></div>`;
+    if(hasGoal)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--emerald);display:inline-block;margin:0 1px"></div>`;
+    if(hasRecur)dotHtml+=`<div style="width:4px;height:4px;border-radius:50%;background:var(--violet);display:inline-block;margin:0 1px"></div>`;
+    const dotsRow=dotHtml?`<div style="display:flex;justify-content:center;flex-wrap:wrap;margin-top:1px">${dotHtml}</div>`:'';
 
-    html+=`<div onclick="openHomeDayDetail('${ds}')" style="display:flex;flex-direction:column;align-items:center;border-radius:8px;padding:4px 2px;min-height:52px;cursor:pointer;background:${cellBg};border:${cellBorder};transition:background 0.15s">
+    html+=`<div onclick="openHomeDayDetail('${ds}')" style="display:flex;flex-direction:column;align-items:center;border-radius:8px;padding:4px 2px;min-height:52px;cursor:pointer;background:${cellBg};border:${cellBorder};transition:background 0.15s${!hasAnyEvent&&!isToday?';opacity:0.45':''}">
       <div style="font-size:11px;font-weight:700;line-height:22px;text-align:center;display:flex;align-items:center;justify-content:center;${todayCircle}color:${isToday?'#fff':numColor};flex-shrink:0">${d}</div>
       ${expLabel}
       ${incLabel}
@@ -4059,12 +4231,14 @@ function renderHomeMiniCal(yearOverride, monthOverride){
   }
 
   html+=`</div>
-    <!-- Legend -->
-    <div style="display:flex;gap:10px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="color:var(--expense);font-weight:700;font-size:9px">-Red</span> = Expenses</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="color:var(--income);font-weight:700;font-size:9px">+Green</span> = Income</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--planned);border-radius:50%"></span> Planned</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--overdue);border-radius:50%"></span> Overdue</span>
+    <div style="display:flex;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="color:var(--expense);font-weight:700">-</span>Expense</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="color:var(--income);font-weight:700">+</span>Income</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--overdue);border-radius:50%"></span>Overdue</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--amber);border-radius:50%"></span>Payable Due</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--planned);border-radius:50%"></span>Planned</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--violet);border-radius:50%"></span>Recurring</span>
+      <span style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text3)"><span style="display:inline-block;width:6px;height:6px;background:var(--emerald);border-radius:50%"></span>Goal</span>
     </div>
   </div>`;
   el.innerHTML=html;
@@ -4082,54 +4256,86 @@ function openHomeDayDetail(dateStr){
   const dayTxs=db.transactions.filter(t=>t.date===dateStr);
   const dayPlanned=db.planned.filter(p=>p.date===dateStr);
   const todayStr=today();
-  // Also check payables due on this date (not in planned)
+
+  // Payables: only show as upcoming if this date is an UNPAID due date
   const dayPayables=[];
   db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
-    const d=new Date(dateStr+'T00:00:00');
-    if(d.getDate()===py.dueDay){
-      const alreadyPlanned=dayPlanned.some(pl=>pl.payableId===py.id);
-      if(!alreadyPlanned)dayPayables.push(py);
-    }
+    try {
+      const sched=generatePayableSchedule(py);
+      const thisEntry=sched.find(s=>s.date===dateStr&&(s.status==='overdue'||s.status==='current'||s.status==='upcoming'));
+      if(thisEntry) dayPayables.push({py,entry:thisEntry});
+    } catch(e){}
   });
-  // Recurring events on this date
+
+  // Recurring: only show if this date has an upcoming/missed (not yet applied) occurrence
   const dayRecurring=[];
   db.recurring.filter(r=>r.status==='active').forEach(r=>{
-    const nextD=getNextRecurDate(r);
-    if(nextD===dateStr)dayRecurring.push(r);
+    try {
+      const sched=generateRecurringSchedule(r);
+      const thisEntry=sched.find(s=>s.date===dateStr&&(s.status==='upcoming'||s.status==='current'||s.status==='missed'));
+      if(thisEntry) dayRecurring.push({r,entry:thisEntry});
+    } catch(e){}
   });
+
   // Goals with target date matching
   const dayGoals=db.goals.filter(g=>g.targetDate===dateStr&&g.status!=='achieved');
 
-  if(!dayTxs.length&&!dayPlanned.length&&!dayPayables.length&&!dayRecurring.length&&!dayGoals.length){
+  // Deduplicate: planned entries linked to payables already shown in dayPayables
+  const shownPayableIdsCheck = new Set(dayPayables.map(({py})=>py.id));
+  const dayPlannedFiltered_check = dayPlanned.filter(p=>
+    !(p.payableId && shownPayableIdsCheck.has(p.payableId)) &&
+    p.status!=='completed' && p.status!=='skipped'
+  );
+
+  if(!dayTxs.length&&!dayPlannedFiltered_check.length&&!dayPayables.length&&!dayRecurring.length&&!dayGoals.length){
     showToast('No activity on '+fmtDate(dateStr),'info');return;
   }
   const label=fmtDate(dateStr);
   let html=`<div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px">📅 ${label}</div>`;
 
-  // Payables due
+  // Payables due (unpaid only)
   if(dayPayables.length){
     html+=`<div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">💳 Payables Due (${dayPayables.length})</div>`;
-    dayPayables.forEach(py=>{
+    dayPayables.forEach(({py,entry})=>{
       const acc=py.linkedAccount?db.accounts.find(a=>a.id===py.linkedAccount):null;
-      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--amber-bg);border:1px solid rgba(245,158,11,.2);margin-bottom:6px">
+      const isOverdue=entry.status==='overdue';
+      const bg=isOverdue?'var(--rose-bg)':'var(--amber-bg)';
+      const border=isOverdue?'rgba(225,29,72,.2)':'rgba(245,158,11,.2)';
+      const statusBadge=isOverdue?`<span style="font-size:9px;font-weight:700;color:var(--rose)">⚠ OVERDUE</span>`:`<span style="font-size:9px;font-weight:700;color:var(--amber)">📅 DUE</span>`;
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:${bg};border:1px solid ${border};margin-bottom:6px" onclick="closeModal('modal-day-detail');setTimeout(()=>openPayableSchedule('${py.id}'),100)">
         <div>
           <div style="font-size:13px;font-weight:700">💳 ${py.name}</div>
-          <div style="font-size:10px;color:var(--text3);margin-top:2px">${PAYABLE_TYPES[py.type]||py.type}${acc?' · '+acc.name:' · No account linked'}</div>
-          <div style="font-size:10px;color:var(--amber);margin-top:1px">Due every ${py.dueDay}${py.dueDay===1?'st':py.dueDay===2?'nd':py.dueDay===3?'rd':'th'} of month</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${PAYABLE_TYPES[py.type]||py.type}${acc?' · '+acc.name:''}</div>
+          <div style="margin-top:3px">${statusBadge} <span style="font-size:10px;color:var(--text3)">Remaining: ${fmt(py.remaining||0)}</span></div>
         </div>
-        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--expense)">${fmt(py.monthlyPayment)}</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--expense)">-${fmt(py.monthlyPayment)}</div>
+          <div style="font-size:9px;color:var(--text3);text-align:right;margin-top:2px">tap to pay</div>
+        </div>
       </div>`;
     });
   }
 
-  // Planned activities
-  if(dayPlanned.length){
-    html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📅 Planned (${dayPlanned.length})</div>`;
-    dayPlanned.forEach(p=>{
+  // Planned activities — EXCLUDE entries already shown as Payables Due above
+  // (planned items with a payableId whose payable already appeared in dayPayables)
+  const shownPayableIds = new Set(dayPayables.map(({py})=>py.id));
+  const dayPlannedFiltered = dayPlanned.filter(p => {
+    // Skip if this planned entry belongs to a payable we already displayed
+    if(p.payableId && shownPayableIds.has(p.payableId)) return false;
+    // Skip completed/skipped entries
+    if(p.status==='completed'||p.status==='skipped') return false;
+    return true;
+  });
+
+  if(dayPlannedFiltered.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--planned);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:${dayPayables.length?'10px':'0'}">📋 Upcoming Events (${dayPlannedFiltered.length})</div>`;
+    dayPlannedFiltered.forEach(p=>{
       const tc=p.type==='expense'?'var(--expense)':p.type==='income'?'var(--income)':'var(--transfer)';
+      const sign=p.type==='expense'?'-':p.type==='income'?'+':'⇄';
       const acc=db.accounts.find(a=>a.id===p.accountId);
       const statusColor=p.date<todayStr?'var(--rose)':p.date===todayStr?'var(--amber)':'var(--blue)';
       const statusLabel=p.date<todayStr?'OVERDUE':p.date===todayStr?'TODAY':'UPCOMING';
+      const statusBg=p.date<todayStr?'var(--rose-bg)':p.date===todayStr?'var(--amber-bg)':'var(--blue-bg)';
       const payable=p.payableId?db.payables.find(py=>py.id===p.payableId):null;
       const nameToShow=payable?payable.name:(p.desc||p.category.replace(/^\S+\s/,''));
       html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);margin-bottom:6px;cursor:pointer" onclick="closeModal('modal-day-detail');setTimeout(()=>{ showScreen('goals');setTimeout(()=>showGoalsTab('planned',document.querySelectorAll('#screen-goals .screen-tab')[3]),50); },50)">
@@ -4137,25 +4343,30 @@ function openHomeDayDetail(dateStr){
           <div style="font-size:13px;font-weight:700">${p.category.split(' ')[0]} ${nameToShow}</div>
           <div style="font-size:10px;color:var(--text3);margin-top:2px">${p.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''}</div>
           ${p.desc&&!payable?`<div style="font-size:10px;color:var(--text3)">${p.desc}</div>`:''}
-          <span style="font-size:9px;font-weight:700;color:${statusColor};background:${p.date<todayStr?'var(--rose-bg)':p.date===todayStr?'var(--amber-bg)':'var(--blue-bg)'};padding:1px 6px;border-radius:4px">${statusLabel}</span>
+          <span style="font-size:9px;font-weight:700;color:${statusColor};background:${statusBg};padding:1px 6px;border-radius:4px">${statusLabel}</span>
         </div>
-        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${fmt(p.amount)}</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${sign}${fmt(p.amount)}</div>
       </div>`;
     });
   }
 
-  // Upcoming recurring
+  // Upcoming/missed recurring (not yet applied)
   if(dayRecurring.length){
     html+=`<div style="font-size:10px;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;margin-top:10px">🔄 Recurring (${dayRecurring.length})</div>`;
-    dayRecurring.forEach(r=>{
+    dayRecurring.forEach(({r,entry})=>{
       const tc=r.type==='expense'?'var(--expense)':'var(--income)';
       const acc=db.accounts.find(a=>a.id===r.accountId);
-      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:var(--violet-bg);border:1px solid rgba(20,184,166,.2);margin-bottom:6px">
+      const isMissed=entry.status==='missed';
+      const bg=isMissed?'var(--rose-bg)':'var(--violet-bg)';
+      const border=isMissed?'rgba(225,29,72,.2)':'rgba(20,184,166,.2)';
+      const badge=isMissed?`<span style="font-size:9px;font-weight:700;color:var(--rose)">⚠ MISSED</span>`:`<span style="font-size:9px;font-weight:700;color:var(--violet)">🔄 ${entry.status==='current'?'TODAY':'UPCOMING'}</span>`;
+      html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:10px;background:${bg};border:1px solid ${border};margin-bottom:6px" onclick="closeModal('modal-day-detail');setTimeout(()=>openRecurringSchedule('${r.id}'),100)">
         <div>
           <div style="font-size:13px;font-weight:700">🔄 ${r.name}</div>
-          <div style="font-size:10px;color:var(--text3);margin-top:2px">${r.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''} · ${r.frequency}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${r.category.replace(/^\S+\s/,'')}${acc?' · '+acc.name:''} · ${RECUR_FREQ_LABELS[r.frequency]}</div>
+          <div style="margin-top:3px">${badge}</div>
         </div>
-        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${r.type==='expense'?'-':'+'} ${fmt(r.amount)}</div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${tc}">${r.type==='expense'?'-':'+'}${fmt(r.amount)}</div>
       </div>`;
     });
   }
@@ -4176,7 +4387,7 @@ function openHomeDayDetail(dateStr){
     });
   }
 
-  // Transactions
+  // Transactions (paid payables + applied recurring appear here as expenses/income naturally)
   if(dayTxs.length){
     html+=`<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin:${(dayPlanned.length||dayPayables.length||dayRecurring.length||dayGoals.length)?'10px 0 6px':'0 0 6px'}">📊 Transactions (${dayTxs.length})</div>`;
     dayTxs.forEach(tx=>{
@@ -4341,7 +4552,7 @@ function renderCalendar(container){
   const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-  // Build maps: date → {expense, income, hasPlanned, hasOverdue, hasPayable}
+  // Build maps
   const txMap={},plMap={};
   db.transactions.forEach(tx=>{
     const k=tx.date;
@@ -4350,20 +4561,46 @@ function renderCalendar(container){
     else if(tx.type==='income')txMap[k].inc+=tx.amount;
   });
   db.planned.filter(p=>p.status==='pending').forEach(p=>{
-    if(!plMap[p.date])plMap[p.date]={hasPlanned:false,hasOverdue:false,hasPayable:false};
+    if(!plMap[p.date])plMap[p.date]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
     plMap[p.date].hasPlanned=true;
     if(p.date<todayStr)plMap[p.date].hasOverdue=true;
-    if(p.payableId)plMap[p.date].hasPayable=true;
   });
-  // Also mark payable due dates (auto-calculated, not yet in planned)
-  db.payables.filter(p=>p.status==='active'&&p.dueDay).forEach(py=>{
-    for(let m=0;m<3;m++){
-      const d=new Date(calYear,calMonth+m,py.dueDay);
-      if(d.getMonth()===calMonth&&d.getFullYear()===calYear){
-        const ds=d.toISOString().split('T')[0];
-        if(!plMap[ds])plMap[ds]={hasPlanned:false,hasOverdue:false,hasPayable:false};
-        plMap[ds].hasPayable=true;
-      }
+
+  // Payable dots — only UNPAID scheduled dates
+  const ms2=`${calYear}-${String(calMonth+1).padStart(2,'0')}-01`;
+  const me2=new Date(calYear,calMonth+1,0).toISOString().split('T')[0];
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    try {
+      const sched=generatePayableSchedule(py);
+      sched.filter(s=>s.status==='overdue'||s.status==='current'||s.status==='upcoming').forEach(s=>{
+        if(s.date>=ms2&&s.date<=me2){
+          if(!plMap[s.date])plMap[s.date]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
+          plMap[s.date].hasPayable=true;
+          if(s.status==='overdue')plMap[s.date].hasOverdue=true;
+        }
+      });
+    } catch(e){}
+  });
+
+  // Recurring dots — only upcoming/missed occurrences
+  db.recurring.filter(r=>r.status!=='paused').forEach(r=>{
+    try {
+      const sched=generateRecurringSchedule(r);
+      sched.filter(s=>s.status==='upcoming'||s.status==='current'||s.status==='missed').forEach(s=>{
+        if(s.date>=ms2&&s.date<=me2){
+          if(!plMap[s.date])plMap[s.date]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
+          plMap[s.date].hasRecur=true;
+          if(s.status==='missed')plMap[s.date].hasOverdue=true;
+        }
+      });
+    } catch(e){}
+  });
+
+  // Goal target dates
+  db.goals.filter(g=>g.targetDate&&g.status!=='achieved').forEach(g=>{
+    if(g.targetDate>=ms2&&g.targetDate<=me2){
+      if(!plMap[g.targetDate])plMap[g.targetDate]={hasPlanned:false,hasOverdue:false,hasPayable:false,hasGoal:false,hasRecur:false};
+      plMap[g.targetDate].hasGoal=true;
     }
   });
 
@@ -4375,18 +4612,19 @@ function renderCalendar(container){
     const isSel=ds===calSelectedDate;
     const td=txMap[ds];
     const pd=plMap[ds];
-    let numClass='cal-num';
     let dotHtml='';
     if(pd){
-      if(pd.hasOverdue)dotHtml=`<div class="cal-dot overdue"></div>`;
-      else if(pd.hasPayable)dotHtml=`<div class="cal-dot" style="background:var(--amber)"></div>`;
-      else if(pd.hasPlanned)dotHtml=`<div class="cal-dot planned"></div>`;
+      if(pd.hasOverdue)dotHtml+=`<div class="cal-dot overdue"></div>`;
+      if(pd.hasPayable&&!pd.hasOverdue)dotHtml+=`<div class="cal-dot" style="background:var(--amber)"></div>`;
+      if(pd.hasPlanned)dotHtml+=`<div class="cal-dot planned"></div>`;
+      if(pd.hasGoal)dotHtml+=`<div class="cal-dot" style="background:var(--emerald)"></div>`;
+      if(pd.hasRecur&&!pd.hasOverdue)dotHtml+=`<div class="cal-dot" style="background:var(--violet)"></div>`;
     }
     cells+=`<div class="cal-cell${isToday?' today':''}${isSel?' selected':''} ${td||dotHtml?'':'empty-day'}" onclick="calCellClick('${ds}')">
-      <div class="${numClass}">${d}</div>
+      <div class="cal-num">${d}</div>
       ${td&&td.exp>0?`<div class="cal-exp">-${shortFmt(td.exp)}</div>`:''}
       ${td&&td.inc>0?`<div class="cal-inc">+${shortFmt(td.inc)}</div>`:''}
-      ${dotHtml}
+      <div style="display:flex;justify-content:center;flex-wrap:wrap">${dotHtml}</div>
     </div>`;
   }
 
@@ -4401,12 +4639,14 @@ function renderCalendar(container){
       </div>
       <div class="cal-day-labels">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(l=>`<div class="cal-dl">${l}</div>`).join('')}</div>
       <div class="cal-grid">${cells}</div>
-      <div style="display:flex;gap:12px;font-size:10px;color:var(--text3);margin-top:10px;flex-wrap:wrap">
-        <span style="color:var(--expense)">▪ Red = Expenses</span>
-        <span style="color:var(--income)">▪ Green = Income</span>
-        <span>🟠 Planned</span>
-        <span style="color:var(--amber)">🟡 Payable Due</span>
-        <span style="color:var(--overdue)">🔴 Overdue</span>
+      <div style="display:flex;gap:10px;font-size:10px;color:var(--text3);margin-top:10px;flex-wrap:wrap">
+        <span style="color:var(--expense)">▪ Expenses</span>
+        <span style="color:var(--income)">▪ Income</span>
+        <span style="color:var(--rose)">🔴 Overdue</span>
+        <span style="color:var(--amber)">🟡 Payable</span>
+        <span style="color:var(--planned)">🟠 Planned</span>
+        <span style="color:var(--emerald)">🟢 Goal</span>
+        <span style="color:var(--violet)">🔵 Recurring</span>
       </div>
     </div>
     ${dayDetailHtml}
@@ -4485,10 +4725,10 @@ function calNav(dir){calMonth+=dir;if(calMonth<0){calMonth=11;calYear--;}if(calM
 function renderPlannedList(container){
   const pending=db.planned.filter(p=>p.status==='pending').sort((a,b)=>a.date.localeCompare(b.date));
   const done=db.planned.filter(p=>p.status==='done').sort((a,b)=>b.date.localeCompare(a.date));
-  if(!pending.length&&!done.length){container.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><p>No planned activities.<br>Tap + to add one.</p></div>`;return;}
+  if(!pending.length&&!done.length){container.innerHTML=`<div class="empty"><div class="empty-icon">📋</div><p>No upcoming events yet.<br>Tap + to schedule one.</p></div>`;return;}
   let html='';
-  if(pending.length){html+=`<div class="section-title">Pending (${pending.length})</div>${renderPlannedItemsHTML(pending)}`;}
-  if(done.length){html+=`<div class="section-title" style="margin-top:16px">Completed (${done.length})</div>${done.slice(0,15).map(p=>{const acc=db.accounts.find(a=>a.id===p.accountId);return`<div class="planned-item" style="opacity:0.55"><div class="planned-header"><div class="planned-cat">${p.category}</div><div class="planned-amount" style="color:var(--income)">${fmt(p.amount)}</div></div><div class="planned-meta"><span class="planned-badge done">DONE</span><span>${acc?acc.name:''}</span><span>${fmtDate(p.actualDate||p.date)}</span></div></div>`;}).join('')}`;}
+  if(pending.length){html+=`<div class="section-title">📋 Upcoming Events (${pending.length})</div>${renderPlannedItemsHTML(pending)}`;}
+  if(done.length){html+=`<div class="section-title" style="margin-top:16px">✅ Completed (${done.length})</div>${done.slice(0,15).map(p=>{const acc=db.accounts.find(a=>a.id===p.accountId);return`<div class="planned-item" style="opacity:0.55"><div class="planned-header"><div class="planned-cat">${p.category}</div><div class="planned-amount" style="color:var(--income)">${fmt(p.amount)}</div></div><div class="planned-meta"><span class="planned-badge done">DONE</span><span>${acc?acc.name:''}</span><span>${fmtDate(p.actualDate||p.date)}</span></div></div>`;}).join('')}`;}
   container.innerHTML=html;
 }
 function renderOverdue(container){
@@ -4539,13 +4779,13 @@ function renderPlannedItemsHTML(items){
 // ===== PLANNED CRUD =====
 function openAddPlanned(prefillDate){
   editingPlannedId=null;currentPlannedType='expense';
-  document.getElementById('modal-planned-title').textContent='Add Planned Activity';
+  document.getElementById('modal-planned-title').textContent='Add Upcoming Event';
   document.getElementById('pl-amount').value='';
   document.getElementById('pl-ref').value='';
   document.getElementById('pl-desc').value='';
   document.getElementById('pl-date').value=prefillDate||today();
   document.getElementById('pl-delete-btn').style.display='none';
-  document.getElementById('pl-save-btn').textContent='Save Planned Activity';
+  document.getElementById('pl-save-btn').textContent='Save Event';
   setPlannedType('expense',document.querySelector('#modal-planned .type-tab.expense'));
   fillAccDropdowns();openModal('modal-planned');
 }
@@ -4582,7 +4822,7 @@ function savePlanned(){
 function openEditPlanned(id){
   const pl=db.planned.find(p=>p.id===id);if(!pl)return;
   editingPlannedId=id;currentPlannedType=pl.type;
-  document.getElementById('modal-planned-title').textContent='Edit Planned Activity';
+  document.getElementById('modal-planned-title').textContent='Edit Upcoming Event';
   document.getElementById('pl-delete-btn').style.display='';
   document.getElementById('pl-save-btn').textContent='Update';
   setPlannedType(pl.type,document.querySelector(`#modal-planned .type-tab.${pl.type}`));
@@ -4596,7 +4836,7 @@ function openEditPlanned(id){
   else document.getElementById('pl-account').value=pl.accountId;
   fillAccDropdowns();openModal('modal-planned');
 }
-function deletePlanned(){showConfirm('Delete Planned Activity?','',()=>{db.planned=db.planned.filter(p=>p.id!==editingPlannedId);saveDB();closeModal('modal-planned');showToast('Deleted','error');editingPlannedId=null;renderPlanned();updateOverdueBadge();});}
+function deletePlanned(){showConfirm('Delete Upcoming Event?','',()=>{db.planned=db.planned.filter(p=>p.id!==editingPlannedId);saveDB();closeModal('modal-planned');showToast('Deleted','error');editingPlannedId=null;renderPlanned();updateOverdueBadge();});}
 
 // ===== CONFIRM PLANNED =====
 function openConfirmPlanned(id){
@@ -4907,14 +5147,42 @@ const PAYABLE_TYPES={loan:'🏦 Bank/Personal Loan',credit:'💳 Credit Card',sp
 const PAYABLE_COLORS={loan:'var(--accent)',credit:'var(--expense)',spl:'var(--planned)',other:'var(--text2)'};
 
 function updatePayablesBadge(){
-  const today_=today();
-  const due=db.payables.filter(p=>p.status==='active'&&p.dueDay).filter(p=>{
-    const nowDate=new Date();const dueDate=new Date(nowDate.getFullYear(),nowDate.getMonth(),p.dueDay);
-    const diff=(dueDate-nowDate)/(1000*60*60*24);
-    return diff<=3&&diff>=-1;
-  }).length;
+  // Count payables with overdue or current-month unpaid due dates (within next 3 days)
+  const todayStr=today();
+  const nowDate=new Date();
+  let dueSoon=0;
+  db.payables.filter(p=>p.status==='active'&&p.dueDay&&p.monthlyPayment>0).forEach(py=>{
+    try {
+      const sched=generatePayableSchedule(py);
+      const urgent=sched.find(s=>{
+        if(s.status!=='overdue'&&s.status!=='current'&&s.status!=='upcoming') return false;
+        const diff=(new Date(s.date+'T00:00:00')-nowDate)/(1000*60*60*24);
+        return diff<=-1||diff<=3; // overdue or due within 3 days
+      });
+      if(urgent) dueSoon++;
+    } catch(e){}
+  });
   const badge=document.getElementById('payables-badge');
-  if(badge){if(due>0){badge.style.display='flex';badge.textContent=due;}else badge.style.display='none';}
+  if(badge){if(dueSoon>0){badge.style.display='flex';badge.textContent=dueSoon;}else badge.style.display='none';}
+}
+
+function updateRecurringBadge(){
+  const nowDate=new Date();
+  let dueSoon=0;
+  db.recurring.filter(r=>r.status==='active').forEach(r=>{
+    try {
+      const sched=generateRecurringSchedule(r);
+      const urgent=sched.find(s=>{
+        if(s.status!=='missed'&&s.status!=='current'&&s.status!=='upcoming') return false;
+        const diff=(new Date(s.date+'T00:00:00')-nowDate)/(1000*60*60*24);
+        return diff<=-1||diff<=3;
+      });
+      if(urgent) dueSoon++;
+    } catch(e){}
+  });
+  // Use the goals badge for recurring (since recurring is on Goals screen)
+  const badge=document.getElementById('recurring-badge');
+  if(badge){if(dueSoon>0){badge.style.display='flex';badge.textContent=dueSoon;}else badge.style.display='none';}
 }
 
 function openAddPayable(){
@@ -5017,7 +5285,294 @@ function autoSchedulePayable(py){
   }
 }
 
-// Record payment
+// ─── PAYABLE REPAYMENT SCHEDULE ENGINE ────────────────────────
+/**
+ * Generates a complete repayment schedule for a payable.
+ * Handles advance multi-month payments correctly.
+ * Returns array of { date, monthKey, amount, status, paymentRef }
+ */
+function generatePayableSchedule(py) {
+  if(!py.dueDay||!py.monthlyPayment) return [];
+  const todayStr=today();
+  const schedule=[];
+
+  // Build set of "month keys" covered by payments
+  // Each payment.months tells how many consecutive months starting from its due month
+  const coveredMonths=new Map(); // 'YYYY-MM' → payment object
+  (py.payments||[]).forEach(pay=>{
+    const months=pay.months||1;
+    const payDate=new Date(pay.date+'T00:00:00');
+    // Find which due month this payment covers (the next due date at or after payment date)
+    let dueMo=new Date(payDate.getFullYear(),payDate.getMonth(),py.dueDay);
+    if(dueMo<payDate) dueMo=new Date(payDate.getFullYear(),payDate.getMonth()+1,py.dueDay);
+    for(let m=0;m<months;m++){
+      const d=new Date(dueMo.getFullYear(),dueMo.getMonth()+m,py.dueDay);
+      const key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+      if(!coveredMonths.has(key)) coveredMonths.set(key,pay);
+    }
+  });
+
+  // Determine start: earliest covered month OR first upcoming due date
+  let startDate;
+  if(py.createdAt){
+    const cd=new Date(py.createdAt);
+    startDate=new Date(cd.getFullYear(),cd.getMonth(),py.dueDay);
+    if(startDate<cd) startDate=new Date(cd.getFullYear(),cd.getMonth()+1,py.dueDay);
+  } else {
+    const now=new Date();
+    startDate=new Date(now.getFullYear(),now.getMonth(),py.dueDay);
+    if(startDate<now) startDate=new Date(now.getFullYear(),now.getMonth()+1,py.dueDay);
+  }
+  // Also consider earliest covered month
+  coveredMonths.forEach((_,key)=>{
+    const[y,m]=key.split('-').map(Number);
+    const d=new Date(y,m-1,py.dueDay);
+    if(d<startDate) startDate=d;
+  });
+
+  // ─── CORE: Build schedule rows from REMAINING balance ────────
+  // Row count  = ceil(remaining / monthly)          [NOT totalAmount]
+  // Row amount = min(monthly, remainingLeft)          [last row is partial]
+  //
+  // Example: total=10000, paid=4000, remaining=6000, monthly=1250, dueDay=5
+  //   #1 Mar 5  → 1250   #2 Apr 5 → 1250   #3 May 5 → 1250
+  //   #4 Jun 5  → 1250   #5 Jul 5 → 1000  ← last partial
+  const remaining    = Math.max(0, py.remaining || 0);
+  const monthly      = py.monthlyPayment;
+  const futureInstall = remaining > 0 ? Math.ceil(remaining / monthly) : 0;
+  const totalRows    = coveredMonths.size + futureInstall;
+  if(totalRows === 0) return [];
+
+  let iter        = new Date(startDate);
+  let futureCount = 0; // tracks future (unpaid) rows emitted
+
+  for(let i = 0; i < totalRows && i < 120; i++){
+    const dateStr  = iter.toISOString().split('T')[0];
+    const monthKey = iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0');
+    const isPaid   = coveredMonths.has(monthKey);
+    const payRef   = isPaid ? coveredMonths.get(monthKey) : null;
+
+    let rowAmount;
+    if(isPaid){
+      rowAmount = monthly; // show standard monthly for paid rows
+    } else {
+      const alreadyAllocated = futureCount * monthly;
+      rowAmount = Math.min(monthly, Math.max(0, remaining - alreadyAllocated));
+      if(rowAmount <= 0) break;
+      futureCount++;
+    }
+
+    let status;
+    if(isPaid)                status = 'paid';
+    else if(dateStr < todayStr)  status = 'overdue';
+    else if(dateStr === todayStr) status = 'current';
+    else                      status = 'upcoming';
+
+    schedule.push({ date:dateStr, monthKey, amount:rowAmount, status, payRef });
+
+    if(!isPaid && futureCount >= futureInstall) break;
+    iter = new Date(iter.getFullYear(), iter.getMonth()+1, py.dueDay);
+  }
+  return schedule;
+}
+
+function openPayableSchedule(id){
+  const py=db.payables.find(p=>p.id===id);if(!py)return;
+  const color=PAYABLE_COLORS[py.type]||'var(--text2)';
+  const schedule=generatePayableSchedule(py);
+  const paidCount=schedule.filter(s=>s.status==='paid').length;
+  const overdueCount=schedule.filter(s=>s.status==='overdue').length;
+  const totalCount=schedule.length;
+  const pct=py.totalAmount>0?Math.min(100,((py.paidAmount||0)/py.totalAmount)*100):0;
+
+  document.getElementById('payable-schedule-title').textContent='📅 '+py.name+' — Repayment Schedule';
+
+  // Summary cards
+  document.getElementById('payable-schedule-summary').innerHTML=`
+    <div class="sched-summary">
+      <div><div class="sched-sum-val" style="color:${color}">${fmt(py.remaining||0)}</div><div class="sched-sum-lbl">Remaining</div></div>
+      <div><div class="sched-sum-val" style="color:var(--income)">${fmt(py.paidAmount||0)}</div><div class="sched-sum-lbl">Paid</div></div>
+      <div><div class="sched-sum-val">${paidCount}/${totalCount}</div><div class="sched-sum-lbl">Installments</div></div>
+    </div>`;
+
+  // Progress bar
+  const progressColor=pct>=80?'var(--income)':pct>=40?'var(--planned)':'var(--expense)';
+  document.getElementById('payable-schedule-progress').innerHTML=`
+    <div style="margin-bottom:8px">
+      <div class="sched-progress-row">
+        <div class="sched-progress-bar-wrap">
+          <div class="sched-progress-bar" style="width:${pct.toFixed(1)}%;background:${progressColor}"></div>
+        </div>
+        <span style="font-size:11px;font-weight:700;color:${progressColor};min-width:36px">${pct.toFixed(0)}%</span>
+      </div>
+      ${overdueCount>0?`<div style="font-size:11px;color:var(--rose);font-weight:600">⚠️ ${overdueCount} payment${overdueCount>1?'s':''} overdue — please record payment to stay on track.</div>`:''}
+      ${py.interestRate>0?`<div style="font-size:10px;color:var(--text3);margin-top:4px">Interest rate: ${py.interestRate}% per year</div>`:''}
+    </div>`;
+
+  // Schedule table
+  if(schedule.length){
+    const rows=schedule.map((s,i)=>{
+      const acc=s.payRef?(db.accounts.find(a=>a.id===s.payRef.accountId)||null):null;
+      let badge='',rowClass='';
+      if(s.status==='paid'){badge=`<span class="sched-badge paid">✓ Paid</span>`;rowClass='sched-paid';}
+      else if(s.status==='current'){badge=`<span class="sched-badge current">📅 Due Today</span>`;rowClass='sched-current';}
+      else if(s.status==='overdue'){badge=`<span class="sched-badge overdue">⚠ Overdue</span>`;rowClass='sched-overdue';}
+      else{badge=`<span class="sched-badge upcoming">${i===schedule.filter(x=>x.status!=='paid').findIndex(x=>x.status==='upcoming')+paidCount?'Next':'⏳ Upcoming'}</span>`;}
+
+      const payNote=s.payRef?`<div style="font-size:9px;color:var(--text3);margin-top:2px">${fmtDate(s.payRef.date)}${acc?' · '+acc.name:''}${s.payRef.months>1?' · '+s.payRef.months+'mo advance':''}</div>`:'';
+      return`<tr class="${rowClass}">
+        <td><div style="font-weight:600">#${i+1}</div></td>
+        <td><div style="font-weight:600">${fmtDate(s.date)}</div></td>
+        <td><div style="font-family:var(--mono);font-weight:700;color:var(--expense)">-${fmt(s.amount)}</div>${payNote}</td>
+        <td>${badge}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('payable-schedule-table').innerHTML=`
+      <div class="schedule-wrap">
+        <table class="schedule-table">
+          <thead><tr><th>#</th><th>Due Date</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  } else {
+    document.getElementById('payable-schedule-table').innerHTML=`<div style="text-align:center;color:var(--text3);padding:16px;font-size:12px">No schedule to display. Add a due day and monthly payment to generate a forecast.</div>`;
+  }
+
+  // Wire up buttons
+  document.getElementById('payable-schedule-pay-btn').onclick=()=>{closeModal('modal-payable-schedule');openPayPayable(id);};
+  document.getElementById('payable-schedule-edit-btn').onclick=()=>{closeModal('modal-payable-schedule');openEditPayable(id);};
+  openModal('modal-payable-schedule');
+}
+
+// ─── RECURRING SCHEDULE ENGINE ────────────────────────────────
+/**
+ * Generates occurrence list for a recurring rule.
+ * Compares against db.transactions (recurringId match) to determine applied status.
+ * Returns array of { date, status: 'applied'|'missed'|'current'|'upcoming'|'paused' }
+ */
+function generateRecurringSchedule(r) {
+  const todayStr=today();
+  const schedule=[];
+  const start=new Date(r.startDate+'T00:00:00');
+  const endDate=r.endDate;
+  const MAX=48; // max 48 occurrences to show
+
+  // Build set of dates where this recurring has been applied
+  const appliedDates=new Set(
+    db.transactions.filter(tx=>tx.recurringId===r.id).map(tx=>tx.date)
+  );
+
+  // Helper: get day of month (use dueDay if set and monthly, else startDate day)
+  const dayOfMonth=(r.frequency==='monthly'&&r.dueDay)?r.dueDay:start.getDate();
+
+  // Generate all occurrence dates
+  let iter=new Date(start);
+  // For monthly with dueDay, align to the dueDay
+  if(r.frequency==='monthly'&&r.dueDay){
+    iter=new Date(start.getFullYear(),start.getMonth(),r.dueDay);
+    if(iter<start) iter=new Date(start.getFullYear(),start.getMonth()+1,r.dueDay);
+  }
+
+  for(let i=0;i<MAX;i++){
+    const dateStr=iter.toISOString().split('T')[0];
+    if(endDate&&dateStr>endDate) break;
+
+    const isApplied=appliedDates.has(dateStr);
+    // Also check if any transaction in this month has the recurringId (for auto-applied)
+    const monthKey=dateStr.substring(0,7);
+    const isAppliedThisMonth=!isApplied&&[...appliedDates].some(d=>d.startsWith(monthKey));
+
+    let status;
+    if(isApplied||isAppliedThisMonth) status='applied';
+    else if(r.status==='paused') status='paused';
+    else if(dateStr<todayStr) status='missed';
+    else if(dateStr===todayStr) status='current';
+    else status='upcoming';
+
+    schedule.push({date:dateStr,status});
+
+    // Advance to next occurrence
+    if(r.frequency==='daily') iter=new Date(iter.getTime()+86400000);
+    else if(r.frequency==='weekly') iter=new Date(iter.getTime()+7*86400000);
+    else if(r.frequency==='monthly') iter=new Date(iter.getFullYear(),iter.getMonth()+1,dayOfMonth);
+    else if(r.frequency==='yearly') iter=new Date(iter.getFullYear()+1,iter.getMonth(),iter.getDate());
+    else break;
+
+    // Stop if no endDate and we have enough future ones
+    if(!endDate){
+      const futureCount=schedule.filter(s=>s.status==='upcoming'||s.status==='current').length;
+      if(futureCount>=12) break;
+    }
+  }
+  return schedule;
+}
+
+function openRecurringSchedule(id){
+  const r=db.recurring.find(r=>r.id===id);if(!r)return;
+  const acc=db.accounts.find(a=>a.id===r.accountId);
+  const schedule=generateRecurringSchedule(r);
+  const appliedCount=schedule.filter(s=>s.status==='applied').length;
+  const missedCount=schedule.filter(s=>s.status==='missed').length;
+  const upcomingCount=schedule.filter(s=>s.status==='upcoming'||s.status==='current').length;
+  const amtColor=r.type==='income'?'var(--income)':'var(--expense)';
+  const amtSign=r.type==='income'?'+':'-';
+  const isPaused=r.status==='paused';
+
+  document.getElementById('recur-schedule-title').textContent='🔄 '+r.name+' — Schedule';
+
+  // Summary
+  document.getElementById('recur-schedule-summary').innerHTML=`
+    <div class="sched-summary" style="margin-bottom:12px">
+      <div><div class="sched-sum-val" style="color:${amtColor}">${amtSign}${fmt(r.amount)}</div><div class="sched-sum-lbl">Per ${RECUR_FREQ_LABELS[r.frequency]}</div></div>
+      <div><div class="sched-sum-val" style="color:var(--income)">${appliedCount}</div><div class="sched-sum-lbl">Applied</div></div>
+      <div><div class="sched-sum-val" style="color:${missedCount>0?'var(--rose)':'var(--text3)'}">${missedCount}</div><div class="sched-sum-lbl">Missed</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-bottom:10px;background:var(--bg3);border-radius:10px;padding:10px 12px;line-height:1.6">
+      <strong>${r.category.replace(/^\S+\s/,'')}</strong>${acc?' · '+acc.name:''} · ${RECUR_FREQ_LABELS[r.frequency]}
+      ${r.startDate?`<br>Started: ${fmtDate(r.startDate)}`:''}
+      ${r.endDate?`<br>Ends: ${fmtDate(r.endDate)}`:'<br>No end date'}
+      ${isPaused?'<br><strong style="color:var(--amber)">⏸ Currently Paused</strong>':''}
+      ${missedCount>0?`<br><strong style="color:var(--rose)">⚠️ ${missedCount} missed occurrence${missedCount>1?'s':''} — apply now to catch up</strong>`:''}
+    </div>`;
+
+  // Table
+  if(schedule.length){
+    const rows=schedule.map((s,i)=>{
+      let badge='',rowClass='';
+      if(s.status==='applied'){badge=`<span class="sched-badge applied">✓ Applied</span>`;rowClass='sched-paid';}
+      else if(s.status==='current'){badge=`<span class="sched-badge current">📅 Due Today</span>`;rowClass='sched-current';}
+      else if(s.status==='missed'){badge=`<span class="sched-badge missed">⚠ Missed</span>`;rowClass='sched-overdue';}
+      else if(s.status==='paused'){badge=`<span class="sched-badge paused">⏸ Paused</span>`;}
+      else{badge=`<span class="sched-badge upcoming">⏳ Upcoming</span>`;}
+      // Find the applied transaction for this date
+      const tx=db.transactions.find(t=>t.recurringId===r.id&&t.date.startsWith(s.date.substring(0,7)));
+      const txNote=tx?`<div style="font-size:9px;color:var(--text3);margin-top:1px">${fmtDate(tx.date)}</div>`:'';
+      return`<tr class="${rowClass}">
+        <td><div style="font-weight:600">#${i+1}</div></td>
+        <td><div style="font-weight:600">${fmtDate(s.date)}</div></td>
+        <td><div style="font-family:var(--mono);font-weight:700;color:${amtColor}">${amtSign}${fmt(r.amount)}</div>${txNote}</td>
+        <td>${badge}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('recur-schedule-table').innerHTML=`
+      <div class="schedule-wrap">
+        <table class="schedule-table">
+          <thead><tr><th>#</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  } else {
+    document.getElementById('recur-schedule-table').innerHTML=`<div style="text-align:center;color:var(--text3);padding:16px;font-size:12px">No occurrences generated. Check the start date and frequency.</div>`;
+  }
+
+  // Wire buttons
+  document.getElementById('recur-schedule-apply-btn').onclick=()=>{closeModal('modal-recur-schedule');applyRecurringNow(id);};
+  document.getElementById('recur-schedule-pause-btn').textContent=isPaused?'▶ Resume Rule':'⏸ Pause Rule';
+  document.getElementById('recur-schedule-pause-btn').onclick=()=>{toggleRecurPause(id);closeModal('modal-recur-schedule');};
+  document.getElementById('recur-schedule-edit-btn').onclick=()=>{closeModal('modal-recur-schedule');openEditRecurring(id);};
+  openModal('modal-recur-schedule');
+}
+
 function openPayPayable(id){
   const py=db.payables.find(p=>p.id===id);if(!py)return;
   payingPayableId=id;
@@ -5227,33 +5782,43 @@ function renderActivePayables(container){
     const pct=Math.min(100,((py.paidAmount||0)/py.totalAmount)*100);
     const color=PAYABLE_COLORS[py.type]||'var(--text2)';
     const progressColor=pct>=80?'var(--income)':pct>=40?'var(--planned)':'var(--expense)';
+
+    // Calculate next unpaid due date
+    const todayStr=today();
+    const schedule=generatePayableSchedule(py);
+    const nextUnpaid=schedule.find(s=>s.status==='overdue'||s.status==='current'||s.status==='upcoming');
+    const overdueCount=schedule.filter(s=>s.status==='overdue').length;
+    const paidCount=schedule.filter(s=>s.status==='paid').length;
+    const totalInstallments=schedule.length;
+
     let dueHtml='';
-    if(py.dueDay){
-      const now=new Date();
-      const d=new Date(now.getFullYear(),now.getMonth(),py.dueDay);
-      const diff=Math.ceil((d-now)/(1000*60*60*24));
-      if(diff<0)dueHtml='<span style="color:var(--overdue);font-size:11px">⚠️ Overdue by '+Math.abs(diff)+' day'+(Math.abs(diff)>1?'s':'')+'</span>';
-      else if(diff<=3)dueHtml='<span style="color:var(--planned);font-size:11px">⏰ Due in '+diff+' day'+(diff!==1?'s':'')+'</span>';
-      else dueHtml='<span style="font-size:11px;color:var(--text3)">📅 Due '+py.dueDay+(py.dueDay===1?'st':py.dueDay===2?'nd':py.dueDay===3?'rd':'th')+' of month</span>';
+    if(nextUnpaid){
+      const daysUntil=Math.ceil((new Date(nextUnpaid.date+'T00:00:00')-new Date())/(1000*60*60*24));
+      if(nextUnpaid.status==='overdue')dueHtml=`<span style="color:var(--overdue);font-size:11px">⚠️ ${overdueCount} payment${overdueCount>1?'s':''} overdue</span>`;
+      else if(daysUntil<=3)dueHtml=`<span style="color:var(--planned);font-size:11px">⏰ Due in ${daysUntil===0?'today':daysUntil+' day'+(daysUntil!==1?'s':'')}</span>`;
+      else dueHtml=`<span style="font-size:11px;color:var(--text3)">📅 Next due: ${fmtDate(nextUnpaid.date)}</span>`;
+    } else if(py.dueDay){
+      dueHtml=`<span style="font-size:11px;color:var(--income)">✅ Fully paid off!</span>`;
     }
-    html+='<div class="payable-card" onclick="openEditPayable(\''+py.id+'\')">';
+
+    html+='<div class="payable-card" onclick="openPayableSchedule(\''+py.id+'\')">';
     html+='<div class="payable-header">';
     html+='<div><div class="payable-name">'+py.name+'</div>';
     html+='<span class="payable-type-badge '+py.type+'">'+PAYABLE_TYPES[py.type]+'</span></div>';
     html+='<div style="text-align:right">';
-    html+='<div style="font-family:\'Space Mono\',monospace;font-size:16px;font-weight:700;color:'+color+'">'+fmt(py.remaining||0)+'</div>';
+    html+='<div style="font-family:var(--mono);font-size:16px;font-weight:700;color:'+color+'">'+fmt(py.remaining||0)+'</div>';
     html+='<div style="font-size:10px;color:var(--text3)">remaining</div></div></div>';
     html+='<div style="font-size:11px;color:var(--text3);margin-bottom:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">';
     html+=dueHtml;
     if(py.monthlyPayment)html+='<span>Monthly: '+fmt(py.monthlyPayment)+'</span>';
+    if(totalInstallments>0)html+='<span style="color:var(--text3)">'+paidCount+'/'+totalInstallments+' paid</span>';
     html+='</div>';
     html+='<div class="payable-progress-wrap"><div class="payable-progress-bar" style="width:'+pct.toFixed(1)+'%;background:'+progressColor+'"></div></div>';
     html+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px">';
     html+='<span>Paid: '+fmt(py.paidAmount||0)+'</span><span>'+pct.toFixed(0)+'% done</span><span>Total: '+fmt(py.totalAmount)+'</span></div>';
     html+='<div class="payable-actions">';
     html+='<button type="button" class="payable-btn pay" onclick="event.stopPropagation();openPayPayable(\''+py.id+'\')">💰 Pay</button>';
-    html+='<button type="button" class="payable-btn schedule" onclick="event.stopPropagation();openSchedulePayable(\''+py.id+'\')">📅 Schedule</button>';
-    html+='<button type="button" class="payable-btn" style="background:rgba(124,131,253,0.1);border-color:var(--accent);color:var(--accent)" onclick="event.stopPropagation();openPayableHistory(\''+py.id+'\')">📜 History</button>';
+    html+='<button type="button" class="payable-btn" style="background:var(--blue-bg);border-color:rgba(59,130,246,.3);color:var(--blue)" onclick="event.stopPropagation();openPayableSchedule(\''+py.id+'\')">📊 Schedule</button>';
     html+='<button type="button" class="payable-btn edit" onclick="event.stopPropagation();openEditPayable(\''+py.id+'\')">✏️ Edit</button>';
     html+='</div></div>';
   });
@@ -7165,10 +7730,31 @@ function renderRecurringList(){
   }
   el.innerHTML=db.recurring.map(r=>{
     const acc=db.accounts.find(a=>a.id===r.accountId);
-    const nextDate=getNextRecurDate(r);
     const isPaused=r.status==='paused';
     const amtSign=r.type==='income'?'+':'-';
-    return`<div class="recur-card${isPaused?' paused':''}" onclick="openEditRecurring('${r.id}')">
+    const todayStr=today();
+
+    // Get upcoming occurrence info
+    const schedule=generateRecurringSchedule(r);
+    const nextDue=schedule.find(s=>s.status==='upcoming'||s.status==='current');
+    const overdueSched=schedule.filter(s=>s.status==='missed');
+    const appliedCount=schedule.filter(s=>s.status==='applied').length;
+
+    let dueBadge='';
+    if(isPaused){
+      dueBadge=`<span class="recur-badge" style="background:rgba(90,98,130,0.15);color:var(--text3)">⏸ Paused</span>`;
+    } else if(overdueSched.length>0){
+      dueBadge=`<span class="recur-badge" style="background:var(--rose-bg);color:var(--rose)">⚠️ ${overdueSched.length} missed</span>`;
+    } else if(nextDue){
+      const daysUntil=Math.ceil((new Date(nextDue.date+'T00:00:00')-new Date())/(1000*60*60*24));
+      if(daysUntil===0)dueBadge=`<span class="recur-badge" style="background:var(--amber-bg);color:var(--amber)">📅 Due Today</span>`;
+      else if(daysUntil<=3)dueBadge=`<span class="recur-badge" style="background:var(--amber-bg);color:var(--amber)">⏰ In ${daysUntil}d</span>`;
+      else dueBadge=`<span class="recur-badge next">Next: ${fmtDate(nextDue.date)}</span>`;
+    } else if(r.endDate&&todayStr>r.endDate){
+      dueBadge=`<span class="recur-badge" style="background:var(--emerald-bg);color:var(--emerald)">✅ Completed</span>`;
+    }
+
+    return`<div class="recur-card${isPaused?' paused':''}" onclick="openRecurringSchedule('${r.id}')">
       <div class="recur-hdr">
         <div class="recur-left">
           <div class="recur-icon ${r.type}" style="background:${r.type==='income'?'rgba(86,200,160,0.12)':'rgba(240,98,146,0.12)'}">${r.category.split(' ')[0]}</div>
@@ -7182,12 +7768,13 @@ function renderRecurringList(){
       <div class="recur-meta">
         <span class="recur-badge ${r.type}">${r.type==='income'?'↑ Income':'↓ Expense'}</span>
         <span class="recur-badge freq">🔄 ${RECUR_FREQ_LABELS[r.frequency]}</span>
-        ${nextDate?`<span class="recur-badge next">Next: ${nextDate}</span>`:''}
-        ${isPaused?`<span class="recur-badge" style="background:rgba(90,98,130,0.15);color:var(--text3)">⏸ Paused</span>`:''}
+        ${dueBadge}
         ${acc?`<span style="font-size:10px;color:var(--text3)">${ACC_ICONS[acc.type]} ${acc.name}</span>`:''}
+        ${appliedCount>0?`<span style="font-size:10px;color:var(--text3)">${appliedCount} applied</span>`:''}
       </div>
       <div class="recur-actions" onclick="event.stopPropagation()">
         <button class="recur-btn apply" onclick="applyRecurringNow('${r.id}')">▶ Apply Now</button>
+        <button class="recur-btn sched" onclick="openRecurringSchedule('${r.id}')">📊 Schedule</button>
         <button class="recur-btn pause" onclick="toggleRecurPause('${r.id}')">${isPaused?'▶ Resume':'⏸ Pause'}</button>
         <button class="recur-btn del" onclick="deleteRecurring('${r.id}')">🗑</button>
       </div>
@@ -7222,6 +7809,7 @@ function openAddRecurring(){
   document.getElementById('recur-freq').value='monthly';
   document.getElementById('recur-start').value=today();
   document.getElementById('recur-end').value='';
+  document.getElementById('recur-due-day').value='';
   const cats=EXPENSE_CATS;
   document.getElementById('recur-category').innerHTML=cats.map(c=>`<option value="${c}">${c}</option>`).join('');
   document.querySelector('#modal-recur .type-tab.expense').classList.add('active');
@@ -7242,6 +7830,7 @@ function openEditRecurring(id){
   document.getElementById('recur-freq').value=r.frequency;
   document.getElementById('recur-start').value=r.startDate;
   document.getElementById('recur-end').value=r.endDate||'';
+  document.getElementById('recur-due-day').value=r.dueDay||'';
   const cats=r.type==='expense'?EXPENSE_CATS:INCOME_CATS;
   document.getElementById('recur-category').innerHTML=cats.map(c=>`<option value="${c}"${c===r.category?' selected':''}>${c}</option>`).join('');
   document.querySelectorAll('#modal-recur .type-tab').forEach(t=>t.classList.remove('active'));
@@ -7258,15 +7847,16 @@ function saveRecurring(){
   const frequency=document.getElementById('recur-freq').value;
   const startDate=document.getElementById('recur-start').value;
   const endDate=document.getElementById('recur-end').value||null;
+  const dueDay=parseInt(document.getElementById('recur-due-day').value)||null;
   if(!name){showToast('Please enter a name','error');return;}
   if(amount<=0){showToast('Please enter a valid amount','error');return;}
   if(!startDate){showToast('Please set a start date','error');return;}
   if(editingRecurId){
     const r=db.recurring.find(r=>r.id===editingRecurId);
-    if(r)Object.assign(r,{name,amount,category,accountId,frequency,startDate,endDate,type:currentRecurType});
+    if(r)Object.assign(r,{name,amount,category,accountId,frequency,startDate,endDate,dueDay,type:currentRecurType});
     showToast('Recurring rule updated! 🔄','success');
   } else {
-    db.recurring.push({id:uid(),name,amount,category,accountId,frequency,startDate,endDate,type:currentRecurType,status:'active',lastApplied:null,createdAt:Date.now()});
+    db.recurring.push({id:uid(),name,amount,category,accountId,frequency,startDate,endDate,dueDay,type:currentRecurType,status:'active',lastApplied:null,createdAt:Date.now()});
     showToast('Recurring rule saved! 🔄','success');
   }
   saveDB();closeModal('modal-recur');editingRecurId=null;renderGoalsScreen();renderCashFlow();
@@ -7281,7 +7871,7 @@ function deleteRecurring(id){
 function toggleRecurPause(id){
   const r=db.recurring.find(r=>r.id===id);if(!r)return;
   r.status=r.status==='paused'?'active':'paused';
-  saveDB();renderGoalsScreen();
+  saveDB();renderGoalsScreen();updateRecurringBadge();
   showToast(r.status==='paused'?'Recurring paused ⏸':'Recurring resumed ▶','success');
 }
 function applyRecurringNow(id){
@@ -7559,20 +8149,44 @@ function exportAllCSV(){
 loadDB();
 initTheme();
 cleanDismissedAlerts();
-applyDueRecurring(); // auto-apply any due recurring transactions
-saveDB(); // save any auto-applied transactions
+applyDueRecurring();
+saveDB();
 updateOverdueBadge();
 updatePayablesBadge();
+updateRecurringBadge();
 checkDuePlanned();
 loadPrivacyToggles();
 updateEyeBtn();
 const savedCurrEl=document.querySelector(`#currency-select option[value="${db.settings.currency||'₱|PHP'}"]`);
 if(savedCurrEl)document.getElementById('currency-display').textContent=savedCurrEl.textContent;
-// Export modal live preview
 document.getElementById('export-period')?.addEventListener('change',updateExportPreview);
 document.getElementById('export-type')?.addEventListener('change',updateExportPreview);
 renderHome();
 setTimeout(checkOnboarding,600);
+
+// ── Splash screen dismiss ──────────────────────────────────────
+(function dismissSplash(){
+  const splash = document.getElementById('splash-screen');
+  if(!splash) return;
+  // Minimum display time 1.8s so the animation feels intentional
+  const minTime = 1800;
+  const start   = Date.now();
+  function hide(){
+    const elapsed = Date.now() - start;
+    const delay   = Math.max(0, minTime - elapsed);
+    setTimeout(()=>{
+      splash.style.opacity  = '0';
+      splash.style.transform= 'scale(1.04)';
+      setTimeout(()=>{ splash.style.display='none'; }, 520);
+    }, delay);
+  }
+  // Hide as soon as DOM is ready (renderHome already ran above)
+  if(document.readyState === 'complete'){
+    hide();
+  } else {
+    window.addEventListener('load', hide, {once:true});
+  }
+})();
 </script>
 </body>
 </html>
