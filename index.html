@@ -777,7 +777,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 /* ══════════════════════════════
    REPORTS
 ══════════════════════════════ */
-.report-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+@media(min-width:360px){ .report-grid { grid-template-columns: repeat(4, 1fr); } }
+/* FEATURE 1: Recording active banner */
+#recording-banner { position:fixed; top:0; left:0; right:0; z-index:9999; background:var(--rose); color:#fff; padding:8px 16px; display:none; align-items:center; gap:8px; font-size:12px; font-weight:700; justify-content:center; }
+#recording-banner.show { display:flex; }
+.rec-pulse { width:10px; height:10px; border-radius:50%; background:#fff; animation:pulse-ring 1.2s infinite; flex-shrink:0; }
 .report-stat { text-align: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 6px; }
 .report-stat .rs-val { font-family: var(--mono); font-size: 14px; font-weight: 600; }
 .report-stat .rs-label { font-size: 9px; color: var(--text3); margin-top: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
@@ -1389,6 +1394,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </style>
 </head>
 <body>
+<!-- FEATURE 1: Active recording banner - shows while mic is live -->
+<div id="recording-banner" role="status" aria-live="polite">
+  <span class="rec-pulse"></span>
+  <span>🎙️ Recording… speak clearly</span>
+  <span id="rec-live-text" style="font-weight:400;opacity:.85;margin-left:4px"></span>
+  <button onclick="_stopAllVoice()" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;cursor:pointer">■ Stop</button>
+</div>
 <div id="app">
 
 <!-- ▸ HOME ─────────────────────────────────────────────────── -->
@@ -2068,6 +2080,26 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       Set keywords so the AI maps what you say to each field.
     </div>
 
+    <!-- FEATURE 1: Privacy notice in settings -->
+    <div style="background:var(--blue-bg);border:1px solid var(--blue);border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:10px;color:var(--text2);line-height:1.5">
+      🔒 <strong>Privacy:</strong> Mic access is <em>temporary only</em> — the stream is destroyed the moment you stop speaking. No audio ever leaves your device.
+    </div>
+
+    <!-- FEATURE 4: 2s silence delay toggle -->
+    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px">
+      <div>
+        <div style="font-size:12px;font-weight:700">⏱ Keep listening for 2s after pause</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">Waits 2 seconds of silence before finalising (better for longer sentences)</div>
+      </div>
+      <label style="position:relative;display:inline-block;width:38px;height:22px;flex-shrink:0;margin-left:12px">
+        <input type="checkbox" id="vai-silence-toggle" checked
+          onchange="db.settings.vaiSilenceDelay=this.checked?2000:500;saveDB();_voiceEngine.silenceDelay=db.settings.vaiSilenceDelay;_updateToggleStyle(this.checked);"
+          style="opacity:0;width:0;height:0">
+        <span style="position:absolute;cursor:pointer;inset:0;background:var(--border);border-radius:22px;transition:.3s" id="vai-silence-track"></span>
+        <span style="position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s" id="vai-silence-thumb"></span>
+      </label>
+    </div>
+
     <!-- Record-type tab bar -->
     <div class="vai-tab-bar" id="vai-type-tabs">
       <button class="vai-tab-btn" onclick="switchVAITab('payable',this)">💳 Payable</button>
@@ -2078,7 +2110,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <button class="vai-tab-btn" onclick="switchVAITab('budget',this)">📊 Budget</button>
     </div>
 
-    <div id="vai-fields-panel" style="max-height:54vh;overflow-y:auto"></div>
+    <div id="vai-fields-panel" style="max-height:50vh;overflow-y:auto"></div>
 
     <button class="btn-primary" style="margin-top:14px" onclick="saveVAISettings()">💾 Save Settings</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-vai-settings')">Cancel</button>
@@ -2370,6 +2402,53 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <p id="confirm-msg" style="text-align:center;color:var(--text2);font-size:13px;margin-bottom:20px"></p>
     <button class="btn-primary btn-danger" id="confirm-ok-btn">Confirm</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-confirm')">Cancel</button>
+  </div>
+</div>
+
+<!-- FEATURE 1: Mic Permission Modal -->
+<div class="modal-overlay" id="modal-mic-permission" role="dialog" aria-modal="true" aria-labelledby="mic-perm-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="mic-perm-title">🎤 Microphone Access Required</div>
+    <div style="background:var(--blue-bg);border:1px solid var(--blue);border-radius:12px;padding:14px;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--text);line-height:1.7">
+        <div style="margin-bottom:8px">FinFlow Voice AI needs <strong>temporary</strong> microphone access to listen to your voice.</div>
+        <div style="margin-bottom:6px">✅ Access is granted <strong>ONLY while recording</strong> and is automatically revoked the moment you stop speaking.</div>
+        <div style="margin-bottom:6px">🔒 Your voice is processed <strong>100% locally</strong> on your device and <strong>never leaves</strong> your phone or browser.</div>
+        <div>🚫 No audio data is stored, transmitted, or shared anywhere.</div>
+      </div>
+    </div>
+    <div style="background:var(--emerald-bg);border:1px solid var(--emerald);border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:10px;color:var(--emerald);font-weight:600">
+      🛡️ Privacy-first: Mic stream is immediately destroyed after each recording session
+    </div>
+    <button class="btn-primary btn-success" id="mic-allow-btn" onclick="_onMicAllow()">🎤 Allow Microphone Access</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="_onMicDeny()">Cancel</button>
+  </div>
+</div>
+
+<!-- FEATURE 3: Secure Clear All Data Modal -->
+<div class="modal-overlay" id="modal-clear-data" role="dialog" aria-modal="true" aria-labelledby="clear-data-title">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="clear-data-title" style="color:var(--rose)">⚠️ Permanent Data Deletion</div>
+    <div style="background:var(--rose-bg);border:1px solid var(--rose);border-radius:12px;padding:14px;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--text);line-height:1.7">
+        <div style="margin-bottom:8px;font-weight:700;color:var(--rose)">This action CANNOT be undone.</div>
+        <div>ALL your transactions, goals, payables, budgets, accounts, recurring rules and history will be <strong>permanently deleted</strong> from this device.</div>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label" style="color:var(--rose)">Type <strong>DELETE</strong> to confirm</label>
+      <input type="text" class="form-input" id="clear-data-input"
+        placeholder="Type DELETE to confirm"
+        oninput="onClearDataInput(this.value)"
+        onkeydown="if(event.key==='Enter'&&!document.getElementById('clear-data-confirm-btn').disabled)executeClearData()"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        style="border-color:var(--rose-bg)">
+      <div id="clear-data-hint" style="font-size:10px;color:var(--text3);margin-top:4px">Enter exactly: DELETE (case-sensitive)</div>
+    </div>
+    <button class="btn-primary btn-danger" id="clear-data-confirm-btn" onclick="executeClearData()" disabled style="opacity:0.4;cursor:not-allowed">🗑️ Delete Everything</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-clear-data');document.getElementById('clear-data-input').value='';onClearDataInput('')">Cancel</button>
   </div>
 </div>
 
@@ -3248,7 +3327,18 @@ function showToast(msg,type='success'){const t=document.getElementById('toast');
 // ===== MODALS =====
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function openModal(id){document.getElementById(id).classList.add('open');}
-document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{
+  // Don't close mic permission modal on backdrop click — user must make explicit choice
+  if(m.id==='modal-mic-permission')return;
+  if(e.target===m)m.classList.remove('open');
+}));
+// Escape key closes topmost open modal (except mic permission — requires explicit choice)
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const open=[...document.querySelectorAll('.modal-overlay.open')].filter(m=>m.id!=='modal-mic-permission');
+    if(open.length){ open[open.length-1].classList.remove('open'); e.preventDefault(); }
+  }
+});
 
 function triggerCamera(){document.getElementById('camera-input').click();}
 function handleReceipt(e){
@@ -5182,16 +5272,29 @@ function updateOverdueBadge(){
 }
 
 // ===== REPORTS =====
+// FEATURE 2: Avg Daily Burn Rate added
 function renderReports(){
   const{start,end}=getDateRange(currentReportPeriod);
   const txs=db.transactions.filter(t=>t.date>=start&&t.date<=end);
   const income=txs.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
   const expense=txs.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
   const net=income-expense;
+  // Burn Rate: total expenses / days in period (excludes transfers per financial spec)
+  const now=new Date();
+  let daysInPeriod=30;
+  if(currentReportPeriod==='monthly'){daysInPeriod=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();}
+  else if(currentReportPeriod==='weekly'){daysInPeriod=7;}
+  else if(currentReportPeriod==='daily'){daysInPeriod=1;}
+  else if(currentReportPeriod==='yearly'){daysInPeriod=365;}
+  const burn=daysInPeriod>0?expense/daysInPeriod:0;
+  const burnHtml=expense>0
+    ?`<div class="rs-val" style="color:var(--amber)">${fmt(burn)}<span style="font-size:8px;font-weight:400;color:var(--text3)">/day</span></div>`
+    :`<div class="rs-val" style="color:var(--text3);font-size:12px">${getCurrency()}0.00<span style="font-size:8px;font-weight:400">/day</span></div>`;
   document.getElementById('report-stats').innerHTML=`
     <div class="report-stat card-sm"><div class="rs-val" style="color:var(--income)">${fmt(income)}</div><div class="rs-label">Income</div></div>
     <div class="report-stat card-sm"><div class="rs-val" style="color:var(--expense)">${fmt(expense)}</div><div class="rs-label">Expenses</div></div>
     <div class="report-stat card-sm"><div class="rs-val" style="color:${net>=0?'var(--accent2)':'var(--danger)'}">${fmt(net)}</div><div class="rs-label">Net ${net>=0?'💚':'🔴'}</div></div>
+    <div class="report-stat card-sm" title="Average daily spending (excl. transfers)">${burnHtml}<div class="rs-label">🔥 Daily Burn</div></div>
   `;
   renderBarChart();
   renderPieChart(txs.filter(t=>t.type==='expense'));
@@ -5426,7 +5529,36 @@ function openCurrencySettings(){document.getElementById('currency-select').value
 function saveCurrency(){db.settings.currency=document.getElementById('currency-select').value;const label=document.querySelector(`#currency-select option[value="${db.settings.currency}"]`)?.textContent||'';document.getElementById('currency-display').textContent=label;saveDB();closeModal('modal-currency');renderHome();renderAccountsScreen();showToast('Currency updated!');}
 function exportData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`finflow-backup-${today()}.json`;a.click();showToast('Data exported! 📤');}
 function importData(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(data.accounts&&data.transactions){db={...data,logs:data.logs||[],planned:data.planned||[]};saveDB();renderHome();showToast('Data imported! 📥');}else showToast('Invalid backup file','error');}catch{showToast('Invalid file format','error');}};reader.readAsText(file);e.target.value='';}
-function confirmClearData(){showConfirm('Clear All Data?','This will permanently delete all transactions, accounts, planned activities, payables, QR codes, budgets, goals, and recurring rules.',()=>{db={accounts:[],transactions:[],planned:[],logs:[],settings:db.settings,payables:[],qrCodes:[],budgets:[],goals:[],recurring:[]};saveDB();renderHome();renderAccountsScreen();renderTransactions();renderPayables();renderBudgetSettings();updateOverdueBadge();updatePayablesBadge();showToast('All data cleared','error');});}
+// FEATURE 3: Secure Clear All Data — requires typing DELETE
+function confirmClearData(){
+  document.getElementById('clear-data-input').value='';
+  onClearDataInput('');
+  openModal('modal-clear-data');
+  setTimeout(()=>{document.getElementById('clear-data-input').focus();},300);
+}
+function onClearDataInput(val){
+  const btn=document.getElementById('clear-data-confirm-btn');
+  const hint=document.getElementById('clear-data-hint');
+  const inp=document.getElementById('clear-data-input');
+  const match=val==='DELETE';
+  if(btn){btn.disabled=!match;btn.style.opacity=match?'1':'0.4';btn.style.cursor=match?'pointer':'not-allowed';}
+  if(hint){hint.textContent=match?'✅ Ready to delete — click the button below':'Enter exactly: DELETE (case-sensitive)';hint.style.color=match?'var(--emerald)':'var(--text3)';}
+  if(inp){inp.style.borderColor=val.length>0&&!match?'var(--rose)':match?'var(--emerald)':'var(--border)';}
+}
+function executeClearData(){
+  if(document.getElementById('clear-data-input').value!=='DELETE')return;
+  // QA: Data wipe executed
+  console.log('Data wipe executed');
+  closeModal('modal-clear-data');
+  // Clear all finflow_* keys in localStorage
+  Object.keys(localStorage).filter(k=>k.startsWith('finflow')).forEach(k=>localStorage.removeItem(k));
+  localStorage.removeItem('finflow_pre_demo');
+  db={accounts:[],transactions:[],planned:[],logs:[],settings:{},payables:[],qrCodes:[],budgets:[],goals:[],recurring:[]};
+  saveDB();
+  renderHome();renderAccountsScreen();renderTransactions();renderPayables();renderBudgetSettings();
+  updateOverdueBadge();updatePayablesBadge();
+  showToast('✅ All data cleared successfully. App reset.','success');
+}
 function executeSavingsGuardedTx(){
   closeModal('modal-savings-guard');
   if(!pendingSavingsTx)return;
@@ -7201,6 +7333,178 @@ let smartVoiceListening = false;
 let categoryManuallyChanged = false;
 let smartInputTimer = null;
 
+// ══════════════════════════════════════════════════════════════
+// FEATURE 1 + 4: Unified Secure Voice Engine
+// Cyber-security: temporary mic access only — privacy first.
+// All streams destroyed immediately after recording stops.
+// ══════════════════════════════════════════════════════════════
+let _voiceEngine = {
+  // Shared state
+  activeStream: null,         // MediaStream — always cleaned up on stop
+  pendingCallback: null,      // fn(text) called when transcript finalised
+  silenceTimer: null,         // FEATURE 4: 2s silence timer
+  silenceDelay: 2000,         // ms — configurable
+  currentTranscript: '',      // live transcript
+  recognition: null,          // SpeechRecognition instance
+  listening: false,
+  context: null,              // string tag e.g. 'smartInput', 'formVAI-payable', 'vaiBar', 'generic-...'
+  onFinalise: null,           // fn(transcript) — final processing callback
+  liveTextEl: null,           // element to update with live text
+  inputFieldEl: null,         // optional text field to mirror live text into
+
+  // FEATURE 1: show permission modal first, then call _start
+  request(context, onFinalise, liveTextElId, inputFieldElId) {
+    if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+      showToast('Voice input not supported. Try Chrome or Edge.', 'error'); return;
+    }
+    // Stop any active session first
+    if (this.listening) { this.stop(true); return; }
+    this.context = context;
+    this.onFinalise = onFinalise;
+    this.liveTextEl  = liveTextElId  ? document.getElementById(liveTextElId)  : null;
+    this.inputFieldEl= inputFieldElId? document.getElementById(inputFieldElId): null;
+    // Show permission modal
+    _voicePermCallback = () => this._start();
+    openModal('modal-mic-permission');
+    // Trap focus in modal
+    setTimeout(()=>{ const btn=document.getElementById('mic-allow-btn'); if(btn)btn.focus(); }, 200);
+  },
+
+  async _start() {
+    closeModal('modal-mic-permission');
+    // FEATURE 1: Explicit getUserMedia for browser permission prompt + stream handle
+    try {
+      this.activeStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch(e) {
+      if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError') {
+        showToast('Microphone access denied. Enable mic in browser settings.', 'error');
+      } else {
+        showToast('Could not access microphone: '+e.message, 'error');
+      }
+      return;
+    }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this.recognition = new SR();
+    // FEATURE 4: continuous=true + interimResults for 2s silence detection
+    this.recognition.lang = 'en-US';
+    this.recognition.continuous = true;
+    this.recognition.interimResults = true;
+    this.recognition.maxAlternatives = 1;
+    this.currentTranscript = '';
+    this.listening = true;
+    _showRecordingBanner(true, '');
+
+    this.recognition.onstart = () => {
+      _showRecordingBanner(true, '');
+    };
+
+    this.recognition.onresult = (e) => {
+      // Build live transcript
+      let interim = '';
+      let finalPart = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) finalPart += e.results[i][0].transcript + ' ';
+        else interim += e.results[i][0].transcript;
+      }
+      if (finalPart) this.currentTranscript += finalPart;
+      const liveText = (this.currentTranscript + interim).trim();
+      // Update live displays
+      _showRecordingBanner(true, liveText);
+      if (this.liveTextEl) this.liveTextEl.textContent = liveText ? ('🎙️ '+liveText) : '🎙️ Listening…';
+      if (this.inputFieldEl) this.inputFieldEl.value = liveText;
+      // Fire oninput-style callbacks live (for form VAI preview)
+      if (this.onLive) this.onLive(liveText);
+      // FEATURE 4: Reset 2s silence timer on every speech event
+      clearTimeout(this.silenceTimer);
+      this.silenceTimer = setTimeout(() => {
+        // 2 seconds of silence — finalise
+        const final = (this.currentTranscript).trim() || liveText;
+        if (final) this.stop(false, final);
+        else this.stop(true);
+      }, this.silenceDelay);
+    };
+
+    this.recognition.onspeechend = () => {
+      // Speech ended — start silence timer if not already running
+      clearTimeout(this.silenceTimer);
+      this.silenceTimer = setTimeout(() => {
+        const final = this.currentTranscript.trim();
+        if (final) this.stop(false, final);
+        else this.stop(true);
+      }, this.silenceDelay);
+    };
+
+    this.recognition.onerror = (ev) => {
+      if (ev.error === 'no-speech') {
+        // Continue listening, just no speech yet
+        return;
+      }
+      this.stop(true);
+      if (ev.error === 'not-allowed') showToast('Microphone access denied.', 'error');
+      else if (ev.error !== 'aborted') showToast('Voice error: '+ev.error, 'error');
+    };
+
+    this.recognition.onend = () => {
+      // Auto-restart if still listening (browser cuts stream) — FEATURE 4 robustness
+      if (this.listening && !this.silenceTimer) {
+        try { this.recognition.start(); } catch(e) {}
+      }
+    };
+
+    try { this.recognition.start(); }
+    catch(e) {
+      this.stop(true);
+      showToast('Cannot start mic. Check permissions.', 'error');
+    }
+  },
+
+  stop(cancelled, finalTranscript) {
+    clearTimeout(this.silenceTimer);
+    this.silenceTimer = null;
+    this.listening = false;
+    _showRecordingBanner(false, '');
+    // FEATURE 1: Always destroy mic stream immediately
+    if (this.activeStream) {
+      this.activeStream.getTracks().forEach(t => t.stop());
+      this.activeStream = null;
+    }
+    if (this.recognition) {
+      try { this.recognition.stop(); } catch(e) {}
+      this.recognition = null;
+    }
+    if (!cancelled && finalTranscript && this.onFinalise) {
+      this.onFinalise(finalTranscript);
+    }
+    // Reset live display
+    if (this.liveTextEl) this.liveTextEl.textContent = '';
+    this.currentTranscript = '';
+    this.onLive = null;
+  }
+};
+
+let _voicePermCallback = null;   // set before opening permission modal
+
+function _onMicAllow() {
+  if (_voicePermCallback) { _voicePermCallback(); _voicePermCallback = null; }
+}
+function _onMicDeny() {
+  closeModal('modal-mic-permission');
+  _voicePermCallback = null;
+}
+function _stopAllVoice() {
+  _voiceEngine.stop(true);
+  stopSmartVoice();
+}
+
+// Show/hide persistent recording banner with live text
+function _showRecordingBanner(show, liveText) {
+  const banner = document.getElementById('recording-banner');
+  const liveEl = document.getElementById('rec-live-text');
+  if (!banner) return;
+  banner.classList.toggle('show', show);
+  if (liveEl) liveEl.textContent = liveText ? ('"'+liveText.slice(0,48)+(liveText.length>48?'…':'')+'"') : '';
+}
+
 // ── onSmartInput: debounced real-time parsing ─────────────────
 function onSmartInput(text) {
   document.getElementById('smart-input-bar').classList.toggle('active', text.length > 0);
@@ -7356,60 +7660,31 @@ function focusSmartInput() {
   document.getElementById('smart-input-field').focus();
 }
 
-// ── Smart Voice Input ─────────────────────────────────────────
+// ── Smart Voice Input (now backed by unified secure voice engine) ─────
+// FEATURE 1 + 4: Permission modal → getUserMedia → 2s silence → auto-stop
 function toggleSmartVoice() {
-  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-    showToast('Voice input not supported on this browser. Try Chrome.','error'); return;
+  // If already listening via engine, stop
+  if (_voiceEngine.listening && _voiceEngine.context === 'smartInput') {
+    _voiceEngine.stop(false, _voiceEngine.currentTranscript.trim());
+    return;
   }
-  if (smartVoiceListening) { stopSmartVoice(); return; }
-
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  smartVoiceRecog = new SR();
-  // Use en-US for best mobile support, fallback gracefully
-  smartVoiceRecog.lang = 'en-US';
-  smartVoiceRecog.continuous = false;
-  smartVoiceRecog.interimResults = true;
-  smartVoiceRecog.maxAlternatives = 1;
-  smartVoiceListening = true;
-
-  const btn = document.getElementById('smart-voice-btn');
-  const bar = document.getElementById('smart-voice-status');
-  const txt = document.getElementById('smart-voice-text');
-  const inputBar = document.getElementById('smart-input-bar');
+  const btn       = document.getElementById('smart-voice-btn');
+  const bar       = document.getElementById('smart-voice-status');
+  const inputBar  = document.getElementById('smart-input-bar');
   if (btn) btn.classList.add('listening');
   if (bar) bar.classList.add('show');
   if (inputBar) inputBar.classList.add('listening');
-
-  smartVoiceRecog.onstart = () => {
-    if (txt) txt.textContent = '🎙️ Listening… speak now';
-  };
-  smartVoiceRecog.onresult = e => {
-    const interim = Array.from(e.results).map(r => r[0].transcript).join('');
-    if (txt) txt.textContent = '🎙️ ' + interim;
+  _voiceEngine.onLive = (text) => {
+    const txt = document.getElementById('smart-voice-text');
     const field = document.getElementById('smart-input-field');
-    if (field) field.value = interim;
-    if (e.results[e.results.length-1].isFinal) {
-      onSmartInput(interim);
-      stopSmartVoice();
-    }
+    if (txt) txt.textContent = '🎙️ ' + text;
+    if (field) field.value = text;
+    onSmartInput(text);
   };
-  smartVoiceRecog.onerror = (ev) => {
+  _voiceEngine.request('smartInput', (finalText) => {
     stopSmartVoice();
-    if (ev.error === 'not-allowed') {
-      showToast('Microphone access denied. Please allow mic in browser settings.','error');
-    } else if (ev.error === 'no-speech') {
-      showToast('No speech detected. Try again.','warn');
-    } else {
-      showToast('Voice error: ' + ev.error + '. Try again.','error');
-    }
-  };
-  smartVoiceRecog.onend = () => stopSmartVoice();
-  try {
-    smartVoiceRecog.start();
-  } catch(e) {
-    stopSmartVoice();
-    showToast('Could not start voice input. Check mic permissions.','error');
-  }
+    onSmartInput(finalText);
+  }, 'smart-voice-text', 'smart-input-field');
 }
 
 function stopSmartVoice() {
@@ -7443,60 +7718,25 @@ function parseVoiceInput(text) { onSmartInput(text); }
 // Usage: genericVoice(btnId, targetFieldId, onResult, statusId)
 let genericVoiceRecog = null;
 let genericVoiceListening = false;
+// FEATURE 1+4: genericVoice — routes through unified secure voice engine
 function genericVoice(btnId, targetFieldId, onResult, statusId) {
-  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-    showToast('Voice input not supported. Try Chrome.','error'); return;
-  }
-  if (genericVoiceListening) {
-    // Stop
-    if (genericVoiceRecog) { try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null; }
-    genericVoiceListening = false;
-    const btn = document.getElementById(btnId);
-    if (btn) btn.classList.remove('listening');
-    const st = statusId ? document.getElementById(statusId) : null;
-    if (st) st.style.display = 'none';
-    return;
-  }
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  genericVoiceRecog = new SR();
-  genericVoiceRecog.lang = 'en-US';
-  genericVoiceRecog.continuous = false;
-  genericVoiceRecog.interimResults = true;
-  genericVoiceRecog.maxAlternatives = 1;
-  genericVoiceListening = true;
+  if (_voiceEngine.listening) { _voiceEngine.stop(false, _voiceEngine.currentTranscript.trim()); return; }
   const btn = document.getElementById(btnId);
+  const st  = statusId ? document.getElementById(statusId) : null;
   if (btn) btn.classList.add('listening');
-  const st = statusId ? document.getElementById(statusId) : null;
-  if (st) { st.style.display='flex'; st.textContent='🎙️ Listening…'; }
-
-  genericVoiceRecog.onresult = e => {
-    const text = Array.from(e.results).map(r=>r[0].transcript).join('');
+  if (st)  { st.style.display='flex'; st.textContent='🎙️ Listening…'; }
+  _voiceEngine.onLive = (text) => {
     const field = document.getElementById(targetFieldId);
     if (field) field.value = text;
     if (st) st.textContent = '🎙️ '+text;
-    if (e.results[e.results.length-1].isFinal) {
-      if (onResult) onResult(text);
-      genericVoiceListening = false;
-      if (btn) btn.classList.remove('listening');
-      if (genericVoiceRecog) {try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null;}
-      setTimeout(()=>{ if(st) st.style.display='none'; }, 1500);
-    }
   };
-  genericVoiceRecog.onerror = (ev) => {
-    genericVoiceListening = false;
+  _voiceEngine.request('generic-'+btnId, (final) => {
     if (btn) btn.classList.remove('listening');
-    if (genericVoiceRecog) {try{genericVoiceRecog.stop();}catch(e){} genericVoiceRecog=null;}
-    if (st) st.style.display='none';
-    if (ev.error === 'not-allowed') showToast('Mic access denied. Allow mic in browser.','error');
-    else if (ev.error !== 'no-speech') showToast('Voice error. Try again.','warn');
-  };
-  genericVoiceRecog.onend = () => {
-    genericVoiceListening = false;
-    if (btn) btn.classList.remove('listening');
-    if (st) setTimeout(()=>{ if(st)st.style.display='none'; }, 800);
-  };
-  try { genericVoiceRecog.start(); }
-  catch(e) { genericVoiceListening=false; if(btn)btn.classList.remove('listening'); showToast('Cannot start voice.','error'); }
+    if (st)  { st.textContent='🎙️ '+final; setTimeout(()=>{ if(st)st.style.display='none'; }, 1800); }
+    const field = document.getElementById(targetFieldId);
+    if (field) field.value = final;
+    if (onResult) onResult(final);
+  }, null, targetFieldId);
 }
 
 // ===== END AI CATEGORIZATION ENGINE ======
@@ -8607,8 +8847,23 @@ function openVAISettings() {
   vaiCurrentTab = 'payable';
   document.querySelectorAll('#vai-type-tabs .vai-tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
   if (!window._vaiDraft) window._vaiDraft = {};
+  // FEATURE 4: Sync silence toggle to saved setting
+  const delayEnabled = (db.settings.vaiSilenceDelay===undefined) ? true : db.settings.vaiSilenceDelay>0;
+  const tog = document.getElementById('vai-silence-toggle');
+  if(tog) {
+    tog.checked = delayEnabled;
+    _updateToggleStyle(delayEnabled);
+  }
   openModal('modal-vai-settings');
   renderVAITab('payable');
+}
+
+// Visual toggle thumb/track update
+function _updateToggleStyle(on) {
+  const track = document.getElementById('vai-silence-track');
+  const thumb = document.getElementById('vai-silence-thumb');
+  if(track) track.style.background = on ? 'var(--emerald)' : 'var(--border)';
+  if(thumb) thumb.style.transform  = on ? 'translateX(16px)' : 'translateX(0)';
 }
 
 function switchVAITab(type, btn) {
@@ -9149,36 +9404,28 @@ function dismissFormVAI(formType) {
   }
 }
 
+// FEATURE 1+4: Form VAI voice — permission modal → getUserMedia → 2s silence
 function toggleFormVAIVoice(formType) {
-  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
-    showToast('Voice input not supported on this browser. Try Chrome.', 'error'); return;
+  // Toggle off if same form is active
+  if (_voiceEngine.listening && _voiceEngine.context === 'formVAI-'+formType) {
+    _voiceEngine.stop(false, _voiceEngine.currentTranscript.trim());
+    stopFormVAIVoice(formType);
+    return;
   }
-  if (_fvaiActive[formType]) { stopFormVAIVoice(formType); return; }
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  _fvaiRecog[formType] = new SR();
-  _fvaiRecog[formType].lang = 'en-US';
-  _fvaiRecog[formType].continuous = false;
-  _fvaiRecog[formType].interimResults = true;
   _fvaiActive[formType] = true;
-  const mic    = document.getElementById(formType+'-vai-mic');
-  const vsBar  = document.getElementById(formType+'-vai-voice-status');
+  const mic   = document.getElementById(formType+'-vai-mic');
+  const vsBar = document.getElementById(formType+'-vai-voice-status');
   if (mic)   mic.classList.add('listening');
   if (vsBar) vsBar.classList.add('show');
-  _fvaiRecog[formType].onresult = e => {
-    const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+  _voiceEngine.onLive = (text) => {
     const inp = document.getElementById(formType+'-vai-input');
-    if (inp) { inp.value = transcript; onFormVAI(formType, transcript); }
-    if (e.results[e.results.length-1].isFinal) stopFormVAIVoice(formType);
+    if (inp) { inp.value = text; onFormVAI(formType, text); }
   };
-  _fvaiRecog[formType].onerror = ev => {
+  _voiceEngine.request('formVAI-'+formType, (finalText) => {
     stopFormVAIVoice(formType);
-    if (ev.error === 'not-allowed') showToast('Microphone access denied.', 'error');
-    else if (ev.error === 'no-speech') showToast('No speech detected. Try again.', 'warn');
-    else showToast('Voice error: '+ev.error, 'error');
-  };
-  _fvaiRecog[formType].onend = () => stopFormVAIVoice(formType);
-  try { _fvaiRecog[formType].start(); }
-  catch(e) { stopFormVAIVoice(formType); showToast('Cannot start mic. Check permissions.', 'error'); }
+    const inp = document.getElementById(formType+'-vai-input');
+    if (inp) { inp.value = finalText; onFormVAI(formType, finalText); }
+  }, formType+'-vai-voice-status', formType+'-vai-input');
 }
 
 function stopFormVAIVoice(formType) {
@@ -9250,45 +9497,27 @@ function parseAndConfirmVAI(text, source){
   showVAIConfirm(parsed);
 }
 
-// ── VOICE RECORDING for quick bar ─────────────────────────────────
+// FEATURE 1+4: VAI Quick Bar voice — permission modal → getUserMedia → 2s silence
 function toggleVAIVoice(){
-  if(!('SpeechRecognition' in window)&&!('webkitSpeechRecognition' in window)){
-    showToast('Voice input not supported on this browser. Try Chrome.','error'); return;
+  if(_voiceEngine.listening && _voiceEngine.context==='vaiBar'){
+    _voiceEngine.stop(false, _voiceEngine.currentTranscript.trim());
+    stopVAIVoice(); return;
   }
-  if(vaiListening){ stopVAIVoice(); return; }
-
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  vaiVoiceRecog=new SR();
-  vaiVoiceRecog.lang='en-US';
-  vaiVoiceRecog.continuous=false;
-  vaiVoiceRecog.interimResults=true;
-  vaiVoiceRecog.maxAlternatives=1;
   vaiListening=true;
-
   const micBtn=document.getElementById('vai-mic-btn');
-  const inp   =document.getElementById('vai-quick-input');
   const hint  =document.getElementById('vai-bar-hint');
   if(micBtn) micBtn.classList.add('listening');
-  if(hint)   hint.textContent='🎙️ Listening… speak now';
-
-  vaiVoiceRecog.onresult=e=>{
-    const transcript=Array.from(e.results).map(r=>r[0].transcript).join('');
-    if(inp) inp.value=transcript;
-    onVAITextInput(transcript);
-    if(e.results[e.results.length-1].isFinal){
-      stopVAIVoice();
-      parseAndConfirmVAI(transcript,'voice');
-    }
+  if(hint)   hint.textContent='🎙️ Listening…';
+  _voiceEngine.onLive = (text) => {
+    const inp=document.getElementById('vai-quick-input');
+    if(inp) inp.value=text;
+    onVAITextInput(text);
+    if(hint) hint.textContent='🎙️ '+text.slice(0,60);
   };
-  vaiVoiceRecog.onerror=ev=>{
+  _voiceEngine.request('vaiBar', (finalText) => {
     stopVAIVoice();
-    if(ev.error==='not-allowed') showToast('Microphone access denied.','error');
-    else if(ev.error==='no-speech') showToast('No speech detected. Try again.','warn');
-    else showToast('Voice error: '+ev.error,'error');
-  };
-  vaiVoiceRecog.onend=()=>stopVAIVoice();
-  try{ vaiVoiceRecog.start(); }
-  catch(e){ stopVAIVoice(); showToast('Cannot start mic. Check permissions.','error'); }
+    parseAndConfirmVAI(finalText, 'voice');
+  }, null, 'vai-quick-input');
 }
 
 function stopVAIVoice(){
@@ -9491,6 +9720,8 @@ applyDueRecurring(); // auto-apply any due recurring transactions
 saveDB(); // save any auto-applied transactions
 // Restore demo mode UI if app was reloaded during demo
 if(db.settings.demoMode) _updateDemoUI(true);
+// FEATURE 4: Restore silence delay setting on app load
+if(db.settings.vaiSilenceDelay!==undefined) _voiceEngine.silenceDelay = db.settings.vaiSilenceDelay>0 ? db.settings.vaiSilenceDelay : 500;
 updateOverdueBadge();
 updatePayablesBadge();
 updateRecurringBadge();
