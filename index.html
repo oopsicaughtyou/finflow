@@ -724,11 +724,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 /* ── Toast ── */
 .toast {
-  position: fixed; bottom: 98px; left: 50%; transform: translateX(-50%) translateY(14px);
+  position: fixed; top: 18px; left: 50%; transform: translateX(-50%) translateY(-14px);
   background: var(--card); border: 1px solid var(--border2);
-  border-radius: 11px; padding: 10px 18px; font-size: 13px; font-weight: 600;
+  border-radius: 11px; padding: 11px 18px; font-size: 13px; font-weight: 600;
   z-index: 1000; opacity: 0; transition: all .25s var(--ease);
-  pointer-events: none; white-space: nowrap; max-width: 310px;
+  pointer-events: none; white-space: normal; max-width: min(88vw, 360px);
+  text-align: center; line-height: 1.45;
   backdrop-filter: blur(20px); box-shadow: var(--shadow);
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -778,14 +779,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
    REPORTS
 ══════════════════════════════ */
 .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-@media(min-width:360px){ .report-grid { grid-template-columns: repeat(4, 1fr); } }
-/* FEATURE 1: Recording active banner */
+@media(min-width:400px){ .report-grid { grid-template-columns: repeat(4, 1fr); } }
+.report-stat { text-align: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; min-width: 0; overflow: hidden; }
+.report-stat .rs-val { font-family: var(--mono); font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.report-stat .rs-label { font-size: 9px; color: var(--text3); margin-top: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; }
 #recording-banner { position:fixed; top:0; left:0; right:0; z-index:9999; background:var(--rose); color:#fff; padding:8px 16px; display:none; align-items:center; gap:8px; font-size:12px; font-weight:700; justify-content:center; }
 #recording-banner.show { display:flex; }
 .rec-pulse { width:10px; height:10px; border-radius:50%; background:#fff; animation:pulse-ring 1.2s infinite; flex-shrink:0; }
-.report-stat { text-align: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 6px; }
-.report-stat .rs-val { font-family: var(--mono); font-size: 14px; font-weight: 600; }
-.report-stat .rs-label { font-size: 9px; color: var(--text3); margin-top: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+/* FEATURE 1: Recording active banner — see #recording-banner above */
 .cat-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .cat-item:last-child { border-bottom: none; }
 .cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -920,6 +921,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
    BUDGET
 ══════════════════════════════ */
 .budget-bar-wrap { background: var(--bg3); border-radius: 99px; height: 5px; margin: 5px 0 2px; overflow: hidden; }
+.budget-main-tab { background: transparent; color: var(--text3); }
+.active-budget-tab { background: var(--card); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.18); }
 .budget-bar { height: 100%; border-radius: 99px; transition: width .5s; }
 .budget-item { padding: 11px 0; border-bottom: 1px solid var(--border); }
 .budget-item:last-child { border-bottom: none; }
@@ -1578,18 +1581,43 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="header">
     <h1>💰 Budget</h1>
     <div class="header-actions">
-      <button class="icon-btn" onclick="openBudgetAddForMonth()">＋</button>
+      <button class="icon-btn" id="budget-header-add-btn" onclick="budgetHeaderAdd()">＋</button>
     </div>
   </div>
-  <div style="padding:12px 16px 0;flex-shrink:0">
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
-      <button onclick="navBudgetMonth(-1)" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">‹</button>
-      <div id="budget-screen-month-label" style="flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--text)"></div>
-      <button onclick="navBudgetMonth(1)" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">›</button>
+
+  <!-- Tab bar -->
+  <div style="padding:10px 16px 0;flex-shrink:0">
+    <div style="display:flex;background:var(--bg3);border-radius:12px;padding:3px;gap:2px">
+      <button id="budget-tab-monthly" class="budget-main-tab active-budget-tab"
+        onclick="switchBudgetMainTab('monthly')"
+        style="flex:1;padding:9px 0;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s">
+        📅 Monthly Budget
+      </button>
+      <button id="budget-tab-default" class="budget-main-tab"
+        onclick="switchBudgetMainTab('default')"
+        style="flex:1;padding:9px 0;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s">
+        🗂 Default Template
+      </button>
     </div>
-    <div id="budget-screen-month-tabs" style="display:flex;overflow-x:auto;scrollbar-width:none;gap:6px;padding:8px 0 4px"></div>
   </div>
-  <div class="scroll-area" id="budget-screen-content"></div>
+
+  <!-- Monthly Budget Panel -->
+  <div id="budget-panel-monthly" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0">
+    <div style="padding:10px 16px 0;flex-shrink:0">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
+        <button onclick="navBudgetMonth(-1)" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">‹</button>
+        <div id="budget-screen-month-label" style="flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--text)"></div>
+        <button onclick="navBudgetMonth(1)" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">›</button>
+      </div>
+      <div id="budget-screen-month-tabs" style="display:flex;overflow-x:auto;scrollbar-width:none;gap:6px;padding:6px 0 4px"></div>
+    </div>
+    <div class="scroll-area" id="budget-screen-content"></div>
+  </div>
+
+  <!-- Default Budget Panel -->
+  <div id="budget-panel-default" style="display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0">
+    <div class="scroll-area" id="budget-default-content"></div>
+  </div>
 </div>
 
 <!-- ▸ PAYABLES ──────────────────────────────────────────────── -->
@@ -1652,8 +1680,59 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="header"><h1>Settings</h1></div>
   <div class="scroll-area" style="padding:14px 16px">
 
-    <!-- ── THEME PICKER ── -->
-    <div class="settings-card">
+    <!-- ── WHAT'S NEW (top) ── -->
+    <div class="settings-card" style="margin-bottom:16px" id="whats-new-card">
+      <div class="settings-card-header" onclick="openPatchNotes()" style="cursor:pointer">
+        <div class="settings-card-icon" style="background:var(--emerald-bg)">🆕</div>
+        <div style="flex:1">
+          <div class="settings-card-title">What's New</div>
+          <div class="settings-card-sub" id="patch-version-label">v5.1 — Latest updates &amp; improvements</div>
+        </div>
+        <div id="patch-new-dot" style="width:10px;height:10px;border-radius:50%;background:var(--rose);flex-shrink:0;display:none"></div>
+        <div style="font-size:18px;color:var(--text3);margin-left:4px">›</div>
+      </div>
+    </div>
+
+    <!-- ── GENERAL ── -->
+    <div class="settings-section-lbl">General</div>
+    <div class="settings-card" style="margin-bottom:16px">
+      <div class="settings-card-body" style="padding-bottom:4px;padding-top:4px">
+        <div class="settings-row" onclick="openCurrencySettings()">
+          <div class="settings-row-icon" style="background:var(--emerald-bg)">💱</div>
+          <div class="settings-row-info"><div class="settings-row-label">Currency</div><div class="settings-row-sub" id="currency-display">Philippine Peso (₱)</div></div>
+          <div class="settings-row-action">›</div>
+        </div>
+        <div class="settings-row" onclick="showScreen('budget')">
+          <div class="settings-row-icon" style="background:var(--amber-bg)">📊</div>
+          <div class="settings-row-info"><div class="settings-row-label">Budget</div><div class="settings-row-sub">Set default &amp; monthly budgets</div></div>
+          <div class="settings-row-action">›</div>
+        </div>
+        <div class="settings-row" onclick="openExportModal()">
+          <div class="settings-row-icon" style="background:var(--violet-bg)">📤</div>
+          <div class="settings-row-info"><div class="settings-row-label">Export Report</div><div class="settings-row-sub">PDF · Excel · CSV</div></div>
+          <div class="settings-row-action">›</div>
+        </div>
+        <div class="settings-row" onclick="exportData()">
+          <div class="settings-row-icon" style="background:var(--amber-bg)">💾</div>
+          <div class="settings-row-info"><div class="settings-row-label">Backup Data</div><div class="settings-row-sub">Save full JSON backup</div></div>
+          <div class="settings-row-action">›</div>
+        </div>
+        <div class="settings-row" onclick="document.getElementById('import-file').click()">
+          <div class="settings-row-icon" style="background:var(--blue-bg)">📥</div>
+          <div class="settings-row-info"><div class="settings-row-label">Import Data</div><div class="settings-row-sub">Restore from backup</div></div>
+          <div class="settings-row-action">›</div>
+        </div>
+        <div class="settings-row" onclick="confirmClearData()">
+          <div class="settings-row-icon" style="background:var(--rose-bg)">🗑️</div>
+          <div class="settings-row-info"><div class="settings-row-label" style="color:var(--rose)">Clear All Data</div><div class="settings-row-sub">Delete everything permanently</div></div>
+          <div class="settings-row-action" style="color:var(--rose)">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DISPLAY / THEMES ── -->
+    <div class="settings-section-lbl">Display</div>
+    <div class="settings-card" style="margin-bottom:16px">
       <div class="settings-card-header">
         <div class="settings-card-icon" style="background:var(--blue-bg)">🎨</div>
         <div>
@@ -1767,24 +1846,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
     </div>
 
-    <!-- ── BUDGET LIMITS ── -->
-    <div class="settings-card">
-      <div class="settings-card-header">
-        <div class="settings-card-icon" style="background:var(--amber-bg)">📊</div>
-        <div>
-          <div class="settings-card-title">Budget Limits</div>
-          <div class="settings-card-sub">Monthly or yearly category limits</div>
-        </div>
-      </div>
-      <div class="settings-card-body">
-        <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.6">Alerts trigger when you reach 80% and 100% of your limit.</div>
-        <div id="budget-list-settings"></div>
-        <button class="btn-primary btn-secondary" style="margin-top:10px" onclick="openAddBudget()">＋ Add Budget Limit</button>
-      </div>
-    </div>
+    <!-- ── BUDGET LIMITS ── MOVED TO BUDGET SCREEN -->
 
     <!-- ── PRIVACY ── -->
-    <div class="settings-card">
+    <div class="settings-section-lbl">Privacy</div>
+    <div class="settings-card" style="margin-bottom:16px">
       <div class="settings-card-header">
         <div class="settings-card-icon" style="background:var(--violet-bg)">🔒</div>
         <div>
@@ -1820,46 +1886,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       </div>
     </div>
 
-    <!-- ── GENERAL ── -->
-    <div class="settings-card">
-      <div class="settings-card-header">
-        <div class="settings-card-icon" style="background:var(--blue-bg)">⚙️</div>
-        <div>
-          <div class="settings-card-title">General</div>
-          <div class="settings-card-sub">Currency, export &amp; data</div>
-        </div>
-      </div>
-      <div class="settings-card-body" style="padding-bottom:4px">
-        <div class="settings-row" onclick="openCurrencySettings()">
-          <div class="settings-row-icon" style="background:var(--emerald-bg)">💱</div>
-          <div class="settings-row-info"><div class="settings-row-label">Currency</div><div class="settings-row-sub" id="currency-display">Philippine Peso (₱)</div></div>
-          <div class="settings-row-action">›</div>
-        </div>
-        <div class="settings-row" onclick="openExportModal()">
-          <div class="settings-row-icon" style="background:var(--violet-bg)">📤</div>
-          <div class="settings-row-info"><div class="settings-row-label">Export Report</div><div class="settings-row-sub">PDF · Excel · CSV</div></div>
-          <div class="settings-row-action">›</div>
-        </div>
-        <div class="settings-row" onclick="exportData()">
-          <div class="settings-row-icon" style="background:var(--amber-bg)">💾</div>
-          <div class="settings-row-info"><div class="settings-row-label">Backup Data</div><div class="settings-row-sub">Save full JSON backup</div></div>
-          <div class="settings-row-action">›</div>
-        </div>
-        <div class="settings-row" onclick="document.getElementById('import-file').click()">
-          <div class="settings-row-icon" style="background:var(--blue-bg)">📥</div>
-          <div class="settings-row-info"><div class="settings-row-label">Import Data</div><div class="settings-row-sub">Restore from backup</div></div>
-          <div class="settings-row-action">›</div>
-        </div>
-        <div class="settings-row" onclick="confirmClearData()">
-          <div class="settings-row-icon" style="background:var(--rose-bg)">🗑️</div>
-          <div class="settings-row-info"><div class="settings-row-label" style="color:var(--rose)">Clear All Data</div><div class="settings-row-sub">Delete everything permanently</div></div>
-          <div class="settings-row-action" style="color:var(--rose)">›</div>
-        </div>
-      </div>
-    </div>
+    <!-- ── GENERAL (moved to top) ── -->
 
     <!-- ── VOICE AI ── -->
-    <div class="settings-card">
+    <div class="settings-section-lbl">Voice AI</div>
+    <div class="settings-card" style="margin-bottom:16px">
       <div class="settings-card-header">
         <div class="settings-card-icon" style="background:var(--violet-bg)">🎙️</div>
         <div>
@@ -1878,7 +1909,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
 
     <!-- ── DEMO DATA ── -->
-    <div class="settings-card">
+    <div class="settings-section-lbl">Testing</div>
+    <div class="settings-card" style="margin-bottom:16px">
       <div class="settings-card-header">
         <div class="settings-card-icon" style="background:var(--emerald-bg)">🧪</div>
         <div>
@@ -1940,6 +1972,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="nav-item" onclick="showScreen('settings')" id="nav-settings">
     <div class="nav-icon">⚙️</div>
     <div class="nav-label">Settings</div>
+    <div class="nav-badge" id="patch-badge" style="display:none">1</div>
   </div>
 </nav>
 
@@ -2164,6 +2197,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </div>
 
 
+<!-- ACCOUNT DETAIL MODAL -->
+<div class="modal-overlay" id="modal-account-detail">
   <div class="modal" style="padding-bottom:24px">
     <div class="modal-handle"></div>
     <div id="account-detail-content"></div>
@@ -2171,6 +2206,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <button class="btn-primary btn-secondary" id="account-detail-edit-btn">✏️ Edit Account</button>
       <button class="btn-primary btn-secondary" onclick="closeModal('modal-account-detail')">Close</button>
     </div>
+    <button class="btn-primary btn-danger" id="account-detail-delete-btn" style="margin-top:8px">🗑 Delete Account</button>
   </div>
 </div>
 
@@ -2213,11 +2249,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Account Name *</label>
-      <div style="display:flex;gap:8px;align-items:flex-start">
-        <input type="text" class="form-input" id="acc-name" placeholder="e.g. BDO Savings, GCash, Cash Wallet" style="flex:1">
-        <button type="button" class="voice-btn" id="acc-voice-btn" onclick="genericVoice('acc-voice-btn','acc-name',null,'acc-voice-status')" title="Voice input">🎤</button>
-      </div>
-      <div id="acc-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
+      <input type="text" class="form-input" id="acc-name" placeholder="e.g. BDO Savings, GCash, Cash Wallet">
     </div>
     <div class="form-group">
       <label class="form-label">Account Type *</label>
@@ -2353,6 +2385,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <div style="font-size:11px;color:var(--text3);margin-top:4px">If different from the planned date, the original date will be saved in change logs.</div>
     </div>
     <div id="confirm-balance-warning" class="balance-warning" style="margin-bottom:10px"></div>
+    <div class="form-group">
+      <label class="form-label">Transaction Fee <span style="font-size:10px;color:var(--text3);font-weight:400">(Optional)</span></label>
+      <input type="number" class="form-input" id="confirm-tx-fee" placeholder="0.00" min="0" step="0.01">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Fee recorded as a separate expense transaction.</div>
+    </div>
     <button class="btn-primary btn-success" onclick="executeConfirmPlanned()">✅ Yes, It Happened</button>
     <button class="btn-primary btn-warn" style="margin-top:8px" onclick="executeSkipPlanned()">⏭️ Skip / Did Not Happen</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-confirm-planned')">Cancel</button>
@@ -2500,18 +2537,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Payable Name *</label>
-      <div style="display:flex;gap:8px;align-items:flex-start">
-        <input type="text" class="form-input" id="py-name" placeholder="e.g. BDO Credit Card, SSS Loan" style="flex:1">
-        <button type="button" class="voice-btn" id="py-voice-btn" onclick="genericVoice('py-voice-btn','py-name',null,'py-voice-status')" title="Voice input">🎤</button>
-      </div>
-      <div id="py-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
+      <input type="text" class="form-input" id="py-name" placeholder="e.g. BDO Credit Card, SSS Loan">
     </div>
     <div class="form-group">
       <label class="form-label">Type *</label>
       <select class="form-input" id="py-type">
         <option value="loan">🏦 Personal / Bank Loan</option>
         <option value="credit">💳 Credit Card</option>
-        <option value="spl">📱 SPayLater / BuyNow PayLater</option>
+        <option value="spl">📱 BuyNow PayLater / BNPL</option>
         <option value="other">📋 Other Payable</option>
       </select>
     </div>
@@ -2527,6 +2560,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div class="form-group">
       <label class="form-label">Monthly Payment / Minimum Due</label>
       <input type="number" class="form-input" id="py-monthly" placeholder="0.00" min="0" step="0.01">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Variable Monthly Amount <span style="font-size:10px;color:var(--text3);font-weight:400">(e.g. BNPL, SPayLater)</span></label>
+      <select class="form-input" id="py-single-month">
+        <option value="no">🔄 Allow advance multi-month payments</option>
+        <option value="yes">1️⃣ Single month only — amount changes each month</option>
+      </select>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Choose "Single month only" for BNPL/instalment plans where the due amount may vary each month.</div>
     </div>
     <div class="form-group">
       <label class="form-label">Interest Rate (% per year)</label>
@@ -2601,6 +2642,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div class="form-group">
       <label class="form-label">Reference / Notes</label>
       <input type="text" class="form-input" id="pay-ref" placeholder="Optional">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Transaction Fee <span style="font-size:10px;color:var(--text3);font-weight:400">(Optional — e.g. processing fee)</span></label>
+      <input type="number" class="form-input" id="pay-tx-fee" placeholder="0.00" min="0" step="0.01">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">⚠️ Fee will be recorded as a separate expense transaction.</div>
     </div>
     <button class="btn-primary btn-success" onclick="executePayPayable()">✅ Record Payment</button>
     <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-pay-payable')">Cancel</button>
@@ -2782,11 +2828,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Goal Name *</label>
-      <div style="display:flex;gap:8px;align-items:flex-start">
-        <input type="text" class="form-input" id="goal-name" placeholder="e.g. Vacation, New Phone, Emergency Fund" style="flex:1">
-        <button type="button" class="voice-btn" id="goal-voice-btn" onclick="genericVoice('goal-voice-btn','goal-name',null,'goal-voice-status')" title="Voice input">🎤</button>
-      </div>
-      <div id="goal-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
+      <input type="text" class="form-input" id="goal-name" placeholder="e.g. Vacation, New Phone, Emergency Fund">
     </div>
     <div class="form-group">
       <label class="form-label">Icon</label>
@@ -2915,11 +2957,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Name / Description *</label>
-      <div style="display:flex;gap:8px;align-items:flex-start">
-        <input type="text" class="form-input" id="recur-name" placeholder="e.g. Netflix, Salary, Rent" style="flex:1">
-        <button type="button" class="voice-btn" id="recur-voice-btn" onclick="genericVoice('recur-voice-btn','recur-name',null,'recur-voice-status')" title="Voice input">🎤</button>
-      </div>
-      <div id="recur-voice-status" style="display:none;font-size:11px;color:var(--rose);padding:4px 0"></div>
+      <input type="text" class="form-input" id="recur-name" placeholder="e.g. Netflix, Salary, Rent">
     </div>
     <div class="form-group">
       <label class="form-label">Amount *</label>
@@ -2969,7 +3007,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div id="payable-schedule-progress" style="margin-bottom:12px"></div>
     <div id="payable-schedule-table"></div>
     <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn-primary btn-success" id="payable-schedule-pay-btn" onclick="" style="flex:1">💰 Record Payment</button>
+      <button class="btn-primary btn-success" id="payable-schedule-pay-btn" onclick="" style="flex:1">💰 Pay Now</button>
       <button class="btn-primary btn-secondary" style="flex:1" onclick="closeModal('modal-payable-schedule')">Close</button>
     </div>
     <button class="btn-primary btn-secondary" id="payable-schedule-edit-btn" style="margin-top:8px" onclick="">✏️ Edit Payable</button>
@@ -2984,8 +3022,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div id="recur-schedule-summary"></div>
     <div id="recur-schedule-table"></div>
     <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn-primary btn-success" id="recur-schedule-apply-btn" onclick="" style="flex:1">▶ Apply Now</button>
+      <button class="btn-primary btn-success" id="recur-schedule-apply-btn" onclick="" style="flex:1">💰 Pay Now</button>
       <button class="btn-primary btn-secondary" style="flex:1" onclick="closeModal('modal-recur-schedule')">Close</button>
+    </div>
+    <div class="form-group" style="margin-top:10px">
+      <label class="form-label">Transaction Fee <span style="font-size:10px;color:var(--text3);font-weight:400">(Optional)</span></label>
+      <input type="number" class="form-input" id="recur-schedule-fee" placeholder="0.00" min="0" step="0.01">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Fee recorded as a separate expense transaction.</div>
     </div>
     <button class="btn-primary btn-secondary" id="recur-schedule-pause-btn" style="margin-top:8px" onclick="">⏸ Pause Rule</button>
     <button class="btn-primary btn-secondary" id="recur-schedule-edit-btn" style="margin-top:8px" onclick="">✏️ Edit Rule</button>
@@ -3040,6 +3083,65 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <button class="btn-primary btn-secondary" style="margin-top:12px" onclick="closeModal('modal-export')">Close</button>
   </div>
+</div>
+
+<!-- CATCH-UP / OVERDUE PAYMENT MODAL -->
+<div class="modal-overlay" id="modal-catchup-payable">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" style="color:var(--rose)">🔴 Catch-up Payment</div>
+    <div id="catchup-payable-detail" style="margin-bottom:12px"></div>
+    <div id="catchup-overdue-info" style="background:var(--rose-bg);border:1px solid rgba(225,29,72,.3);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--rose);margin-bottom:14px;line-height:1.7;word-break:break-word;overflow-wrap:break-word"></div>
+    <div class="form-group">
+      <label class="form-label">Catch-up Amount * <span style="font-size:10px;color:var(--text3);font-weight:400">(principal only)</span></label>
+      <input type="number" class="form-input" id="catchup-amount" placeholder="0.00" min="0" step="0.01" oninput="updateCatchupPreview()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Late Fee <span style="font-size:10px;color:var(--text3);font-weight:400">(added to total, default 0)</span></label>
+      <input type="number" class="form-input" id="catchup-late-fee" placeholder="0.00" min="0" step="0.01" value="0" oninput="updateCatchupPreview()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Pay From Account *</label>
+      <select class="form-input" id="catchup-from-account"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payment Date</label>
+      <input type="date" class="form-input" id="catchup-date">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <input type="text" class="form-input" id="catchup-notes" placeholder="Optional">
+    </div>
+    <div id="catchup-preview" style="background:var(--emerald-bg);border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--emerald);margin-bottom:14px;display:none"></div>
+    <button class="btn-primary btn-danger" onclick="executeCatchupPayment()">🔴 Record Catch-up Payment</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-catchup-payable')">Cancel</button>
+  </div>
+</div>
+
+<!-- PATCH NOTES FULL-SCREEN MODAL -->
+<div id="modal-patch-notes" style="
+  display:none; position:fixed; inset:0; z-index:500;
+  background:var(--bg); flex-direction:column; overflow:hidden;
+  animation:fadeUp .22s cubic-bezier(0.4,0,0.2,1);
+">
+  <!-- Header -->
+  <div style="
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 18px 14px; border-bottom:1px solid var(--border);
+    background:var(--bg); flex-shrink:0;
+  ">
+    <div>
+      <div style="font-size:18px;font-weight:800;letter-spacing:-.4px">🆕 What's New</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px">FinFlow update notes</div>
+    </div>
+    <button onclick="closePatchNotes()" style="
+      width:34px;height:34px;border-radius:10px;border:1px solid var(--border);
+      background:var(--bg3);color:var(--text2);font-size:18px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+    ">✕</button>
+  </div>
+  <!-- Scrollable content -->
+  <div id="patch-notes-content" style="flex:1;overflow-y:auto;padding:16px 18px 40px;scrollbar-width:none"></div>
 </div>
 
 <!-- SAVINGS GUARD MODAL -->
@@ -3290,8 +3392,8 @@ function showScreen(name){
   else if(name==='goals')renderGoalsScreen();
   else if(name==='reports'){renderReports();showReportsTab(currentReportsTab,document.querySelector('#screen-reports .screen-tab'));}
   else if(name==='payables'){renderPayables();updatePayablesBadge();}
-  else if(name==='budget'){renderBudgetScreen();}
-  else if(name==='settings'){loadPrivacyToggles();renderBudgetSettings();updateThemeUI();}
+  else if(name==='budget'){maybeAutoGenerateBudgetForCurrentMonth();renderBudgetScreen();if(budgetMainTab==='default')renderDefaultBudget();}
+  else if(name==='settings'){loadPrivacyToggles();updateThemeUI();checkPatchBadge();}
   if(typeof _vaiOnScreenChange==='function') _vaiOnScreenChange(name);
 }
 function showReportsTab(tab,btn){
@@ -3322,7 +3424,15 @@ function showPayablesTab(tab,btn){
 }
 
 // ===== TOAST =====
-function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3000);}
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show '+type;
+  // longer messages stay a bit longer
+  const dur=msg.length>60?4500:3000;
+  clearTimeout(t._toastTimer);
+  t._toastTimer=setTimeout(()=>t.classList.remove('show'),dur);
+}
 
 // ===== MODALS =====
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -3891,6 +4001,8 @@ function openAccountDetail(id){
     ${txHtml}
   `;
   document.getElementById('account-detail-edit-btn').onclick=()=>{closeModal('modal-account-detail');openEditAccount(id);};
+  const delBtn=document.getElementById('account-detail-delete-btn');
+  if(delBtn)delBtn.onclick=()=>{closeModal('modal-account-detail');editingAccId=id;deleteAccount();};
   openModal('modal-account-detail');
 }
 
@@ -5236,6 +5348,7 @@ function openConfirmPlanned(id){
   const tc=pl.type==='expense'?'var(--expense)':pl.type==='income'?'var(--income)':'var(--transfer)';
   document.getElementById('confirm-planned-detail').innerHTML=`<div class="card-sm" style="text-align:center"><div style="font-size:24px;margin-bottom:6px">${pl.category.split(' ')[0]}</div><div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:${tc}">${fmt(pl.amount)}</div><div style="font-size:12px;color:var(--text2);margin-top:4px">${pl.category} • ${acc?acc.name:''}${toAcc?' → '+toAcc.name:''}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Planned: ${fmtDate(pl.date)}</div></div>`;
   document.getElementById('confirm-actual-date').value=today();
+  const feeEl=document.getElementById('confirm-tx-fee');if(feeEl)feeEl.value='';
   const wEl=document.getElementById('confirm-balance-warning');
   if(pl.type==='expense'||pl.type==='transfer'){const a=db.accounts.find(x=>x.id===pl.accountId);if(a&&pl.amount>a.balance){wEl.style.display='block';wEl.textContent=`⚠️ Insufficient balance! ${a.name} has ${fmt(a.balance)} but needs ${fmt(pl.amount)}.`;}else wEl.style.display='none';}
   else wEl.style.display='none';
@@ -5247,6 +5360,15 @@ function executeConfirmPlanned(){
   if(pl.type==='expense'||pl.type==='transfer'){const acc=db.accounts.find(a=>a.id===pl.accountId);if(acc&&pl.amount>acc.balance){showToast(`❌ Insufficient balance! ${acc.name} has ${fmt(acc.balance)}`,'error');return;}}
   const tx={id:uid(),type:pl.type,amount:pl.amount,category:pl.category,accountId:pl.accountId,toAccountId:pl.toAccountId,date:actualDate,ref:pl.ref,desc:(pl.desc?pl.desc+' ':'')+`[Planned: ${fmtDate(pl.originalDate||pl.date)}]`,receipt:null,createdAt:Date.now(),fromPlanned:pl.id};
   db.transactions.unshift(tx);applyTransaction(tx);
+  // Record fee if provided
+  const txFee=parseFloat(document.getElementById('confirm-tx-fee')?.value)||0;
+  if(txFee>0){
+    const feeAcc=db.accounts.find(a=>a.id===pl.accountId);
+    if(feeAcc)feeAcc.balance-=txFee;
+    const feeTx={id:uid(),type:'expense',amount:txFee,category:'💳 Fees',accountId:pl.accountId,date:actualDate,ref:'',desc:`Transaction Fee: ${pl.category}${pl.desc?' — '+pl.desc:''}`,receipt:null,createdAt:Date.now()};
+    db.transactions.unshift(feeTx);
+    addLog('created',`Transaction fee: ${fmt(txFee)}`,feeTx.id,'transaction');
+  }
   pl.status='done';pl.actualDate=actualDate;pl.confirmedAt=Date.now();
   let logMsg=`Confirmed: ${pl.type} ${pl.category} ${fmt(pl.amount)}`;
   if(actualDate!==pl.date)logMsg+=` | Planned: ${fmtDate(pl.date)} → Actual: ${fmtDate(actualDate)}`;
@@ -5555,7 +5677,7 @@ function executeClearData(){
   localStorage.removeItem('finflow_pre_demo');
   db={accounts:[],transactions:[],planned:[],logs:[],settings:{},payables:[],qrCodes:[],budgets:[],goals:[],recurring:[]};
   saveDB();
-  renderHome();renderAccountsScreen();renderTransactions();renderPayables();renderBudgetSettings();
+  renderHome();renderAccountsScreen();renderTransactions();renderPayables();
   updateOverdueBadge();updatePayablesBadge();
   showToast('✅ All data cleared successfully. App reset.','success');
 }
@@ -5574,7 +5696,7 @@ function executeSavingsGuardedTx(){
 function showConfirm(title,msg,onOk){document.getElementById('confirm-title').textContent=title;document.getElementById('confirm-msg').textContent=msg;document.getElementById('confirm-ok-btn').onclick=()=>{onOk();closeModal('modal-confirm');};openModal('modal-confirm');}
 
 // ===== PAYABLES =====
-const PAYABLE_TYPES={loan:'🏦 Bank/Personal Loan',credit:'💳 Credit Card',spl:'📱 SPayLater/BNPL',other:'📋 Other'};
+const PAYABLE_TYPES={loan:'🏦 Bank/Personal Loan',credit:'💳 Credit Card',spl:'📱 BuyNow PayLater',other:'📋 Other'};
 const PAYABLE_COLORS={loan:'var(--accent)',credit:'var(--expense)',spl:'var(--planned)',other:'var(--text2)'};
 
 function updatePayablesBadge(){
@@ -5627,6 +5749,7 @@ function openAddPayable(){
   document.getElementById('py-interest').value='';
   document.getElementById('py-due-day').value='';
   document.getElementById('py-overpay').value='no';
+  document.getElementById('py-single-month').value='no';
   document.getElementById('py-notes').value='';
   document.getElementById('py-delete-btn').style.display='none';
   document.getElementById('py-save-btn').textContent='Save Payable';
@@ -5650,6 +5773,7 @@ function openEditPayable(id){
   document.getElementById('py-interest').value=py.interestRate||'';
   document.getElementById('py-due-day').value=py.dueDay||'';
   document.getElementById('py-overpay').value=py.allowOverpay?'yes':'no';
+  document.getElementById('py-single-month').value=py.singleMonthOnly?'yes':'no';
   document.getElementById('py-notes').value=py.notes||'';
   document.getElementById('py-delete-btn').style.display='';
   document.getElementById('py-save-btn').textContent='Update Payable';
@@ -5668,6 +5792,7 @@ function savePayable(){
   const interestRate=parseFloat(document.getElementById('py-interest').value)||0;
   const dueDay=parseInt(document.getElementById('py-due-day').value)||null;
   const allowOverpay=document.getElementById('py-overpay').value==='yes';
+  const singleMonthOnly=document.getElementById('py-single-month').value==='yes';
   const linkedAccount=document.getElementById('py-account').value||null;
   const notes=document.getElementById('py-notes').value.trim();
   if(!name){showToast('Please enter a payable name','error');return;}
@@ -5677,9 +5802,9 @@ function savePayable(){
   const status=remaining<=0?'paid':'active';
   if(editingPayableId){
     const py=db.payables.find(p=>p.id===editingPayableId);
-    if(py)Object.assign(py,{name,type,totalAmount,paidAmount,monthlyPayment,interestRate,dueDay,allowOverpay,linkedAccount,notes,remaining,status});
+    if(py)Object.assign(py,{name,type,totalAmount,paidAmount,monthlyPayment,interestRate,dueDay,allowOverpay,singleMonthOnly,linkedAccount,notes,remaining,status});
   }else{
-    db.payables.push({id:uid(),name,type,totalAmount,paidAmount,monthlyPayment,interestRate,dueDay,allowOverpay,linkedAccount,notes,remaining,status,payments:[],createdAt:Date.now()});
+    db.payables.push({id:uid(),name,type,totalAmount,paidAmount,monthlyPayment,interestRate,dueDay,allowOverpay,singleMonthOnly,linkedAccount,notes,remaining,status,payments:[],createdAt:Date.now()});
   }
   saveDB();closeModal('modal-payable');
   showToast(editingPayableId?'Payable updated! 💳':'Payable added! 💳');
@@ -5996,7 +6121,8 @@ function openRecurringSchedule(id){
   }
 
   // Wire buttons
-  document.getElementById('recur-schedule-apply-btn').onclick=()=>{closeModal('modal-recur-schedule');applyRecurringNow(id);};
+  const feeEl=document.getElementById('recur-schedule-fee');if(feeEl)feeEl.value='';
+  document.getElementById('recur-schedule-apply-btn').onclick=()=>{const fee=parseFloat(document.getElementById('recur-schedule-fee').value)||0;closeModal('modal-recur-schedule');applyRecurringNow(id,fee);};
   document.getElementById('recur-schedule-pause-btn').textContent=isPaused?'▶ Resume Rule':'⏸ Pause Rule';
   document.getElementById('recur-schedule-pause-btn').onclick=()=>{toggleRecurPause(id);closeModal('modal-recur-schedule');};
   document.getElementById('recur-schedule-edit-btn').onclick=()=>{closeModal('modal-recur-schedule');openEditRecurring(id);};
@@ -6017,9 +6143,13 @@ function openPayPayable(id){
   document.getElementById('pay-months').value='1';
   document.getElementById('pay-months-note').style.display='none';
   document.querySelectorAll('#modal-pay-payable .planned-btn').forEach(b=>b.classList.remove('confirm'));
+  // Hide multi-month selector for singleMonthOnly payables
+  const monthsGroup=document.querySelector('#modal-pay-payable .form-group');
+  if(monthsGroup)monthsGroup.style.display=py.singleMonthOnly?'none':'block';
   document.getElementById('pay-amount').value=py.monthlyPayment||'';
   document.getElementById('pay-date').value=today();
   document.getElementById('pay-ref').value='';
+  document.getElementById('pay-tx-fee').value='';
   document.getElementById('pay-balance-warning').style.display='none';
   const opts=db.accounts.map(a=>`<option value="${a.id}"${a.id===py.linkedAccount?' selected':''}>${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('')||'<option value="">No accounts</option>';
   document.getElementById('pay-from-account').innerHTML=opts;
@@ -6057,17 +6187,23 @@ function setPayMonths(months, btn){
 function checkPayableWarning(){
   const py=db.payables.find(p=>p.id===payingPayableId);if(!py)return;
   const amount=parseFloat(document.getElementById('pay-amount').value)||0;
+  const txFee=parseFloat(document.getElementById('pay-tx-fee').value)||0;
+  const totalOut=amount+txFee;
   const wEl=document.getElementById('pay-balance-warning');
-  // Check overpayment
+  // Check overpayment (fee doesn't count toward payable balance)
   if(!py.allowOverpay&&amount>py.remaining){
     wEl.style.display='block';wEl.textContent=`⚠️ Payment of ${fmt(amount)} exceeds remaining balance of ${fmt(py.remaining)}. Overpayment is not allowed for this payable.`;
     return;
   }
-  // Check account balance
+  // Check account balance (amount + fee)
   const accId=document.getElementById('pay-from-account').value;
   const acc=db.accounts.find(a=>a.id===accId);
-  if(acc&&amount>acc.balance){wEl.style.display='block';wEl.textContent=`⚠️ Insufficient account balance! ${acc.name} has ${fmt(acc.balance)}.`;}
-  else wEl.style.display='none';
+  if(acc&&totalOut>acc.balance){
+    wEl.style.display='block';
+    wEl.textContent=txFee>0
+      ?`⚠️ Insufficient balance! ${acc.name} has ${fmt(acc.balance)} but total (payment ${fmt(amount)} + fee ${fmt(txFee)}) is ${fmt(totalOut)}.`
+      :`⚠️ Insufficient account balance! ${acc.name} has ${fmt(acc.balance)}.`;
+  } else wEl.style.display='none';
 }
 function executePayPayable(){
   const py=db.payables.find(p=>p.id===payingPayableId);if(!py)return;
@@ -6075,12 +6211,29 @@ function executePayPayable(){
   const accId=document.getElementById('pay-from-account').value;
   const payDate=document.getElementById('pay-date').value||today();
   const ref=document.getElementById('pay-ref').value.trim();
+  const txFee=parseFloat(document.getElementById('pay-tx-fee').value)||0;
   const months=parseInt(document.getElementById('pay-months').value)||1;
   if(amount<=0){showToast('Please enter a valid amount','error');return;}
   // Validations
   if(!py.allowOverpay&&amount>py.remaining){showToast(`❌ Cannot overpay! Remaining: ${fmt(py.remaining)}`,'error');return;}
   const acc=db.accounts.find(a=>a.id===accId);
-  if(acc&&amount>acc.balance){showToast(`❌ Insufficient balance in ${acc.name}`,'error');return;}
+  const totalOut=amount+txFee;
+  if(acc&&totalOut>acc.balance){
+    showToast(txFee>0?`❌ Insufficient balance! Need ${fmt(totalOut)} (payment + fee) but ${acc.name} has ${fmt(acc.balance)}`:`❌ Insufficient balance in ${acc.name}`,'error');return;
+  }
+  // Check savings reserve
+  if(acc){
+    const reserve=acc.savingsReserve||0;
+    if(reserve>0&&(acc.balance-totalOut)<reserve){
+      showToast(`⚠️ Warning: This will dip below your savings reserve of ${fmt(reserve)} in ${acc.name}`,'warn');
+    }
+    // Check goal protection
+    const goalProtection=getGoalProtectedAmount(accId);
+    if(goalProtection>0&&(acc.balance-totalOut)<goalProtection){
+      const linkedGoals=db.goals.filter(g=>g.linkedAccountId===accId&&g.status!=='achieved');
+      showToast(`⚠️ Warning: Payment touches protected goal funds (${fmt(goalProtection)}) in ${acc.name}`,'warn');
+    }
+  }
   // Deduct from account
   if(acc)acc.balance-=amount;
   // Update payable
@@ -6104,9 +6257,17 @@ function executePayPayable(){
   // Create transaction record
   const tx={id:uid(),type:'expense',amount,category:'💰 Bills',accountId:accId,date:payDate,ref,desc:txDesc,receipt:null,createdAt:Date.now(),payableId:py.id};
   db.transactions.unshift(tx);
+  // Record fee as a separate transaction if provided
+  if(txFee>0){
+    if(acc)acc.balance-=txFee;
+    const feeTx={id:uid(),type:'expense',amount:txFee,category:'💳 Fees',accountId:accId,date:payDate,ref,desc:`Transaction Fee: ${py.name}`,receipt:null,createdAt:Date.now(),payableId:py.id};
+    db.transactions.unshift(feeTx);
+    addLog('created',`Transaction fee: ${py.name} ${fmt(txFee)}`,feeTx.id,'transaction');
+  }
   addLog('created',`Payable payment: ${py.name} ${fmt(amount)}${months>1?' ('+months+' months)':''}`,py.id,'payable');
 
   // ── Handle advance multi-month payment: waive scheduled dates ─
+  // For singleMonthOnly payables: only mark the CURRENT due month as paid, no auto-scheduling
   if(py.dueDay&&py.status!=='paid'){
     const now=new Date();
     let nextDue=new Date(now.getFullYear(),now.getMonth(),py.dueDay);
@@ -6116,25 +6277,26 @@ function executePayPayable(){
     for(let i=0;i<months;i++){
       const waiveDate=new Date(nextDue.getFullYear(),nextDue.getMonth()+i,py.dueDay);
       const waiveDateStr=waiveDate.getFullYear()+'-'+String(waiveDate.getMonth()+1).padStart(2,'0')+'-'+String(waiveDate.getDate()).padStart(2,'0');
-      // Find exact or close planned entry for this month
       const existingPl=db.planned.find(p=>p.payableId===py.id&&p.status==='pending'&&p.date===waiveDateStr);
       if(existingPl){
         existingPl.status='completed';existingPl.completedAt=Date.now();
         existingPl.completedNote=`Auto-waived: paid ${months} month${months>1?'s':''} in advance on ${payDate}`;
       } else {
-        // Mark the entry even if date is slightly off (same month)
         const monthStr=waiveDateStr.substring(0,7);
         const pl=db.planned.find(p=>p.payableId===py.id&&p.status==='pending'&&p.date.startsWith(monthStr));
         if(pl){pl.status='completed';pl.completedAt=Date.now();pl.completedNote=`Auto-waived: advance payment`;}
       }
     }
 
-    // Schedule next due date after advance payment window
-    const nextDueFuture=new Date(nextDue.getFullYear(),nextDue.getMonth()+months,py.dueDay);
-    const nextDueFutureStr=nextDueFuture.getFullYear()+'-'+String(nextDueFuture.getMonth()+1).padStart(2,'0')+'-'+String(nextDueFuture.getDate()).padStart(2,'0');
-    const exists=db.planned.some(p=>p.payableId===py.id&&p.date===nextDueFutureStr&&p.status==='pending');
-    if(!exists&&py.status!=='paid'){
-      db.planned.push({id:uid(),type:'expense',amount:py.monthlyPayment||amount,category:'💰 Bills',accountId:accId,date:nextDueFutureStr,ref:'',desc:`Scheduled: ${py.name}`,status:'pending',originalDate:nextDueFutureStr,createdAt:Date.now(),payableId:py.id});
+    // singleMonthOnly: do NOT auto-schedule the next due date — amount may change
+    if(!py.singleMonthOnly){
+      // Schedule next due date after advance payment window
+      const nextDueFuture=new Date(nextDue.getFullYear(),nextDue.getMonth()+months,py.dueDay);
+      const nextDueFutureStr=nextDueFuture.getFullYear()+'-'+String(nextDueFuture.getMonth()+1).padStart(2,'0')+'-'+String(nextDueFuture.getDate()).padStart(2,'0');
+      const exists=db.planned.some(p=>p.payableId===py.id&&p.date===nextDueFutureStr&&p.status==='pending');
+      if(!exists&&py.status!=='paid'){
+        db.planned.push({id:uid(),type:'expense',amount:py.monthlyPayment||amount,category:'💰 Bills',accountId:accId,date:nextDueFutureStr,ref:'',desc:`Scheduled: ${py.name}`,status:'pending',originalDate:nextDueFutureStr,createdAt:Date.now(),payableId:py.id});
+      }
     }
   }
 
@@ -6144,6 +6306,153 @@ function executePayPayable(){
   showToast(successMsg,'success');
   payingPayableId=null;renderPayables();renderHome();updatePayablesBadge();
   renderGoalsScreen();// refresh planned tab if visible
+}
+
+// ===== CATCH-UP / OVERDUE PAYMENT =====
+let catchupPayableId=null;
+
+/**
+ * Calculate how many days overdue a payable is
+ * based on the oldest unpaid past-due schedule entry.
+ */
+function getOverdueDays(py){
+  const schedule=generatePayableSchedule(py);
+  const overdue=schedule.filter(s=>s.status==='overdue');
+  if(!overdue.length)return 0;
+  const oldest=overdue[0];
+  const diff=Math.ceil((new Date()-new Date(oldest.date+'T00:00:00'))/(1000*60*60*24));
+  return Math.max(0,diff);
+}
+
+function openCatchupPayable(id){
+  const py=db.payables.find(p=>p.id===id);if(!py)return;
+  catchupPayableId=id;
+  const schedule=generatePayableSchedule(py);
+  const overdueEntries=schedule.filter(s=>s.status==='overdue');
+  const overdueDays=getOverdueDays(py);
+  const overdueTotal=overdueEntries.reduce((s,e)=>s+e.amount,0);
+  const color=PAYABLE_COLORS[py.type]||'var(--text2)';
+
+  document.getElementById('catchup-payable-detail').innerHTML=`<div class="card-sm" style="text-align:center">
+    <div style="font-size:13px;font-weight:700">${py.name}</div>
+    <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:${color};margin-top:4px">${fmt(py.remaining)} remaining</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:4px">${overdueEntries.length} overdue installment${overdueEntries.length>1?'s':''}</div>
+  </div>`;
+
+  document.getElementById('catchup-overdue-info').innerHTML=
+    `⏰ This payable is overdue by <strong>${overdueDays} day${overdueDays!==1?'s':''}</strong>.<br>
+     <strong>Overdue installments:</strong><br>
+     ${overdueEntries.map(e=>`• ${e.label||fmtDate(e.date)} — ${fmt(e.amount)}`).join('<br>')}<br>
+     <strong>Suggested catch-up: ${fmt(overdueTotal)}</strong> — add late fee below if any.`;
+
+  document.getElementById('catchup-amount').value=overdueTotal>0?overdueTotal.toFixed(2):'';
+  document.getElementById('catchup-late-fee').value='0';
+  document.getElementById('catchup-date').value=today();
+  document.getElementById('catchup-notes').value='';
+  document.getElementById('catchup-preview').style.display='none';
+
+  const opts=db.accounts.map(a=>`<option value="${a.id}"${a.id===py.linkedAccount?' selected':''}>${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('')||'<option value="">No accounts</option>';
+  document.getElementById('catchup-from-account').innerHTML=opts;
+  openModal('modal-catchup-payable');
+  updateCatchupPreview();
+}
+
+function updateCatchupPreview(){
+  const amount=parseFloat(document.getElementById('catchup-amount').value)||0;
+  const lateFee=parseFloat(document.getElementById('catchup-late-fee').value)||0;
+  const total=amount+lateFee;
+  const prev=document.getElementById('catchup-preview');
+  if(amount>0){
+    prev.style.display='block';
+    prev.innerHTML=`💰 Paying <strong>${fmt(total)}</strong> today${lateFee>0?` (includes <strong>${fmt(lateFee)}</strong> late fee as separate record)`:''}`;
+  } else {
+    prev.style.display='none';
+  }
+}
+
+function executeCatchupPayment(){
+  const py=db.payables.find(p=>p.id===catchupPayableId);if(!py)return;
+  const catchupAmount=parseFloat(document.getElementById('catchup-amount').value)||0;
+  const lateFee=parseFloat(document.getElementById('catchup-late-fee').value)||0;
+  const accId=document.getElementById('catchup-from-account').value;
+  const payDate=document.getElementById('catchup-date').value||today();
+  const notes=document.getElementById('catchup-notes').value.trim();
+
+  if(catchupAmount<=0){showToast('Please enter a catch-up amount','error');return;}
+  const acc=db.accounts.find(a=>a.id===accId);
+  const totalOut=catchupAmount+lateFee;
+  if(acc&&totalOut>acc.balance){showToast(`❌ Insufficient balance! ${acc.name} has ${fmt(acc.balance)}`,'error');return;}
+
+  // Identify which overdue installments are covered
+  const schedule=generatePayableSchedule(py);
+  const overdueEntries=schedule.filter(s=>s.status==='overdue');
+  let covered=[];
+  let principal=catchupAmount;
+  for(const entry of overdueEntries){
+    if(principal<=0)break;
+    covered.push(entry);
+    principal-=entry.amount;
+  }
+  const coveredLabels=covered.map(e=>e.label||fmtDate(e.date));
+
+  // Deduct from account
+  if(acc)acc.balance-=totalOut;
+
+  // Update payable principal
+  py.paidAmount=(py.paidAmount||0)+catchupAmount;
+  py.remaining=Math.max(0,py.totalAmount-py.paidAmount);
+  if(py.remaining<=0)py.status='paid';
+  if(!py.payments)py.payments=[];
+  // ⚠️  IMPORTANT: use the FIRST OVERDUE due-date as the payment reference date
+  // so that generatePayableSchedule correctly maps this payment to the right months.
+  const firstOverdueDueDate=covered.length>0?covered[0].date:payDate;
+  py.payments.push({
+    id:uid(),
+    amount:catchupAmount,
+    lateFee,
+    accountId:accId,
+    date:firstOverdueDueDate,   // anchor to first overdue due date for schedule engine
+    actualDate:payDate,          // when money was actually paid
+    ref:'catch-up',
+    notes,
+    months:Math.max(1,covered.length),  // number of installments covered
+    createdAt:Date.now(),
+    type:'catchup'
+  });
+
+  // Mark covered overdue planned entries as completed
+  covered.forEach(entry=>{
+    const monthStr=entry.date.substring(0,7);
+    const pl=db.planned.find(p=>p.payableId===py.id&&p.status==='pending'&&p.date.startsWith(monthStr));
+    if(pl){pl.status='completed';pl.completedAt=Date.now();pl.completedNote=`Catch-up payment on ${payDate}`;}
+  });
+
+  // Build description mentioning covered months
+  const covDesc=coveredLabels.length?` — covered: ${coveredLabels.join(' & ')}`:'';
+  const txDesc=`Catch-up Payment: ${py.name}${covDesc}${notes?' ('+notes+')':''}`;
+
+  // Create main catch-up transaction
+  const tx={id:uid(),type:'expense',amount:catchupAmount,category:'💰 Bills',accountId:accId,date:payDate,ref:'catch-up',desc:txDesc,receipt:null,createdAt:Date.now(),payableId:py.id};
+  db.transactions.unshift(tx);
+
+  // Create separate late fee transaction if applicable
+  if(lateFee>0){
+    const feeTx={id:uid(),type:'expense',amount:lateFee,category:'💳 Fees',accountId:accId,date:payDate,ref:'late-fee',desc:`Late Fee: ${py.name}`,receipt:null,createdAt:Date.now(),payableId:py.id};
+    db.transactions.unshift(feeTx);
+    addLog('created',`Late fee: ${py.name} ${fmt(lateFee)}`,feeTx.id,'transaction');
+  }
+  addLog('created',`Catch-up payment: ${py.name} ${fmt(catchupAmount)}`,tx.id,'payable');
+
+  saveDB();closeModal('modal-catchup-payable');
+
+  // Toast message
+  let msg=covered.length===1
+    ?`✅ Marked ${coveredLabels[0]} installment as paid. Great job catching up!`
+    :`✅ Marked ${coveredLabels.join(' & ')} installments as paid. Great job catching up!`;
+  if(py.status==='paid')msg=`🎉 ${py.name} is now FULLY PAID!`;
+  showToast(msg,'success');
+
+  catchupPayableId=null;renderPayables();renderHome();updatePayablesBadge();
 }
 
 // Schedule payment
@@ -6259,10 +6568,15 @@ function renderActivePayables(container){
     html+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px">';
     html+='<span>Paid: '+fmt(py.paidAmount||0)+'</span><span>'+pct.toFixed(0)+'% done</span><span>Total: '+fmt(py.totalAmount)+'</span></div>';
     html+='<div class="payable-actions">';
-    html+='<button type="button" class="payable-btn pay" onclick="event.stopPropagation();openPayPayable(\''+py.id+'\')">💰 Pay</button>';
+    html+='<button type="button" class="payable-btn pay" onclick="event.stopPropagation();openPayPayable(\''+py.id+'\')">💰 Pay Now</button>';
     html+='<button type="button" class="payable-btn" style="background:var(--blue-bg);border-color:rgba(59,130,246,.3);color:var(--blue)" onclick="event.stopPropagation();openPayableSchedule(\''+py.id+'\')">📊 Schedule</button>';
     html+='<button type="button" class="payable-btn edit" onclick="event.stopPropagation();openEditPayable(\''+py.id+'\')">✏️ Edit</button>';
-    html+='</div></div>';
+    html+='</div>';
+    // Show Catch-up button if overdue
+    if(overdueCount>0){
+      html+='<button type="button" class="payable-btn" style="width:100%;margin-top:6px;background:var(--rose-bg);border-color:rgba(225,29,72,.35);color:var(--rose);font-size:11px" onclick="event.stopPropagation();openCatchupPayable(\''+py.id+'\')">🔴 Catch-up / Pay Overdue ('+overdueCount+' month'+( overdueCount>1?'s':'')+' behind)</button>';
+    }
+    html+='</div>';
   });
   container.innerHTML=html;
 }
@@ -6558,6 +6872,137 @@ function closeOnboarding(){
   document.getElementById('modal-onboarding').classList.remove('open');
 }
 
+// ===== PATCH NOTES =====
+const PATCH_NOTES_VERSION='5.1';
+const PATCH_NOTES_KEY='finflow_patch_seen';
+
+const PATCH_NOTES=[
+  {
+    version:'5.1',
+    date:'March 2026',
+    emoji:'🚀',
+    title:'Smart Payments & Catch-up Update',
+    highlights:[
+      {
+        icon:'🔴',
+        title:'Catch-up Payment for Overdue Loans',
+        what:'If you missed paying a loan or BNPL last month (or several months!), a red "Catch-up" button now appears on that payable card.',
+        example:'Example: You forgot to pay your Home Credit for 2 months. Tap the red button, enter the total you want to pay, and FinFlow will mark those months as settled — no more "overdue" warning!'
+      },
+      {
+        icon:'💳',
+        title:'Transaction Fee Tracking',
+        what:'When recording a payment (loan, recurring bill, or planned activity), you can now add a Transaction Fee separately.',
+        example:'Example: You paid your SSS loan via GCash and GCash charged ₱15. Enter ₱15 in the "Transaction Fee" field — it\'s recorded as a separate expense so your loan payment amount stays accurate.'
+      },
+      {
+        icon:'1️⃣',
+        title:'Single Month Only mode for BuyNow PayLater',
+        what:'For BNPL/instalment plans where the amount changes every month (like SPayLater), you can now set "Single month only" so FinFlow won\'t try to schedule a fixed amount next month.',
+        example:'Example: Your Lazada SPayLater shows ₱500 this month and ₱480 next month. Enable "Single month only" and just enter the actual amount each time you pay — no confusion!'
+      },
+      {
+        icon:'📅',
+        title:'Repayment Schedule improvements',
+        what:'The Schedule view now correctly shows which months you\'ve already paid, including catch-up and advance payments. Paid months show a green ✓ Paid badge.',
+        example:'Example: You paid 2 months in advance for your BDO loan. The schedule now shows both months as ✓ Paid with the date you paid.'
+      },
+      {
+        icon:'🏦',
+        title:'Account Edit & Delete restored',
+        what:'You can now Edit or Delete any account directly from the Account Detail screen (tap any account card).',
+        example:'Example: You closed your old savings account. Tap it, then tap "Delete Account" — done. Your past transactions are kept safe.'
+      },
+      {
+        icon:'💬',
+        title:'Notifications moved to top',
+        what:'Success and error messages (toasts) now appear at the TOP of the screen, so they\'re easier to read and don\'t get hidden by the keyboard.',
+        example:'Example: After recording a payment, the green "Payment recorded!" message pops up at the top — hard to miss!'
+      },
+      {
+        icon:'🔤',
+        title:'Cleaner forms — removed duplicate mic buttons',
+        what:'The extra microphone buttons next to text fields in the Account, Payable, Goal, and Recurring forms have been removed. The Smart Input AI bar at the top of each form already handles voice — no duplicates.',
+        example:'Example: When adding a new goal, just tap the 🎤 button in the "Smart Input AI" bar at the top to speak your goal name and amount all at once!'
+      },
+      {
+        icon:'📱',
+        title:'BuyNow PayLater (BNPL) type renamed',
+        what:'"SPayLater" has been renamed to "BuyNow PayLater / BNPL" to cover all instalment apps — Lazada, Shopee, Akulaku, Billease, and more.',
+        example:'Example: You have a Home Credit instalment — just pick "BuyNow PayLater" as the type and it works the same.'
+      },
+    ]
+  }
+];
+
+function checkPatchBadge(){
+  const seen=localStorage.getItem(PATCH_NOTES_KEY);
+  const badge=document.getElementById('patch-badge');
+  const dot=document.getElementById('patch-new-dot');
+  if(seen!==PATCH_NOTES_VERSION){
+    if(badge)badge.style.display='flex';
+    if(dot)dot.style.display='block';
+  }else{
+    if(badge)badge.style.display='none';
+    if(dot)dot.style.display='none';
+  }
+}
+
+function openPatchNotes(){
+  const modal=document.getElementById('modal-patch-notes');
+  const content=document.getElementById('patch-notes-content');
+  if(!modal||!content)return;
+
+  // Build HTML
+  let html='';
+  PATCH_NOTES.forEach(release=>{
+    html+=`<div style="margin-bottom:28px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:42px;height:42px;border-radius:12px;background:var(--emerald-bg);border:1px solid rgba(16,185,129,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${release.emoji}</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;letter-spacing:-.3px">${release.title}</div>
+          <div style="font-size:11px;color:var(--text3)">Version ${release.version} · ${release.date}</div>
+        </div>
+      </div>`;
+    release.highlights.forEach((item,i)=>{
+      html+=`<div style="
+        background:var(--card);border:1px solid var(--border);border-radius:14px;
+        padding:14px 15px;margin-bottom:10px;
+      ">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:20px">${item.icon}</span>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">${item.title}</div>
+        </div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:8px">${item.what}</div>
+        <div style="background:var(--blue-bg);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:8px 11px;font-size:11px;color:var(--text2);line-height:1.6">
+          ${item.example}
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+
+  html+=`<div style="text-align:center;padding:12px 0;font-size:11px;color:var(--text3)">
+    All your data is stored safely on your device. 🔒<br>Thank you for using FinFlow!
+  </div>`;
+
+  content.innerHTML=html;
+  modal.style.display='flex';
+  content.scrollTop=0;
+
+  // Mark as seen
+  localStorage.setItem(PATCH_NOTES_KEY,PATCH_NOTES_VERSION);
+  const badge=document.getElementById('patch-badge');
+  const dot=document.getElementById('patch-new-dot');
+  if(badge)badge.style.display='none';
+  if(dot)dot.style.display='none';
+}
+
+function closePatchNotes(){
+  const modal=document.getElementById('modal-patch-notes');
+  if(modal){modal.style.display='none';}
+}
+
 // ===== PAYABLES BALANCE ALERT =====
 function checkPayablesBalanceAlerts(){
   const banner=document.getElementById('payables-alert-banner');
@@ -6818,47 +7263,21 @@ function saveBudget(){
   if(targetMonth){const[y,m]=targetMonth.split('-').map(Number);msg=`Budget set for ${monthsArr[m-1]} ${y}! 🎯`;}
   showToast(msg,'success');
   editingBudgetId=null;
-  renderBudgetSettings();
   renderBudgetHomePanel();
-  // If currently viewing budget screen, refresh it immediately
-  if(document.getElementById('screen-budget')&&document.getElementById('screen-budget').classList.contains('active')){
-    renderBudgetScreen();
-  } else {
-    // Always re-render so next visit shows updated data
-    renderBudgetScreen();
-  }
+  renderBudgetScreen();
+  renderDefaultBudget();
 }
 function deleteBudget(){
   showConfirm('Remove Budget?','This budget limit will be removed.',()=>{
     db.budgets=db.budgets.filter(b=>b.id!==editingBudgetId);
     saveDB();closeModal('modal-budget');
     showToast('Budget removed','error');
-    editingBudgetId=null;renderBudgetSettings();renderBudgetHomePanel();
+    editingBudgetId=null;renderBudgetHomePanel();renderBudgetScreen();renderDefaultBudget();
   });
 }
 function renderBudgetSettings(){
+  // Legacy function — kept for backward compatibility; budget is now in the Budget screen
   const el=document.getElementById('budget-list-settings');if(!el)return;
-  if(!db.budgets.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0">No budgets set yet.</div>';return;}
-  const now=new Date();
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  el.innerHTML=db.budgets.map(b=>{
-    const period=b.period||'monthly';
-    const spent=getBudgetSpend(b.category,period,b.targetMonth||null);
-    const pct=Math.min(100,(spent/b.monthlyLimit)*100);
-    const barColor=pct>=100?'var(--danger)':pct>=80?'var(--planned)':'var(--income)';
-    const pctClass=pct>=100?'budget-over':pct>=80?'budget-warn':'';
-    let badge='';
-    if(b.targetMonth){const[y,m]=b.targetMonth.split('-').map(Number);badge=`<span style="font-size:9px;color:var(--accent);background:rgba(124,131,253,0.1);padding:1px 5px;border-radius:4px;margin-left:4px">${months[m-1]} ${y}</span>`;}
-    else if(period==='yearly')badge=`<span style="font-size:9px;color:var(--accent);background:rgba(124,131,253,0.1);padding:1px 5px;border-radius:4px;margin-left:4px">Yearly</span>`;
-    return`<div class="budget-item" onclick="openEditBudget('${b.id}')">
-      <div class="budget-item-row">
-        <div class="budget-cat">${b.category}${badge}</div>
-        <div class="budget-pct ${pctClass}">${pct.toFixed(0)}%</div>
-      </div>
-      <div class="budget-bar-wrap"><div class="budget-bar" style="width:${pct.toFixed(1)}%;background:${barColor}"></div></div>
-      <div class="budget-amounts"><span>${fmt(spent)} spent</span><span>${fmt(b.monthlyLimit)} limit</span></div>
-    </div>`;
-  }).join('');
 }
 function renderBudgetHomePanel(){
   const el=document.getElementById('budget-home-panel');if(!el)return;
@@ -6899,15 +7318,160 @@ function navBudgetMonth(dir){
   if(budgetScreenMonth>11){budgetScreenMonth=0;budgetScreenYear++;}
   renderBudgetScreen();
 }
+// ===== BUDGET SCREEN TABS =====
+let budgetMainTab = 'monthly'; // 'monthly' | 'default'
+
+function switchBudgetMainTab(tab) {
+  budgetMainTab = tab;
+  const mBtn = document.getElementById('budget-tab-monthly');
+  const dBtn = document.getElementById('budget-tab-default');
+  const mPanel = document.getElementById('budget-panel-monthly');
+  const dPanel = document.getElementById('budget-panel-default');
+  const addBtn = document.getElementById('budget-header-add-btn');
+  if(tab === 'monthly') {
+    mBtn.className = 'budget-main-tab active-budget-tab';
+    dBtn.className = 'budget-main-tab';
+    mPanel.style.display = 'flex';
+    dPanel.style.display = 'none';
+    addBtn.title = 'Add budget for this month';
+    renderBudgetScreen();
+  } else {
+    dBtn.className = 'budget-main-tab active-budget-tab';
+    mBtn.className = 'budget-main-tab';
+    mPanel.style.display = 'none';
+    dPanel.style.display = 'flex';
+    addBtn.title = 'Add default budget category';
+    renderDefaultBudget();
+  }
+}
+
+function budgetHeaderAdd() {
+  if(budgetMainTab === 'default') openAddDefaultBudget();
+  else openBudgetAddForMonth();
+}
+
+// ── Default Budget Tab ──────────────────────────────────────────
+function getDefaultBudgets() {
+  // Default budgets are db.budgets with no targetMonth and period='monthly' (or no period)
+  return db.budgets.filter(b => !b.targetMonth && (b.period || 'monthly') === 'monthly');
+}
+
+function renderDefaultBudget() {
+  const el = document.getElementById('budget-default-content');
+  if (!el) return;
+  const defaults = getDefaultBudgets();
+  const now = new Date();
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  let html = '<div style="padding:14px 16px">';
+
+  // Info banner
+  html += `<div style="background:var(--blue-bg);border:1px solid rgba(77,142,255,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:var(--text2);line-height:1.6">
+    <div style="font-weight:700;color:var(--blue-l);margin-bottom:4px">🗂 Default Budget Template</div>
+    This is your <strong>monthly spending plan</strong>. Every new month, FinFlow automatically copies these limits so you don't have to set them again.<br>
+    <span style="color:var(--text3);font-size:11px">Changes here only affect <em>future</em> months — past months are kept as-is.</span>
+  </div>`;
+
+  if (!defaults.length) {
+    html += `<div class="card" style="text-align:center;padding:28px 16px">
+      <div style="font-size:40px;margin-bottom:12px">🗂</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">No Default Budget Yet</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Add category limits here and FinFlow will auto-apply them every month.</div>
+      <button class="btn-primary" onclick="openAddDefaultBudget()" style="width:auto;padding:10px 24px">➕ Add Category</button>
+    </div>`;
+  } else {
+    const total = defaults.reduce((s, b) => s + b.monthlyLimit, 0);
+    html += `<div class="card" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:12px;color:var(--text3);font-weight:600">TOTAL MONTHLY BUDGET</div>
+        <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--emerald)">${fmt(total)}</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">${defaults.length} categor${defaults.length===1?'y':'ies'} · auto-copies to new months</div>
+    </div>`;
+    html += `<div class="card">`;
+    defaults.forEach(b => {
+      const now2 = new Date();
+      const ymStr = `${now2.getFullYear()}-${String(now2.getMonth()+1).padStart(2,'0')}`;
+      const spent = getBudgetSpend(b.category, 'monthly', null);
+      const pct = Math.min(100, (spent / b.monthlyLimit) * 100);
+      const barColor = pct>=100?'var(--rose)':pct>=80?'var(--amber)':'var(--emerald)';
+      html += `<div class="budget-item" onclick="openEditBudget('${b.id}')">
+        <div class="budget-item-row">
+          <div class="budget-cat">${b.category}</div>
+          <div class="budget-pct ${pct>=100?'budget-over':pct>=80?'budget-warn':''}">${fmt(b.monthlyLimit)}</div>
+        </div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:${pct.toFixed(1)}%;background:${barColor}"></div></div>
+        <div class="budget-amounts"><span style="color:var(--text3)">This month: ${fmt(spent)} spent</span><span style="color:var(--text3)">${pct>=100?'<span style="color:var(--rose)">Over budget!</span>':fmt(b.monthlyLimit-spent)+' left'}</span></div>
+      </div>`;
+    });
+    html += `</div>
+    <button class="btn-primary" style="margin-top:12px;background:var(--bg3);color:var(--text);border:1px solid var(--border);box-shadow:none" onclick="openAddDefaultBudget()">➕ Add Category</button>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function openAddDefaultBudget() {
+  editingBudgetId = null;
+  document.getElementById('modal-budget-title').textContent = 'Add Default Budget';
+  document.getElementById('budget-save-btn').textContent = 'Save';
+  document.getElementById('budget-delete-btn').style.display = 'none';
+  document.getElementById('budget-limit').value = '';
+  document.getElementById('budget-period').value = 'monthly';
+  document.getElementById('budget-current-spend').style.display = 'none';
+  document.getElementById('budget-month-selector-group').style.display = 'none'; // default = no target month
+  document.getElementById('budget-target-month').value = '';
+  dismissFormVAI('budget');
+  const vInp = document.getElementById('budget-vai-input'); if(vInp) vInp.value = '';
+  const budgetedCats = db.budgets.filter(b => !b.targetMonth).map(b => b.category);
+  const available = EXPENSE_CATS.filter(c => !budgetedCats.includes(c));
+  document.getElementById('budget-category').innerHTML = (available.length ? available : EXPENSE_CATS).map(c => `<option value="${c}">${c}</option>`).join('');
+  openModal('modal-budget');
+}
+
+// ── Monthly Budget Auto-generation ─────────────────────────────
+/**
+ * Ensure a monthly budget exists for the given YYYY-MM.
+ * If not, copies from default budgets (no targetMonth items).
+ * Called automatically when the budget screen is viewed and on new transactions.
+ */
+function ensureMonthlyBudget(ymStr) {
+  const defaults = getDefaultBudgets();
+  if (!defaults.length) return; // nothing to copy
+  defaults.forEach(def => {
+    const exists = db.budgets.some(b => b.category === def.category && b.targetMonth === ymStr);
+    if (!exists) {
+      db.budgets.push({
+        id: uid(),
+        category: def.category,
+        monthlyLimit: def.monthlyLimit,
+        period: 'monthly',
+        targetMonth: ymStr,
+        autoGenerated: true,
+        createdAt: Date.now()
+      });
+    }
+  });
+  saveDB();
+}
+
+function maybeAutoGenerateBudgetForCurrentMonth() {
+  const now = new Date();
+  const ymStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  ensureMonthlyBudget(ymStr);
+}
+
 function renderBudgetScreen(){
   initBudgetScreen();
+  // Auto-generate monthly budget from defaults if needed
+  const ymViewStr=`${budgetScreenYear}-${String(budgetScreenMonth+1).padStart(2,'0')}`;
+  ensureMonthlyBudget(ymViewStr);
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const SHORT=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const now=new Date();
   // Update label
   const labelEl=document.getElementById('budget-screen-month-label');
   if(labelEl)labelEl.textContent=`${MONTHS[budgetScreenMonth]} ${budgetScreenYear}`;
-  // Render month quick-tabs: all 12 months for the current year, Jan→Dec, scrollable
+  // Render month quick-tabs
   const tabsEl=document.getElementById('budget-screen-month-tabs');
   if(tabsEl){
     let tabs='';
@@ -6915,25 +7479,26 @@ function renderBudgetScreen(){
       const y=budgetScreenYear;
       const isActive=m===budgetScreenMonth&&y===budgetScreenYear;
       const isCurrent=m===now.getMonth()&&y===now.getFullYear();
-      // Dot if any budget data exists for that month
       const ymCheck=`${y}-${String(m+1).padStart(2,'0')}`;
-      const hasBudget=db.budgets.some(b=>!b.targetMonth||b.targetMonth===ymCheck);
+      const hasBudget=db.budgets.some(b=>b.targetMonth===ymCheck||(!b.targetMonth&&(b.period||'monthly')==='monthly'));
       tabs+=`<button onclick="setBudgetScreenMonth(${y},${m})" style="flex-shrink:0;padding:6px 14px;border-radius:99px;border:1.5px solid ${isActive?'var(--blue)':'var(--border)'};background:${isActive?'var(--blue)':'var(--bg2)'};color:${isActive?'#fff':isCurrent?'var(--blue)':'var(--text3)'};font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;position:relative">${SHORT[m]}${isCurrent&&!isActive?'<span style="position:absolute;top:2px;right:2px;width:5px;height:5px;background:var(--blue);border-radius:50%"></span>':''}</button>`;
     }
     tabsEl.innerHTML=tabs;
-    // Scroll active tab into view
     const activeBtn=tabsEl.querySelector('[style*="var(--blue)"]');
     if(activeBtn)setTimeout(()=>activeBtn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}),50);
   }
-  // Get budgets for this month
-  const ymStr=`${budgetScreenYear}-${String(budgetScreenMonth+1).padStart(2,'0')}`;
+  // Get budgets for this month: items with targetMonth=ymViewStr OR default items (no targetMonth)
   const el=document.getElementById('budget-screen-content');if(!el)return;
-  // Relevant budgets: monthly with no targetMonth (applies to all), or targetMonth = ymStr
   const monthBudgets=db.budgets.filter(b=>{
     const p=b.period||'monthly';
     if(p==='yearly')return false;
-    if(!b.targetMonth)return true; // applies to all months
-    return b.targetMonth===ymStr;
+    if(b.targetMonth===ymViewStr)return true;
+    // Also show defaults that have no month-specific override
+    if(!b.targetMonth){
+      const hasOverride=db.budgets.some(o=>o.category===b.category&&o.targetMonth===ymViewStr);
+      return !hasOverride;
+    }
+    return false;
   });
   const ms=`${budgetScreenYear}-${String(budgetScreenMonth+1).padStart(2,'0')}-01`;
   const me=localMonthEnd(budgetScreenYear,budgetScreenMonth);
@@ -6964,25 +7529,29 @@ function renderBudgetScreen(){
     html+=`<div class="card" style="text-align:center;padding:28px 16px">
       <div style="font-size:40px;margin-bottom:12px">📊</div>
       <div style="font-size:14px;font-weight:700;margin-bottom:8px">No budgets for ${MONTHS[budgetScreenMonth]}</div>
-      <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Set spending limits for each category to track your monthly budget.</div>
-      <button class="btn-primary" onclick="openBudgetAddForMonth()" style="width:auto;padding:10px 24px">➕ Add Budget Item</button>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Set spending limits for each category to track your monthly budget, or add categories to your Default Template to auto-fill each month.</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-primary" onclick="openBudgetAddForMonth()" style="width:auto;padding:10px 20px">➕ This Month Only</button>
+        <button class="btn-primary btn-secondary" onclick="switchBudgetMainTab('default')" style="width:auto;padding:10px 20px">🗂 Edit Default</button>
+      </div>
     </div>`;
   } else {
     html+=`<div class="card">`;
     monthBudgets.sort((a,b)=>{
-      const sa=getBudgetSpend(a.category,'monthly',ymStr)/a.monthlyLimit;
-      const sb=getBudgetSpend(b.category,'monthly',ymStr)/b.monthlyLimit;
+      const sa=getBudgetSpend(a.category,'monthly',ymViewStr)/a.monthlyLimit;
+      const sb=getBudgetSpend(b.category,'monthly',ymViewStr)/b.monthlyLimit;
       return sb-sa;
     }).forEach(b=>{
-      const spent=getBudgetSpend(b.category,'monthly',ymStr);
+      const spent=getBudgetSpend(b.category,'monthly',ymViewStr);
       const pct=Math.min(100,(spent/b.monthlyLimit)*100);
       const barColor=pct>=100?'var(--rose)':pct>=80?'var(--amber)':'var(--emerald)';
       const projMulti=isCurrentMonth&&daysDone>0?daysTotal/daysDone:1;
       const proj=isCurrentMonth&&daysDone<daysTotal?spent*projMulti:spent;
       const projWarn=isCurrentMonth&&proj>b.monthlyLimit&&pct<100;
+      const isAutoGen=!b.targetMonth||b.autoGenerated;
       html+=`<div class="budget-item" onclick="openEditBudget('${b.id}')">
         <div class="budget-item-row">
-          <div class="budget-cat">${b.category}${!b.targetMonth?'':''}</div>
+          <div class="budget-cat">${b.category}${isAutoGen&&!b.targetMonth?'<span style="font-size:9px;color:var(--text3);background:var(--bg3);border-radius:4px;padding:1px 5px;margin-left:5px">default</span>':''}</div>
           <div class="budget-pct ${pct>=100?'budget-over':pct>=80?'budget-warn':''}">${pct.toFixed(0)}%</div>
         </div>
         <div class="budget-bar-wrap"><div class="budget-bar" style="width:${pct.toFixed(1)}%;background:${barColor}"></div></div>
@@ -8359,7 +8928,7 @@ function renderRecurringList(){
         ${appliedCount>0?`<span style="font-size:10px;color:var(--text3)">${appliedCount} applied</span>`:''}
       </div>
       <div class="recur-actions" onclick="event.stopPropagation()">
-        <button class="recur-btn apply" onclick="applyRecurringNow('${r.id}')">▶ Apply Now</button>
+        <button class="recur-btn apply" onclick="applyRecurringNow('${r.id}')">💰 Pay Now</button>
         <button class="recur-btn sched" onclick="openRecurringSchedule('${r.id}')">📊 Schedule</button>
         <button class="recur-btn pause" onclick="toggleRecurPause('${r.id}')">${isPaused?'▶ Resume':'⏸ Pause'}</button>
         <button class="recur-btn del" onclick="deleteRecurring('${r.id}')">🗑</button>
@@ -8462,7 +9031,7 @@ function toggleRecurPause(id){
   saveDB();renderGoalsScreen();updateRecurringBadge();
   showToast(r.status==='paused'?'Recurring paused ⏸':'Recurring resumed ▶','success');
 }
-function applyRecurringNow(id){
+function applyRecurringNow(id,txFee=0){
   const r=db.recurring.find(r=>r.id===id);if(!r||r.status==='paused')return;
   const acc=db.accounts.find(a=>a.id===r.accountId);
   if(r.type==='expense'&&acc&&acc.balance<r.amount){
@@ -8470,9 +9039,18 @@ function applyRecurringNow(id){
   }
   const tx={id:uid(),type:r.type,amount:r.amount,category:r.category,accountId:r.accountId,date:today(),desc:r.name,recurringId:r.id,createdAt:Date.now()};
   db.transactions.unshift(tx);applyTransaction(tx);
+  // Record fee as separate transaction if provided
+  if(txFee>0){
+    if(acc)acc.balance-=txFee;
+    const feeTx={id:uid(),type:'expense',amount:txFee,category:'💳 Fees',accountId:r.accountId,date:today(),desc:`Transaction Fee: ${r.name}`,recurringId:r.id,createdAt:Date.now()};
+    db.transactions.unshift(feeTx);
+    addLog('created',`Transaction fee: ${r.name} ${fmt(txFee)}`,feeTx.id,'transaction');
+    showToast(`✅ ${r.name}: ${fmt(r.amount)} applied + ${fmt(txFee)} fee recorded!`,'success');
+  } else {
+    showToast(`✅ ${r.name}: ${fmt(r.amount)} applied!`,'success');
+  }
   r.lastApplied=today();
   saveDB();renderHome();renderTransactions();renderGoalsScreen();
-  showToast(`✅ ${r.name}: ${fmt(r.amount)} applied!`,'success');
 }
 function applyDueRecurring(){
   // Called on app load — auto-apply any overdue recurring rules
@@ -9735,6 +10313,8 @@ document.getElementById('export-period')?.addEventListener('change',updateExport
 document.getElementById('export-type')?.addEventListener('change',updateExportPreview);
 renderHome();
 setTimeout(checkOnboarding,600);
+setTimeout(checkPatchBadge,800);
+setTimeout(maybeAutoGenerateBudgetForCurrentMonth,1200);
 renderVAISettingsSummary();
 </script>
 </body>
