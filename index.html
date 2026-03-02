@@ -778,11 +778,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 /* ══════════════════════════════
    REPORTS
 ══════════════════════════════ */
-.report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-@media(min-width:400px){ .report-grid { grid-template-columns: repeat(4, 1fr); } }
-.report-stat { text-align: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; min-width: 0; overflow: hidden; }
-.report-stat .rs-val { font-family: var(--mono); font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.report-stat .rs-label { font-size: 9px; color: var(--text3); margin-top: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; }
+.report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.report-stat { text-align: center; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 10px 14px; min-width: 0; overflow: hidden; }
+.report-stat .rs-val { font-family: var(--mono); font-size: 17px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.report-stat .rs-label { font-size: 9px; color: var(--text3); margin-top: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; white-space: nowrap; }
 #recording-banner { position:fixed; top:0; left:0; right:0; z-index:9999; background:var(--rose); color:#fff; padding:8px 16px; display:none; align-items:center; gap:8px; font-size:12px; font-weight:700; justify-content:center; }
 #recording-banner.show { display:flex; }
 .rec-pulse { width:10px; height:10px; border-radius:50%; background:#fff; animation:pulse-ring 1.2s infinite; flex-shrink:0; }
@@ -1059,14 +1058,81 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .qr-info { flex: 1; min-width: 0; }
 .qr-name { font-size: 13px; font-weight: 700; }
 .qr-type { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+/* ── QR CARD (Received tab) ── */
+.qr-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: border-color .2s var(--ease), box-shadow .2s var(--ease); }
+.qr-card:active { transform: scale(.99); }
+.qr-header { display: flex; align-items: center; gap: 12px; padding: 14px 15px 12px; }
+.qr-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.qr-info { flex: 1; min-width: 0; }
+.qr-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qr-sub { font-size: 11px; color: var(--text3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qr-img-wrap { display: flex; justify-content: center; padding: 8px 20px 16px; }
+.qr-img-wrap img { width: 180px; height: 180px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
+.qr-actions { display: flex; gap: 8px; padding: 0 14px 14px; }
+.qr-btn { flex: 1; padding: 9px 6px; border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: all .15s; }
+.qr-btn.present  { background: var(--blue-bg); color: var(--blue-l); border: 1px solid rgba(59,130,246,.25); }
+.qr-btn.download { background: var(--emerald-bg); color: var(--emerald-l); border: 1px solid rgba(16,185,129,.25); }
+.qr-btn.delete   { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+.qr-btn:active { transform: scale(.96); opacity: .85; }
+
+/* ── QR CONTACT CARD (Contacts tab) ── */
+.qrc-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: border-color .2s; }
+.qrc-header { display: flex; align-items: center; gap: 12px; padding: 14px 15px 12px; }
+.qrc-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; font-weight: 700; overflow: hidden; }
+.qrc-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+/* Profile image upload circle in modal */
+.profile-img-upload { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 16px; }
+.profile-img-circle { width: 72px; height: 72px; border-radius: 50%; background: var(--bg3); border: 2px dashed var(--border2); display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; overflow: hidden; position: relative; transition: border-color .15s; flex-shrink: 0; }
+.profile-img-circle img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+.profile-img-circle input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.profile-img-circle.has-img { border-color: var(--blue); border-style: solid; }
+.profile-img-label { font-size: 11px; color: var(--text3); text-align: center; }
+.profile-img-remove { font-size: 11px; color: var(--rose); background: none; border: none; cursor: pointer; font-family: var(--font); padding: 0; display: none; }
+.qrc-info { flex: 1; min-width: 0; }
+.qrc-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.qrc-type { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.qrc-img-wrap { display: flex; justify-content: center; padding: 4px 20px 14px; }
+.qrc-img-wrap img { width: 160px; height: 160px; object-fit: contain; border-radius: 12px; background: #fff; padding: 8px; box-shadow: 0 2px 12px rgba(0,0,0,.3); }
+.qrc-actions { display: flex; gap: 8px; padding: 0 14px 14px; }
+
+/* ── QR Sub-tabs ── */
+.qr-subtabs { display: flex; gap: 8px; padding: 0 16px 12px; }
+.qr-subtab { flex: 1; padding: 9px 0; border-radius: 10px; border: 1px solid var(--border); background: var(--bg3); color: var(--text2); font-size: 13px; font-weight: 600; font-family: var(--font); cursor: pointer; transition: all .15s; }
+.qr-subtab.active { background: var(--blue-bg); border-color: rgba(59,130,246,.4); color: var(--blue-l); }
+
+/* ── QR FULLSCREEN PRESENTER ── */
+.qr-fullscreen { position: fixed; inset: 0; z-index: 9000; background: #000; display: none; flex-direction: column; align-items: center; justify-content: space-between; padding: 0; }
+.qr-fullscreen.open { display: flex; }
+.qr-fs-top { display: flex; flex-direction: column; align-items: center; padding: 36px 24px 0; flex-shrink: 0; }
+.qr-fs-name { font-size: 20px; font-weight: 800; color: #fff; text-align: center; }
+.qr-fs-sub  { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 4px; text-align: center; }
+.qr-fs-img-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100%; position: relative; }
+.qr-fs-img  { position: relative; display: flex; align-items: center; justify-content: center; }
+.qr-fs-img img { width: min(72vw, 300px); height: min(72vw, 300px); object-fit: contain; border-radius: 18px; background: #fff; padding: 12px; box-shadow: 0 0 60px rgba(255,255,255,.15); transition: transform .25s cubic-bezier(0.4,0,0.2,1); transform-origin: center; display: block; }
+.qr-fs-zoom-overlay { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; background: rgba(0,0,0,.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.15); border-radius: 40px; padding: 6px 14px; }
+.qr-fs-zoom-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.2); color: #fff; font-size: 20px; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s; flex-shrink: 0; }
+.qr-fs-zoom-btn:active { background: rgba(255,255,255,.3); }
+.qr-fs-zoom-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.8); min-width: 40px; text-align: center; font-family: var(--mono); }
+.qr-fs-bottom { display: flex; gap: 10px; padding: 20px 24px 32px; flex-shrink: 0; width: 100%; max-width: 360px; }
+.qr-fs-dl    { flex: 1; padding: 14px 0; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); border-radius: 14px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; font-family: var(--font); transition: background .15s; }
+.qr-fs-close { flex: 1; padding: 14px 0; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 14px; color: rgba(255,255,255,.65); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); transition: background .15s; }
+.qr-fs-dl:active { background: rgba(255,255,255,.25); }
+.qr-fs-close:active { background: rgba(255,255,255,.12); }
 .voice-btn { width: 42px; height: 42px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; flex-shrink: 0; transition: all .15s; }
 .voice-btn.listening { background: var(--rose-bg); border-color: var(--rose); animation: pulse-ring 1.2s infinite; }
 @keyframes pulse-ring { 0%{transform:scale(1);opacity:1} 70%{transform:scale(1.15);opacity:.4} 100%{transform:scale(1);opacity:0} }
 .voice-status { font-size: 11px; color: var(--blue-l); text-align: center; padding: 6px 0; display: none; }
-.file-zone { border: 2px dashed var(--border2); border-radius: 11px; text-align: center; transition: all .15s; position: relative; background: var(--bg3); }
-.fz-preview { max-height: 120px; border-radius: 8px; object-fit: contain; max-width: 100%; display: block; margin: 0 auto; }
+.file-zone { border: 2px dashed var(--border2); border-radius: 11px; text-align: center; transition: all .15s; position: relative; background: var(--bg3); overflow: hidden; }
+.file-zone.has-file { border-color: var(--blue); border-style: solid; background: var(--blue-bg); }
+.file-zone-label { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 22px 16px; cursor: pointer; gap: 6px; }
+.file-zone-label input[type="file"] { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
+.fz-icon { font-size: 32px; line-height: 1; }
+.fz-text { font-size: 13px; font-weight: 600; color: var(--text); }
+.fz-hint { font-size: 11px; color: var(--text3); }
+.fz-preview { max-height: 140px; border-radius: 8px; object-fit: contain; max-width: 100%; display: block; margin: 0 auto; }
 .fz-fname { font-size: 12px; color: var(--text2); padding: 8px 0 4px; }
-.fz-remove { background: none; border: none; color: var(--rose); font-size: 12px; cursor: pointer; padding: 8px; width: 100%; font-family: var(--font); }
+.fz-remove { background: none; border: none; border-top: 1px solid var(--border); color: var(--rose); font-size: 12px; cursor: pointer; padding: 10px; width: 100%; font-family: var(--font); display: block; }
 .export-row { display: flex; align-items: center; gap: 13px; padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: opacity .15s; }
 .export-row:last-child { border-bottom: none; }
 .export-row:active { opacity: .7; }
@@ -1548,12 +1614,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div class="header">
     <h1>Accounts</h1>
     <div class="header-actions">
-      <button class="icon-btn" onclick="currentAccountsTab==='qr'?openAddQR():openAddAccount()">＋</button>
+      <button class="icon-btn" onclick="currentAccountsTab==='qr'?(currentQRSubTab==='contacts'?openAddQRContact():openAddQR()):openAddAccount()">＋</button>
     </div>
   </div>
   <div class="screen-tabs">
     <button class="screen-tab active" onclick="showAccountsTab('accounts',this)">🏦 Accounts</button>
-    <button class="screen-tab" onclick="showAccountsTab('qr',this)">📲 QR Codes</button>
+    <button class="screen-tab" onclick="showAccountsTab('qr',this)">📲 QR Payments</button>
   </div>
   <div class="scroll-area" id="accounts-list-screen"></div>
 </div>
@@ -1642,7 +1708,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 <div id="screen-reports" class="screen">
   <div class="header"><h1>Reports</h1></div>
   <div class="screen-tabs">
-    <button class="screen-tab active" onclick="showReportsTab('overview',this)">📊 Overview</button>
+    <button class="screen-tab active" onclick="showReportsTab('overview',this)">💸 Expenses</button>
     <button class="screen-tab" onclick="showReportsTab('income',this)">💰 Income</button>
     <button class="screen-tab" onclick="showReportsTab('budget',this)">🎯 Budget</button>
   </div>
@@ -1686,7 +1752,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <div class="settings-card-icon" style="background:var(--emerald-bg)">🆕</div>
         <div style="flex:1">
           <div class="settings-card-title">What's New</div>
-          <div class="settings-card-sub" id="patch-version-label">v5.1 — Latest updates &amp; improvements</div>
+          <div class="settings-card-sub" id="patch-version-label">v1.0 — QR Contacts, Zoom &amp; UI Improvements</div>
         </div>
         <div id="patch-new-dot" style="width:10px;height:10px;border-radius:50%;background:var(--rose);flex-shrink:0;display:none"></div>
         <div style="font-size:18px;color:var(--text3);margin-left:4px">›</div>
@@ -1899,6 +1965,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         </div>
       </div>
       <div class="settings-card-body" style="padding-bottom:8px">
+        <!-- Mic On/Off Toggle -->
+        <div class="privacy-row" style="margin-bottom:10px">
+          <div class="privacy-row-info">
+            <div class="privacy-row-label">🎤 Microphone Access</div>
+            <div class="privacy-row-sub" id="mic-toggle-sub">Enable voice input for Smart AI</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="mic-enabled-toggle" onchange="setMicEnabled(this.checked)">
+            <div class="toggle-track"></div>
+          </label>
+        </div>
         <div style="font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:12px">
           Choose which fields voice AI recognises when adding Payables, Goals, Recurring Rules, Planned Events, and Accounts.
           Assign keywords per field so the parser knows exactly what you mean.
@@ -2491,11 +2568,24 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 <!-- QR FULLSCREEN PRESENTER -->
 <div class="qr-fullscreen" id="qr-fullscreen">
-  <div class="qr-fs-name" id="qr-fs-name"></div>
-  <div class="qr-fs-sub" id="qr-fs-sub"></div>
-  <div class="qr-fs-img"><img id="qr-fs-img" src="" alt="QR Code"></div>
-  <button class="qr-fs-dl" onclick="downloadQRFullscreen()">⬇️ Download QR</button>
-  <button class="qr-fs-close" onclick="closeQRFullscreen()">✕ Close</button>
+  <div class="qr-fs-top">
+    <div class="qr-fs-name" id="qr-fs-name"></div>
+    <div class="qr-fs-sub" id="qr-fs-sub"></div>
+  </div>
+  <div class="qr-fs-img-wrap">
+    <div class="qr-fs-img">
+      <img id="qr-fs-img" src="" alt="QR Code">
+    </div>
+    <div class="qr-fs-zoom-overlay">
+      <button class="qr-fs-zoom-btn" onclick="qrZoom(-1)" title="Zoom Out">−</button>
+      <span class="qr-fs-zoom-label" id="qr-fs-zoom-label">100%</span>
+      <button class="qr-fs-zoom-btn" onclick="qrZoom(+1)" title="Zoom In">＋</button>
+    </div>
+  </div>
+  <div class="qr-fs-bottom">
+    <button class="qr-fs-dl" onclick="downloadQRFullscreen()">⬇️ Download</button>
+    <button class="qr-fs-close" onclick="closeQRFullscreen()">✕ Close</button>
+  </div>
 </div>
 
 <!-- ADD PAYABLE MODAL -->
@@ -2702,15 +2792,15 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <input type="text" class="form-input" id="qr-owner" placeholder="e.g. Juan D. / 09XX XXX XXXX">
     </div>
     <div class="form-group">
-      <label class="form-label">Upload QR Code Image *</label>
+      <label class="form-label">QR Code Image *</label>
       <div class="file-zone" id="qr-upload-zone">
         <label class="file-zone-label" id="qr-upload-label-default">
           <input type="file" id="qr-file-input" accept="image/*" onchange="handleQRUpload(event)">
           <div class="fz-icon">📲</div>
           <div class="fz-text">Tap to upload QR code image</div>
-          <div class="fz-hint">JPG, PNG, GIF supported</div>
+          <div class="fz-hint">JPG, PNG, GIF — max 5MB</div>
         </label>
-        <div id="qr-upload-preview" style="display:none;padding:12px 12px 0">
+        <div id="qr-upload-preview" style="display:none;padding:14px 14px 8px">
           <img id="qr-preview-img" class="fz-preview" style="display:block" alt="">
           <div id="qr-preview-fname" class="fz-fname"></div>
         </div>
@@ -2723,7 +2813,63 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   </div>
 </div>
 
-<!-- ADD/EDIT BUDGET MODAL -->
+<!-- ADD QR CONTACT MODAL -->
+<div class="modal-overlay" id="modal-qr-contact">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-qrc-title">Add QR Contact</div>
+
+    <!-- Profile photo -->
+    <div class="profile-img-upload">
+      <div class="profile-img-circle" id="qrc-profile-circle">
+        <span id="qrc-profile-placeholder">👤</span>
+        <img id="qrc-profile-img" src="" alt="" style="display:none">
+        <input type="file" id="qrc-profile-file" accept="image/*" onchange="handleQRCProfileUpload(event)">
+      </div>
+      <div class="profile-img-label" id="qrc-profile-lbl">Tap to add photo</div>
+      <button class="profile-img-remove" id="qrc-profile-remove" onclick="removeQRCProfile()">✕ Remove photo</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Name *</label>
+      <input type="text" class="form-input" id="qrc-name" placeholder="e.g. Juan dela Cruz, SM Supermarket">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Type</label>
+      <select class="form-input" id="qrc-type">
+        <option value="person">👤 Person</option>
+        <option value="merchant">🏪 Merchant / Store</option>
+        <option value="business">🏢 Business</option>
+        <option value="other">📋 Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Account / Number (Optional)</label>
+      <input type="text" class="form-input" id="qrc-account-info" placeholder="e.g. GCash 09XX XXX XXXX, BPI Savings">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Their QR Code Image *</label>
+      <div class="file-zone" id="qrc-upload-zone">
+        <label class="file-zone-label" id="qrc-upload-label-default">
+          <input type="file" id="qrc-file-input" accept="image/*" onchange="handleQRContactUpload(event)">
+          <div class="fz-icon">📲</div>
+          <div class="fz-text">Tap to upload their QR code</div>
+          <div class="fz-hint">GCash, Maya, Bank QR, etc.</div>
+        </label>
+        <div id="qrc-upload-preview" style="display:none;padding:14px 14px 8px">
+          <img id="qrc-preview-img" class="fz-preview" style="display:block" alt="">
+          <div id="qrc-preview-fname" class="fz-fname"></div>
+        </div>
+        <button type="button" class="fz-remove" id="qrc-remove-btn" style="display:none" onclick="removeQRContactUpload()">✕ Remove QR image</button>
+      </div>
+    </div>
+    <button class="btn-primary" id="qrc-save-btn" onclick="saveQRContact()">Save Contact</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-qr-contact')">Cancel</button>
+    <button class="btn-primary btn-danger" id="qrc-delete-btn" style="display:none;margin-top:8px" onclick="deleteQRContact()">Delete Contact</button>
+  </div>
+</div>
+
+
 <div class="modal-overlay" id="modal-budget">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -2973,12 +3119,28 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
     <div class="form-group">
       <label class="form-label">Frequency *</label>
-      <select class="form-input" id="recur-freq">
+      <select class="form-input" id="recur-freq" onchange="onRecurFreqChange()">
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
         <option value="monthly" selected>Monthly</option>
+        <option value="semimonthly">Semi-Monthly (twice a month)</option>
         <option value="yearly">Yearly</option>
       </select>
+    </div>
+    <!-- Semi-monthly date pickers -->
+    <div class="form-group" id="recur-semimonthly-group" style="display:none">
+      <label class="form-label">Semi-Monthly Dates <span style="font-size:10px;color:var(--text3);font-weight:400">(Day of month for each cutoff)</span></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:600">1ST CUTOFF</div>
+          <input type="number" class="form-input" id="recur-semi-day1" placeholder="e.g. 15" min="1" max="31" value="15">
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:600">2ND CUTOFF</div>
+          <input type="number" class="form-input" id="recur-semi-day2" placeholder="e.g. 30" min="1" max="31" value="30">
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px;line-height:1.6">💡 If the date exceeds the month's last day (e.g. 31 in February), it auto-adjusts to the last day of that month.</div>
     </div>
     <div class="form-group">
       <label class="form-label">Start Date *</label>
@@ -3025,13 +3187,94 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <button class="btn-primary btn-success" id="recur-schedule-apply-btn" onclick="" style="flex:1">💰 Pay Now</button>
       <button class="btn-primary btn-secondary" style="flex:1" onclick="closeModal('modal-recur-schedule')">Close</button>
     </div>
-    <div class="form-group" style="margin-top:10px">
-      <label class="form-label">Transaction Fee <span style="font-size:10px;color:var(--text3);font-weight:400">(Optional)</span></label>
-      <input type="number" class="form-input" id="recur-schedule-fee" placeholder="0.00" min="0" step="0.01">
-      <div style="font-size:11px;color:var(--text3);margin-top:4px">Fee recorded as a separate expense transaction.</div>
-    </div>
     <button class="btn-primary btn-secondary" id="recur-schedule-pause-btn" style="margin-top:8px" onclick="">⏸ Pause Rule</button>
     <button class="btn-primary btn-secondary" id="recur-schedule-edit-btn" style="margin-top:8px" onclick="">✏️ Edit Rule</button>
+  </div>
+</div>
+
+<!-- RECURRING PAY NOW MODAL (Expense) -->
+<div class="modal-overlay" id="modal-recur-pay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="recur-pay-title">💰 Pay Recurring</div>
+    <div id="recur-pay-detail" style="margin-bottom:14px"></div>
+    <!-- Occurrences to pay -->
+    <div class="form-group">
+      <label class="form-label">Occurrences to Pay</label>
+      <div id="recur-pay-occurrences" style="display:flex;flex-direction:column;gap:6px;margin-bottom:4px"></div>
+      <div id="recur-pay-selection-note" style="font-size:11px;color:var(--text3);background:var(--blue-bg);border-radius:8px;padding:8px 10px;margin-top:4px;display:none"></div>
+    </div>
+    <!-- Payment Amount -->
+    <div class="form-group">
+      <label class="form-label">Payment Amount *</label>
+      <input type="number" class="form-input" id="recur-pay-amount" placeholder="0.00" min="0" step="0.01" oninput="checkRecurPayWarning()">
+      <div id="recur-pay-balance-warning" class="balance-warning" style="margin-top:6px;display:none"></div>
+    </div>
+    <!-- Pay From Account -->
+    <div class="form-group">
+      <label class="form-label">Pay From Account *</label>
+      <select class="form-input" id="recur-pay-account" onchange="checkRecurPayWarning()"></select>
+    </div>
+    <!-- Payment Date -->
+    <div class="form-group">
+      <label class="form-label">Payment Date</label>
+      <input type="date" class="form-input" id="recur-pay-date">
+    </div>
+    <!-- Transaction Fee -->
+    <div class="form-group">
+      <label class="form-label">Transaction Fee <span style="font-size:10px;color:var(--text3);font-weight:400">(Optional — e.g. GCash, bank fee)</span></label>
+      <input type="number" class="form-input" id="recur-pay-tx-fee" placeholder="0.00" min="0" step="0.01" oninput="checkRecurPayWarning()">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">⚠️ Recorded as a separate expense transaction.</div>
+    </div>
+    <!-- Late Fee -->
+    <div class="form-group">
+      <label class="form-label">Late / Penalty Fee <span style="font-size:10px;color:var(--text3);font-weight:400">(Optional)</span></label>
+      <input type="number" class="form-input" id="recur-pay-late-fee" placeholder="0.00" min="0" step="0.01" oninput="checkRecurPayWarning()">
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">⚠️ Recorded as a separate Fees expense.</div>
+    </div>
+    <!-- Reference / Notes -->
+    <div class="form-group">
+      <label class="form-label">Reference / Notes</label>
+      <input type="text" class="form-input" id="recur-pay-ref" placeholder="Optional — e.g. GCash ref, receipt no.">
+    </div>
+    <button class="btn-primary btn-success" onclick="executeRecurPay()">✅ Record Payment</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-recur-pay')">Cancel</button>
+  </div>
+</div>
+
+<!-- RECURRING RECEIVED MODAL (Income) -->
+<div class="modal-overlay" id="modal-recur-receive">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="recur-receive-title">✅ Mark as Received</div>
+    <div id="recur-receive-detail" style="margin-bottom:14px"></div>
+    <!-- Which occurrence -->
+    <div class="form-group">
+      <label class="form-label">Which Occurrence?</label>
+      <div id="recur-receive-occurrences" style="display:flex;flex-direction:column;gap:6px;margin-bottom:4px"></div>
+    </div>
+    <!-- Amount Received -->
+    <div class="form-group">
+      <label class="form-label">Amount Received *</label>
+      <input type="number" class="form-input" id="recur-receive-amount" placeholder="0.00" min="0" step="0.01">
+    </div>
+    <!-- Receive Into Account -->
+    <div class="form-group">
+      <label class="form-label">Receive Into Account *</label>
+      <select class="form-input" id="recur-receive-account"></select>
+    </div>
+    <!-- Date Received -->
+    <div class="form-group">
+      <label class="form-label">Date Received</label>
+      <input type="date" class="form-input" id="recur-receive-date">
+    </div>
+    <!-- Notes -->
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <input type="text" class="form-input" id="recur-receive-ref" placeholder="Optional — e.g. payroll ref, sender">
+    </div>
+    <button class="btn-primary btn-success" onclick="executeRecurReceive()">✅ Mark as Received</button>
+    <button class="btn-primary btn-secondary" style="margin-top:8px" onclick="closeModal('modal-recur-receive')">Cancel</button>
   </div>
 </div>
 
@@ -3230,7 +3473,7 @@ function getThemeColors() {
 
 // ===== DATA =====
 const DB_KEY='finflow_v3';
-let db={accounts:[],transactions:[],planned:[],logs:[],settings:{currency:'₱|PHP'},payables:[],qrCodes:[],budgets:[],goals:[],recurring:[],aiPatterns:{}};
+let db={accounts:[],transactions:[],planned:[],logs:[],settings:{currency:'₱|PHP'},payables:[],qrCodes:[],qrContacts:[],budgets:[],goals:[],recurring:[],aiPatterns:{}};
 
 // Default privacy settings — all off (amounts visible)
 const PRIV_DEFAULTS={homeTotal:false,homeSummary:false,chips:false,cards:false,accounts:false,transactions:false};
@@ -3286,7 +3529,7 @@ function getCardGradient(color) {
 }
 
 function loadDB(){
-  try{const d=localStorage.getItem(DB_KEY);if(d){const p=JSON.parse(d);db={...db,...p};if(!db.planned)db.planned=[];if(!db.logs)db.logs=[];if(!db.settings)db.settings={currency:'₱|PHP'};if(!db.payables)db.payables=[];if(!db.qrCodes)db.qrCodes=[];if(!db.budgets)db.budgets=[];if(!db.goals)db.goals=[];if(!db.recurring)db.recurring=[];if(!db.aiPatterns)db.aiPatterns={};}
+  try{const d=localStorage.getItem(DB_KEY);if(d){const p=JSON.parse(d);db={...db,...p};if(!db.planned)db.planned=[];if(!db.logs)db.logs=[];if(!db.settings)db.settings={currency:'₱|PHP'};if(!db.payables)db.payables=[];if(!db.qrCodes)db.qrCodes=[];if(!db.qrContacts)db.qrContacts=[];if(!db.budgets)db.budgets=[];if(!db.goals)db.goals=[];if(!db.recurring)db.recurring=[];if(!db.aiPatterns)db.aiPatterns={};}
   // Migrate from v2 key
   const old=localStorage.getItem('finflow_v2');
   if(old&&!db.accounts.length){try{const o=JSON.parse(old);db={...db,accounts:o.accounts||[],transactions:o.transactions||[],planned:o.planned||[],logs:o.logs||[],settings:o.settings||db.settings};}catch(e){}}
@@ -3376,7 +3619,10 @@ function filterByPeriod(arr,period){const{start,end}=getDateRange(period);return
 let currentAccountsTab='accounts';
 let currentPayablesTab='active';
 let editingPayableId=null, payingPayableId=null, schedulingPayableId=null;
+let payingRecurId=null; // for the recurring pay/receive modal
 let editingQRId=null, qrUploadData=null, qrFSData=null;
+let editingQRContactId=null, qrcUploadData=null, qrcProfileData=null;
+let currentQRSubTab='received'; // 'received' | 'contacts'
 
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -3393,7 +3639,7 @@ function showScreen(name){
   else if(name==='reports'){renderReports();showReportsTab(currentReportsTab,document.querySelector('#screen-reports .screen-tab'));}
   else if(name==='payables'){renderPayables();updatePayablesBadge();}
   else if(name==='budget'){maybeAutoGenerateBudgetForCurrentMonth();renderBudgetScreen();if(budgetMainTab==='default')renderDefaultBudget();}
-  else if(name==='settings'){loadPrivacyToggles();updateThemeUI();checkPatchBadge();}
+  else if(name==='settings'){loadPrivacyToggles();updateThemeUI();checkPatchBadge();updateMicToggleUI();}
   if(typeof _vaiOnScreenChange==='function') _vaiOnScreenChange(name);
 }
 function showReportsTab(tab,btn){
@@ -4189,36 +4435,73 @@ function cfCollectEvents(endDate) {
   // 2. Active recurring transactions (project occurrences into the window)
   db.recurring.filter(r => r.status === 'active' && r.type !== 'transfer').forEach(r => {
     if (r.endDate && r.endDate < todayStr) return;
-    const start = new Date(Math.max(new Date(todayStr), new Date(r.startDate || todayStr)));
-    const end = new Date(endDate);
+
+    // Build set of months where this recurring was already applied (has matching transaction)
+    const appliedTxDates = new Set(
+      db.transactions.filter(tx => tx.recurringId === r.id).map(tx => tx.date)
+    );
+    // Also track month-keys of applied transactions to skip whole months
+    const appliedMonthKeys = new Set(
+      db.transactions.filter(tx => tx.recurringId === r.id).map(tx => tx.date.substring(0, 7))
+    );
+
+    const start = new Date(Math.max(new Date(todayStr + 'T00:00:00'), new Date(r.startDate ? r.startDate + 'T00:00:00' : todayStr + 'T00:00:00')));
+    const end = new Date(endDate + 'T23:59:59');
     let cur = new Date(start);
     // advance to the first occurrence AFTER today
     if (r.frequency === 'daily')   cur.setDate(cur.getDate() + 1);
     else if (r.frequency === 'weekly') cur.setDate(cur.getDate() + 7);
     else if (r.frequency === 'monthly') {
-      // next occurrence: same day next month (or this month if not yet passed)
-      const startDay = new Date((r.startDate || todayStr) + 'T00:00:00').getDate();
+      // next occurrence: correct due day of month (use dueDay or startDate day)
+      const startDay = r.dueDay || new Date(r.startDate + 'T00:00:00').getDate();
       cur = new Date(start.getFullYear(), start.getMonth(), startDay);
-      if (cur <= new Date(todayStr + 'T00:00:00')) cur.setMonth(cur.getMonth() + 1);
+      if (cur <= start) cur = new Date(cur.getFullYear(), cur.getMonth() + 1, startDay);
+    }
+    else if (r.frequency === 'semimonthly') {
+      const d1=r.semiDay1||15, d2=r.semiDay2||30;
+      const nowD=new Date(todayStr+'T00:00:00');
+      for(let mo=0;mo<6;mo++){
+        const yr=nowD.getFullYear()+Math.floor((nowD.getMonth()+mo)/12);
+        const mt=(nowD.getMonth()+mo)%12;
+        for(const d of [d1,d2].sort((a,b)=>a-b)){
+          const lastDay=new Date(yr,mt+1,0).getDate();
+          const actualD=Math.min(d,lastDay);
+          const ds2=`${yr}-${String(mt+1).padStart(2,'0')}-${String(actualD).padStart(2,'0')}`;
+          if(ds2>todayStr&&ds2<=endDate&&ds2>=r.startDate&&!appliedTxDates.has(ds2)){
+            events.push({date:ds2,type:r.type,amount:r.amount,label:r.name+' (semi-monthly)',source:'recurring',id:r.id+'-'+ds2});
+          }
+        }
+      }
+      return;
     }
     else if (r.frequency === 'yearly') { cur.setFullYear(cur.getFullYear() + 1); }
 
     let safety = 0;
     while (cur <= end && safety++ < 60) {
-      const ds = cur.toISOString().split('T')[0];
+      // Use local date string to avoid timezone offset shifting the date
+      const ds = localDate(cur);
       if (ds > todayStr && ds <= endDate) {
-        events.push({
-          date: ds,
-          type: r.type,
-          amount: r.amount,
-          label: r.name + ' (recurring)',
-          source: 'recurring',
-          id: r.id + '-' + ds
-        });
+        // Skip if a transaction with this recurringId already exists for this month (already paid)
+        const monthKey = ds.substring(0, 7);
+        const alreadyPaid = appliedMonthKeys.has(monthKey) ||
+          (r.frequency === 'monthly' && appliedTxDates.has(ds));
+        if (!alreadyPaid) {
+          events.push({
+            date: ds,
+            type: r.type,
+            amount: r.amount,
+            label: r.name + ' (recurring)',
+            source: 'recurring',
+            id: r.id + '-' + ds
+          });
+        }
       }
       if (r.frequency === 'daily')   cur.setDate(cur.getDate() + 1);
       else if (r.frequency === 'weekly')  cur.setDate(cur.getDate() + 7);
-      else if (r.frequency === 'monthly') cur.setMonth(cur.getMonth() + 1);
+      else if (r.frequency === 'monthly') {
+        const dueDay = r.dueDay || new Date(r.startDate + 'T00:00:00').getDate();
+        cur = new Date(cur.getFullYear(), cur.getMonth() + 1, dueDay);
+      }
       else if (r.frequency === 'yearly')  cur.setFullYear(cur.getFullYear() + 1);
     }
   });
@@ -4654,9 +4937,9 @@ function renderHomeMiniCal(yearOverride, monthOverride){
     else if(tx.type==='income')dayData[tx.date].inc+=tx.amount;
   });
 
-  // Planned/overdue per day
+  // Planned/overdue per day — exclude payable-linked items (payables already get their own amber dot)
   const dayPlannedMap={};
-  plannedInMonth.forEach(p=>{
+  plannedInMonth.filter(p=>!p.payableId).forEach(p=>{
     if(!dayPlannedMap[p.date])dayPlannedMap[p.date]={planned:0,overdue:0};
     if(p.status==='pending'&&p.date<todayStr)dayPlannedMap[p.date].overdue++;
     else if(p.status==='pending')dayPlannedMap[p.date].planned++;
@@ -4673,12 +4956,15 @@ function renderHomeMiniCal(yearOverride, monthOverride){
     } catch(e){}
   });
 
-  // Recurring dots — ONLY unapplied/missed upcoming occurrences
+  // Recurring dots — ONLY unapplied/missed upcoming occurrences (not already-applied = already showing in txInMonth)
+  const appliedRecurDates=new Set(db.transactions.filter(t=>t.recurringId&&t.date>=ms&&t.date<=me).map(t=>t.date));
   const dayRecurMap={};
   db.recurring.filter(r=>r.status!=='paused').forEach(r=>{
     try {
       const sched=generateRecurringSchedule(r);
       sched.filter(s=>s.status==='upcoming'||s.status==='current'||s.status==='missed').forEach(s=>{
+        // skip if a recurring transaction was already recorded on this exact date
+        if(appliedRecurDates.has(s.date)) return;
         if(s.date>=ms&&s.date<=me) dayRecurMap[s.date]=(dayRecurMap[s.date]||0)+1;
       });
     } catch(e){}
@@ -5410,13 +5696,13 @@ function renderReports(){
   else if(currentReportPeriod==='yearly'){daysInPeriod=365;}
   const burn=daysInPeriod>0?expense/daysInPeriod:0;
   const burnHtml=expense>0
-    ?`<div class="rs-val" style="color:var(--amber)">${fmt(burn)}<span style="font-size:8px;font-weight:400;color:var(--text3)">/day</span></div>`
-    :`<div class="rs-val" style="color:var(--text3);font-size:12px">${getCurrency()}0.00<span style="font-size:8px;font-weight:400">/day</span></div>`;
+    ?`<div class="rs-val" style="color:var(--amber)">${fmt(burn)}<span style="font-size:10px;font-weight:500;color:var(--text3)">/day</span></div>`
+    :`<div class="rs-val" style="color:var(--text3)">${getCurrency()}0.00<span style="font-size:10px;font-weight:400">/day</span></div>`;
   document.getElementById('report-stats').innerHTML=`
-    <div class="report-stat card-sm"><div class="rs-val" style="color:var(--income)">${fmt(income)}</div><div class="rs-label">Income</div></div>
-    <div class="report-stat card-sm"><div class="rs-val" style="color:var(--expense)">${fmt(expense)}</div><div class="rs-label">Expenses</div></div>
-    <div class="report-stat card-sm"><div class="rs-val" style="color:${net>=0?'var(--accent2)':'var(--danger)'}">${fmt(net)}</div><div class="rs-label">Net ${net>=0?'💚':'🔴'}</div></div>
-    <div class="report-stat card-sm" title="Average daily spending (excl. transfers)">${burnHtml}<div class="rs-label">🔥 Daily Burn</div></div>
+    <div class="report-stat"><div class="rs-val" style="color:var(--income)">${fmt(income)}</div><div class="rs-label">💰 Income</div></div>
+    <div class="report-stat"><div class="rs-val" style="color:var(--expense)">${fmt(expense)}</div><div class="rs-label">💸 Expenses</div></div>
+    <div class="report-stat"><div class="rs-val" style="color:${net>=0?'var(--accent2)':'var(--danger)'}">${fmt(net)}</div><div class="rs-label">📊 Net ${net>=0?'💚':'🔴'}</div></div>
+    <div class="report-stat" title="Average daily spending (excl. transfers)">${burnHtml}<div class="rs-label">🔥 Daily Burn</div></div>
   `;
   renderBarChart();
   renderPieChart(txs.filter(t=>t.type==='expense'));
@@ -5675,7 +5961,7 @@ function executeClearData(){
   // Clear all finflow_* keys in localStorage
   Object.keys(localStorage).filter(k=>k.startsWith('finflow')).forEach(k=>localStorage.removeItem(k));
   localStorage.removeItem('finflow_pre_demo');
-  db={accounts:[],transactions:[],planned:[],logs:[],settings:{},payables:[],qrCodes:[],budgets:[],goals:[],recurring:[]};
+  db={accounts:[],transactions:[],planned:[],logs:[],settings:{},payables:[],qrCodes:[],qrContacts:[],budgets:[],goals:[],recurring:[]};
   saveDB();
   renderHome();renderAccountsScreen();renderTransactions();renderPayables();
   updateOverdueBadge();updatePayablesBadge();
@@ -6012,10 +6298,16 @@ function generateRecurringSchedule(r) {
   const endDate=r.endDate;
   const MAX=48; // max 48 occurrences to show
 
-  // Build set of dates where this recurring has been applied
+  // Build set of dates where this recurring has been applied — check recurringDate first, fall back to transaction date
   const appliedDates=new Set(
-    db.transactions.filter(tx=>tx.recurringId===r.id).map(tx=>tx.date)
+    db.transactions.filter(tx=>tx.recurringId===r.id).map(tx=>tx.recurringDate||tx.date)
   );
+
+  // Helper: clamp day to last day of a given month
+  function clampDay(year, month, day) {
+    const lastDay = new Date(year, month + 1, 0).getDate();
+    return Math.min(day, lastDay);
+  }
 
   // Helper: get day of month (use dueDay if set and monthly, else startDate day)
   const dayOfMonth=(r.frequency==='monthly'&&r.dueDay)?r.dueDay:start.getDate();
@@ -6028,12 +6320,46 @@ function generateRecurringSchedule(r) {
     if(iter<start) iter=new Date(start.getFullYear(),start.getMonth()+1,r.dueDay);
   }
 
+  // Semi-monthly: generate sorted list of (year,month,day) pairs
+  if(r.frequency==='semimonthly'){
+    const d1=r.semiDay1||15, d2=r.semiDay2||30;
+    // Find the first occurrence >= start
+    let y=start.getFullYear(), m=start.getMonth();
+    // Build all pairs for this month and onwards
+    for(let safety=0;safety<200&&schedule.length<MAX;safety++){
+      const days=[d1,d2].map(d=>clampDay(y,m,d)).sort((a,b)=>a-b);
+      for(const d of days){
+        if(schedule.length>=MAX) break;
+        const dateObj=new Date(y,m,d);
+        const dateStr=dateObj.getFullYear()+'-'+String(dateObj.getMonth()+1).padStart(2,'0')+'-'+String(dateObj.getDate()).padStart(2,'0');
+        if(dateStr<r.startDate) continue;
+        if(endDate&&dateStr>endDate) break;
+        const isApplied=appliedDates.has(dateStr);
+        const monthKey=dateStr.substring(0,7);
+        const isAppliedThisMonth=!isApplied&&[...appliedDates].some(ad=>ad.startsWith(monthKey));
+        let status;
+        if(isApplied||isAppliedThisMonth)status='applied';
+        else if(r.status==='paused')status='paused';
+        else if(dateStr<todayStr)status='missed';
+        else if(dateStr===todayStr)status='current';
+        else status='upcoming';
+        schedule.push({date:dateStr,status});
+      }
+      if(!endDate){
+        const futureCount=schedule.filter(s=>s.status==='upcoming'||s.status==='current').length;
+        if(futureCount>=12) break;
+      }
+      m++;if(m>11){m=0;y++;}
+    }
+    return schedule;
+  }
+
   for(let i=0;i<MAX;i++){
     const dateStr=iter.getFullYear()+'-'+String(iter.getMonth()+1).padStart(2,'0')+'-'+String(iter.getDate()).padStart(2,'0');
     if(endDate&&dateStr>endDate) break;
 
     const isApplied=appliedDates.has(dateStr);
-    // Also check if any transaction in this month has the recurringId (for auto-applied)
+    // Also check if any transaction in this month has the recurringId with recurringDate in this month
     const monthKey=dateStr.substring(0,7);
     const isAppliedThisMonth=!isApplied&&[...appliedDates].some(d=>d.startsWith(monthKey));
 
@@ -6099,10 +6425,13 @@ function openRecurringSchedule(id){
       else if(s.status==='missed'){badge=`<span class="sched-badge missed">⚠ Missed</span>`;rowClass='sched-overdue';}
       else if(s.status==='paused'){badge=`<span class="sched-badge paused">⏸ Paused</span>`;}
       else{badge=`<span class="sched-badge upcoming">⏳ Upcoming</span>`;}
-      // Find the applied transaction for this date
-      const tx=db.transactions.find(t=>t.recurringId===r.id&&t.date.startsWith(s.date.substring(0,7)));
-      const txNote=tx?`<div style="font-size:9px;color:var(--text3);margin-top:1px">${fmtDate(tx.date)}</div>`:'';
-      return`<tr class="${rowClass}">
+      // Find the applied transaction — check recurringDate first, then fall back to month-key
+      const tx=db.transactions.find(t=>t.recurringId===r.id&&(t.recurringDate===s.date||(!t.recurringDate&&t.date.startsWith(s.date.substring(0,7)))));
+      const txNote=tx?`<div style="font-size:9px;color:var(--text3);margin-top:1px">Paid ${fmtDate(tx.date)}</div>`:'';
+      // Clickable rows for unpaid occurrences — open pay modal directly
+      const isPayable=s.status!=='applied'&&s.status!=='paused'&&r.status!=='paused';
+      const rowClick=isPayable?`onclick="closeModal('modal-recur-schedule');setTimeout(()=>openRecurPay('${r.id}'),200)" style="cursor:pointer"`:'';
+      return`<tr class="${rowClass}" ${rowClick}>
         <td><div style="font-weight:600">#${i+1}</div></td>
         <td><div style="font-weight:600">${fmtDate(s.date)}</div></td>
         <td><div style="font-family:var(--mono);font-weight:700;color:${amtColor}">${amtSign}${fmt(r.amount)}</div>${txNote}</td>
@@ -6121,8 +6450,14 @@ function openRecurringSchedule(id){
   }
 
   // Wire buttons
-  const feeEl=document.getElementById('recur-schedule-fee');if(feeEl)feeEl.value='';
-  document.getElementById('recur-schedule-apply-btn').onclick=()=>{const fee=parseFloat(document.getElementById('recur-schedule-fee').value)||0;closeModal('modal-recur-schedule');applyRecurringNow(id,fee);};
+  const applyBtn=document.getElementById('recur-schedule-apply-btn');
+  if(r.type==='income'){
+    applyBtn.textContent='✅ Mark as Received';
+    applyBtn.onclick=()=>{closeModal('modal-recur-schedule');setTimeout(()=>openRecurPay(id),200);};
+  } else {
+    applyBtn.textContent='💰 Pay Now';
+    applyBtn.onclick=()=>{closeModal('modal-recur-schedule');setTimeout(()=>openRecurPay(id),200);};
+  }
   document.getElementById('recur-schedule-pause-btn').textContent=isPaused?'▶ Resume Rule':'⏸ Pause Rule';
   document.getElementById('recur-schedule-pause-btn').onclick=()=>{toggleRecurPause(id);closeModal('modal-recur-schedule');};
   document.getElementById('recur-schedule-edit-btn').onclick=()=>{closeModal('modal-recur-schedule');openEditRecurring(id);};
@@ -6728,29 +7063,76 @@ function openPayableHistory(id){
 // ===== QR CODES =====
 function renderQRScreen(){
   const screen=document.getElementById('accounts-list-screen');
-  if(!db.qrCodes.length){
-    screen.innerHTML=`<div class="empty"><div class="empty-icon">📲</div><p>No QR codes yet.<br>Tap + to upload your GCash,<br>Maya, or bank QR code.</p></div>`;
-    return;
-  }
-  screen.innerHTML=db.qrCodes.map(qr=>{
-    const acc=qr.linkedAccount?db.accounts.find(a=>a.id===qr.linkedAccount):null;
-    return `<div class="qr-card">
-      <div class="qr-header">
-        <div class="qr-icon" style="background:${acc?acc.color+'22':'var(--bg3)'}">${acc?ACC_ICONS[acc.type]:'📲'}</div>
-        <div class="qr-info">
-          <div class="qr-name">${qr.label}</div>
-          <div class="qr-sub">${qr.owner||''}${acc?' • '+acc.name:''}</div>
+
+  // Sub-tab header
+  const subTabsHTML=`<div class="qr-subtabs">
+    <button class="qr-subtab${currentQRSubTab==='received'?' active':''}" onclick="switchQRSubTab('received',this)">📲 Received</button>
+    <button class="qr-subtab${currentQRSubTab==='contacts'?' active':''}" onclick="switchQRSubTab('contacts',this)">👥 Contacts</button>
+  </div>`;
+
+  if(currentQRSubTab==='received'){
+    if(!db.qrCodes.length){
+      screen.innerHTML=subTabsHTML+`<div class="empty"><div class="empty-icon">📲</div><p>No QR codes yet.<br>Tap <strong>＋</strong> to add your GCash,<br>Maya, or bank QR code.</p></div>`;
+      return;
+    }
+    screen.innerHTML=subTabsHTML+db.qrCodes.map(qr=>{
+      const acc=qr.linkedAccount?db.accounts.find(a=>a.id===qr.linkedAccount):null;
+      const iconBg=acc?acc.color+'22':'var(--bg3)';
+      const iconChar=acc?ACC_ICONS[acc.type]:'📲';
+      return `<div class="qr-card">
+        <div class="qr-header">
+          <div class="qr-icon" style="background:${iconBg}">${iconChar}</div>
+          <div class="qr-info">
+            <div class="qr-name">${qr.label}</div>
+            <div class="qr-sub">${[qr.owner,acc?acc.name:''].filter(Boolean).join(' · ')}</div>
+          </div>
         </div>
-      </div>
-      <div class="qr-img-wrap"><img src="${qr.image}" alt="QR Code for ${qr.label}"></div>
-      <div class="qr-actions">
-        <button type="button" class="qr-btn present" onclick="presentQR('${qr.id}')">📲 Present</button>
-        <button type="button" class="qr-btn download" onclick="downloadQR('${qr.id}')">⬇️ Download</button>
-        <button type="button" class="qr-btn delete" onclick="openEditQR('${qr.id}')">✏️ Edit</button>
-      </div>
-    </div>`;
-  }).join('');
+        <div class="qr-img-wrap"><img src="${qr.image}" alt="QR Code for ${qr.label}" loading="lazy"></div>
+        <div class="qr-actions">
+          <button type="button" class="qr-btn present" onclick="presentQR('${qr.id}')">📲 Present</button>
+          <button type="button" class="qr-btn download" onclick="downloadQR('${qr.id}')">⬇️ Save</button>
+          <button type="button" class="qr-btn delete" onclick="openEditQR('${qr.id}')">✏️ Edit</button>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    // Contacts tab
+    if(!db.qrContacts.length){
+      screen.innerHTML=subTabsHTML+`<div class="empty"><div class="empty-icon">👥</div><p>No QR contacts yet.<br>Tap <strong>＋</strong> to save the QR code<br>of a person or merchant.</p></div>`;
+      return;
+    }
+    const typeEmoji={'person':'👤','merchant':'🏪','business':'🏢','other':'📋'};
+    const typeLabel={'person':'Person','merchant':'Merchant / Store','business':'Business','other':'Other'};
+    screen.innerHTML=subTabsHTML+db.qrContacts.map(c=>{
+      const emoji=typeEmoji[c.type]||'👤';
+      const initials=c.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      const avatarInner=c.profileImage
+        ?`<img src="${c.profileImage}" alt="${c.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+        :`<span style="font-size:18px;font-weight:700;color:var(--blue-l)">${initials}</span>`;
+      return `<div class="qrc-card">
+        <div class="qrc-header">
+          <div class="qrc-avatar" style="background:${c.profileImage?'transparent':'var(--blue-bg)'}">${avatarInner}</div>
+          <div class="qrc-info">
+            <div class="qrc-name">${c.name}</div>
+            <div class="qrc-type">${emoji} ${typeLabel[c.type]||'Other'}${c.accountInfo?' · '+c.accountInfo:''}</div>
+          </div>
+        </div>
+        <div class="qrc-img-wrap"><img src="${c.image}" alt="QR for ${c.name}" loading="lazy"></div>
+        <div class="qrc-actions">
+          <button type="button" class="qr-btn present" onclick="presentQRContact('${c.id}')">📲 Present</button>
+          <button type="button" class="qr-btn download" onclick="downloadQRContact('${c.id}')">⬇️ Save</button>
+          <button type="button" class="qr-btn delete" onclick="openEditQRContact('${c.id}')">✏️ Edit</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
+
+function switchQRSubTab(tab){
+  currentQRSubTab=tab;
+  renderQRScreen();
+}
+
 
 function openAddQR(){
   editingQRId=null;qrUploadData=null;
@@ -6839,12 +7221,41 @@ function presentQR(id){
   const qr=db.qrCodes.find(q=>q.id===id);if(!qr)return;
   const acc=qr.linkedAccount?db.accounts.find(a=>a.id===qr.linkedAccount):null;
   qrFSData=qr;
-  document.getElementById('qr-fs-name').textContent=qr.label;
-  document.getElementById('qr-fs-sub').textContent=`${qr.owner||''}${acc?' • '+acc.name:''}`;
-  document.getElementById('qr-fs-img').src=qr.image;
+  _openQRFullscreen(qr.image, qr.label, `${qr.owner||''}${acc?' · '+acc.name:''}`);
+}
+function presentQRContact(id){
+  const c=db.qrContacts.find(q=>q.id===id);if(!c)return;
+  qrFSData=c;
+  _openQRFullscreen(c.image, c.name, c.accountInfo||'');
+}
+function _openQRFullscreen(img,name,sub){
+  _qrZoomLevel=1;
+  document.getElementById('qr-fs-name').textContent=name;
+  document.getElementById('qr-fs-sub').textContent=sub;
+  const fsImg=document.getElementById('qr-fs-img');
+  fsImg.src=img;
+  fsImg.style.transform='scale(1)';
+  document.getElementById('qr-fs-zoom-label').textContent='100%';
   document.getElementById('qr-fullscreen').classList.add('open');
 }
-function closeQRFullscreen(){document.getElementById('qr-fullscreen').classList.remove('open');}
+let _qrZoomLevel=1;
+function qrZoom(dir){
+  const steps=[0.6,0.8,1,1.3,1.6,2.0,2.5,3.2];
+  const img=document.getElementById('qr-fs-img');
+  const label=document.getElementById('qr-fs-zoom-label');
+  let idx=steps.findIndex(s=>Math.abs(s-_qrZoomLevel)<0.05);
+  if(idx<0)idx=2;
+  idx=Math.max(0,Math.min(steps.length-1,idx+dir));
+  _qrZoomLevel=steps[idx];
+  img.style.transform=`scale(${_qrZoomLevel})`;
+  label.textContent=Math.round(_qrZoomLevel*100)+'%';
+}
+function closeQRFullscreen(){
+  const img=document.getElementById('qr-fs-img');
+  if(img){img.style.transform='scale(1)';}
+  document.getElementById('qr-fullscreen').classList.remove('open');
+  _qrZoomLevel=1;
+}
 function downloadQRFullscreen(){if(qrFSData)downloadQRById(qrFSData.id);}
 function downloadQR(id){downloadQRById(id);}
 function downloadQRById(id){
@@ -6854,6 +7265,136 @@ function downloadQRById(id){
   a.download=`${qr.label.replace(/\s+/g,'-')}-QR.png`;
   a.click();
   showToast('QR code downloaded! ⬇️');
+}
+function downloadQRContact(id){
+  const c=db.qrContacts.find(q=>q.id===id);if(!c)return;
+  const a=document.createElement('a');
+  a.href=c.image;
+  a.download=`${c.name.replace(/\s+/g,'-')}-QR.png`;
+  a.click();
+  showToast('QR downloaded! ⬇️');
+}
+
+// ── QR Contact CRUD ──
+function _resetQRCProfileUI(){
+  qrcProfileData=null;
+  const circle=document.getElementById('qrc-profile-circle');
+  const ph=document.getElementById('qrc-profile-placeholder');
+  const img=document.getElementById('qrc-profile-img');
+  const lbl=document.getElementById('qrc-profile-lbl');
+  const rmv=document.getElementById('qrc-profile-remove');
+  if(circle)circle.classList.remove('has-img');
+  if(ph)ph.style.display='';
+  if(img){img.style.display='none';img.src='';}
+  if(lbl)lbl.textContent='Tap to add photo';
+  if(rmv)rmv.style.display='none';
+}
+function _setQRCProfileUI(dataUrl){
+  qrcProfileData=dataUrl;
+  const circle=document.getElementById('qrc-profile-circle');
+  const ph=document.getElementById('qrc-profile-placeholder');
+  const img=document.getElementById('qrc-profile-img');
+  const lbl=document.getElementById('qrc-profile-lbl');
+  const rmv=document.getElementById('qrc-profile-remove');
+  if(circle)circle.classList.add('has-img');
+  if(ph)ph.style.display='none';
+  if(img){img.src=dataUrl;img.style.display='block';}
+  if(lbl)lbl.textContent='Tap to change photo';
+  if(rmv)rmv.style.display='block';
+}
+function handleQRCProfileUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  if(file.size>3*1024*1024){showToast('Photo too large! Max 3MB','error');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>_setQRCProfileUI(ev.target.result);
+  reader.readAsDataURL(file);
+}
+function removeQRCProfile(){
+  _resetQRCProfileUI();
+  document.getElementById('qrc-profile-file').value='';
+}
+function openAddQRContact(){
+  editingQRContactId=null;qrcUploadData=null;
+  _resetQRCProfileUI();
+  document.getElementById('modal-qrc-title').textContent='Add QR Contact';
+  document.getElementById('qrc-name').value='';
+  document.getElementById('qrc-type').value='person';
+  document.getElementById('qrc-account-info').value='';
+  document.getElementById('qrc-delete-btn').style.display='none';
+  document.getElementById('qrc-save-btn').textContent='Save Contact';
+  document.getElementById('qrc-upload-label-default').style.display='';
+  document.getElementById('qrc-upload-preview').style.display='none';
+  document.getElementById('qrc-remove-btn').style.display='none';
+  document.getElementById('qrc-file-input').value='';
+  document.getElementById('qrc-upload-zone').classList.remove('has-file');
+  openModal('modal-qr-contact');
+}
+function openEditQRContact(id){
+  const c=db.qrContacts.find(q=>q.id===id);if(!c)return;
+  editingQRContactId=id;qrcUploadData=c.image;
+  document.getElementById('modal-qrc-title').textContent='Edit Contact';
+  document.getElementById('qrc-name').value=c.name;
+  document.getElementById('qrc-type').value=c.type||'person';
+  document.getElementById('qrc-account-info').value=c.accountInfo||'';
+  document.getElementById('qrc-delete-btn').style.display='';
+  document.getElementById('qrc-save-btn').textContent='Update Contact';
+  document.getElementById('qrc-upload-label-default').style.display='none';
+  document.getElementById('qrc-upload-preview').style.display='block';
+  document.getElementById('qrc-preview-img').src=c.image;
+  document.getElementById('qrc-preview-fname').textContent='📷 QR image saved';
+  document.getElementById('qrc-remove-btn').style.display='block';
+  document.getElementById('qrc-upload-zone').classList.add('has-file');
+  // Profile photo
+  if(c.profileImage){_setQRCProfileUI(c.profileImage);}else{_resetQRCProfileUI();}
+  openModal('modal-qr-contact');
+}
+function handleQRContactUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  if(file.size>5*1024*1024){showToast('File too large! Max 5MB','error');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    qrcUploadData=ev.target.result;
+    document.getElementById('qrc-upload-label-default').style.display='none';
+    document.getElementById('qrc-upload-preview').style.display='block';
+    document.getElementById('qrc-preview-img').src=qrcUploadData;
+    document.getElementById('qrc-preview-fname').textContent='📷 '+file.name;
+    document.getElementById('qrc-remove-btn').style.display='block';
+    document.getElementById('qrc-upload-zone').classList.add('has-file');
+  };
+  reader.readAsDataURL(file);
+}
+function removeQRContactUpload(){
+  qrcUploadData=null;
+  document.getElementById('qrc-upload-label-default').style.display='';
+  document.getElementById('qrc-upload-preview').style.display='none';
+  document.getElementById('qrc-preview-img').src='';
+  document.getElementById('qrc-remove-btn').style.display='none';
+  document.getElementById('qrc-upload-zone').classList.remove('has-file');
+  document.getElementById('qrc-file-input').value='';
+}
+function saveQRContact(){
+  const name=document.getElementById('qrc-name').value.trim();
+  const type=document.getElementById('qrc-type').value;
+  const accountInfo=document.getElementById('qrc-account-info').value.trim();
+  if(!name){showToast('Please enter a name','error');return;}
+  if(!qrcUploadData){showToast('Please upload their QR code image','error');return;}
+  const profileImage=qrcProfileData||null;
+  if(editingQRContactId){
+    const c=db.qrContacts.find(q=>q.id===editingQRContactId);
+    if(c)Object.assign(c,{name,type,accountInfo,image:qrcUploadData,profileImage});
+  }else{
+    db.qrContacts.push({id:uid(),name,type,accountInfo,image:qrcUploadData,profileImage,createdAt:Date.now()});
+  }
+  saveDB();closeModal('modal-qr-contact');
+  showToast(editingQRContactId?'Contact updated!':'Contact saved! 👥');
+  editingQRContactId=null;renderQRScreen();
+}
+function deleteQRContact(){
+  showConfirm('Delete QR Contact?','',()=>{
+    db.qrContacts=db.qrContacts.filter(q=>q.id!==editingQRContactId);
+    saveDB();closeModal('modal-qr-contact');showToast('Contact deleted','error');
+    editingQRContactId=null;renderQRScreen();
+  });
 }
 function checkDuePlanned(){
   const t=today();
@@ -6873,67 +7414,44 @@ function closeOnboarding(){
 }
 
 // ===== PATCH NOTES =====
-const PATCH_NOTES_VERSION='5.1';
+const PATCH_NOTES_VERSION='1.0';
 const PATCH_NOTES_KEY='finflow_patch_seen';
 
 const PATCH_NOTES=[
   {
-    version:'5.1',
+    version:'1.0',
     date:'March 2026',
-    emoji:'🚀',
-    title:'Smart Payments & Catch-up Update',
+    emoji:'📲',
+    title:'QR Contacts, Zoom & UI Improvements',
     highlights:[
       {
-        icon:'🔴',
-        title:'Catch-up Payment for Overdue Loans',
-        what:'If you missed paying a loan or BNPL last month (or several months!), a red "Catch-up" button now appears on that payable card.',
-        example:'Example: You forgot to pay your Home Credit for 2 months. Tap the red button, enter the total you want to pay, and FinFlow will mark those months as settled — no more "overdue" warning!'
+        icon:'📲',
+        title:'Received Tab — Redesigned QR Code UI',
+        what:'The QR Codes tab has been fully redesigned and renamed to "Received". Your personal QR codes (GCash, Maya, Bank QR) are now displayed in a clean, card-based layout with proper styling and improved readability.',
+        example:'Example: Your GCash QR now shows as a polished card with your name, account, a large QR preview, and action buttons at the bottom.'
       },
       {
-        icon:'💳',
-        title:'Transaction Fee Tracking',
-        what:'When recording a payment (loan, recurring bill, or planned activity), you can now add a Transaction Fee separately.',
-        example:'Example: You paid your SSS loan via GCash and GCash charged ₱15. Enter ₱15 in the "Transaction Fee" field — it\'s recorded as a separate expense so your loan payment amount stays accurate.'
+        icon:'👥',
+        title:'Contacts Tab — Save QR Codes of Others',
+        what:'Brand new "Contacts" sub-tab in the QR Payments section. Save QR codes of people, merchants, and businesses you frequently pay. Each contact card shows their name, type, and QR image.',
+        example:'Example: Save your landlord\'s BPI QR, your friend\'s GCash QR, or a sari-sari store\'s Maya QR — all in one place under Contacts.'
       },
       {
-        icon:'1️⃣',
-        title:'Single Month Only mode for BuyNow PayLater',
-        what:'For BNPL/instalment plans where the amount changes every month (like SPayLater), you can now set "Single month only" so FinFlow won\'t try to schedule a fixed amount next month.',
-        example:'Example: Your Lazada SPayLater shows ₱500 this month and ₱480 next month. Enable "Single month only" and just enter the actual amount each time you pay — no confusion!'
+        icon:'🔍',
+        title:'Zoom QR Code for Easy Scanning',
+        what:'When presenting a QR code fullscreen, you can now pinch-to-zoom or use the on-screen + / − buttons to zoom in and out. Perfect for scanning from across a counter or on a dimmer screen.',
+        example:'Example: Tap "Present", then tap ＋ to zoom in — the cashier can now scan your QR from further away.'
       },
       {
-        icon:'📅',
-        title:'Repayment Schedule improvements',
-        what:'The Schedule view now correctly shows which months you\'ve already paid, including catch-up and advance payments. Paid months show a green ✓ Paid badge.',
-        example:'Example: You paid 2 months in advance for your BDO loan. The schedule now shows both months as ✓ Paid with the date you paid.'
-      },
-      {
-        icon:'🏦',
-        title:'Account Edit & Delete restored',
-        what:'You can now Edit or Delete any account directly from the Account Detail screen (tap any account card).',
-        example:'Example: You closed your old savings account. Tap it, then tap "Delete Account" — done. Your past transactions are kept safe.'
-      },
-      {
-        icon:'💬',
-        title:'Notifications moved to top',
-        what:'Success and error messages (toasts) now appear at the TOP of the screen, so they\'re easier to read and don\'t get hidden by the keyboard.',
-        example:'Example: After recording a payment, the green "Payment recorded!" message pops up at the top — hard to miss!'
-      },
-      {
-        icon:'🔤',
-        title:'Cleaner forms — removed duplicate mic buttons',
-        what:'The extra microphone buttons next to text fields in the Account, Payable, Goal, and Recurring forms have been removed. The Smart Input AI bar at the top of each form already handles voice — no duplicates.',
-        example:'Example: When adding a new goal, just tap the 🎤 button in the "Smart Input AI" bar at the top to speak your goal name and amount all at once!'
-      },
-      {
-        icon:'📱',
-        title:'BuyNow PayLater (BNPL) type renamed',
-        what:'"SPayLater" has been renamed to "BuyNow PayLater / BNPL" to cover all instalment apps — Lazada, Shopee, Akulaku, Billease, and more.',
-        example:'Example: You have a Home Credit instalment — just pick "BuyNow PayLater" as the type and it works the same.'
+        icon:'✨',
+        title:'Improved QR Card Design',
+        what:'QR cards now have a clean, structured layout: account icon + name at the top, a centered QR image in the middle, and action buttons (Present, Download, Edit) neatly at the bottom.',
+        example:'Example: Each QR card clearly shows which account it belongs to, the QR code image, and quick-action buttons.'
       },
     ]
   }
 ];
+
 
 function checkPatchBadge(){
   const seen=localStorage.getItem(PATCH_NOTES_KEY);
@@ -7921,10 +8439,14 @@ let _voiceEngine = {
   liveTextEl: null,           // element to update with live text
   inputFieldEl: null,         // optional text field to mirror live text into
 
-  // FEATURE 1: show permission modal first, then call _start
+  // FEATURE 1: show permission modal first (only once), then call _start
   request(context, onFinalise, liveTextElId, inputFieldElId) {
     if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
       showToast('Voice input not supported. Try Chrome or Edge.', 'error'); return;
+    }
+    // Check if mic is disabled by user
+    if(db.settings.micEnabled === false) {
+      showToast('🎤 Microphone is disabled. Turn it on in Settings → Voice AI.', 'warn'); return;
     }
     // Stop any active session first
     if (this.listening) { this.stop(true); return; }
@@ -7932,10 +8454,13 @@ let _voiceEngine = {
     this.onFinalise = onFinalise;
     this.liveTextEl  = liveTextElId  ? document.getElementById(liveTextElId)  : null;
     this.inputFieldEl= inputFieldElId? document.getElementById(inputFieldElId): null;
-    // Show permission modal
+    // If already granted permission before — skip modal, go directly
+    if(db.settings.micPermGranted === true) {
+      this._start(); return;
+    }
+    // Show one-time permission modal
     _voicePermCallback = () => this._start();
     openModal('modal-mic-permission');
-    // Trap focus in modal
     setTimeout(()=>{ const btn=document.getElementById('mic-allow-btn'); if(btn)btn.focus(); }, 200);
   },
 
@@ -8054,12 +8579,41 @@ let _voiceEngine = {
 let _voicePermCallback = null;   // set before opening permission modal
 
 function _onMicAllow() {
+  // Save permission granted so modal won't show again
+  db.settings.micPermGranted = true;
+  db.settings.micEnabled = true;
+  saveDB();
+  updateMicToggleUI();
   if (_voicePermCallback) { _voicePermCallback(); _voicePermCallback = null; }
 }
 function _onMicDeny() {
   closeModal('modal-mic-permission');
   _voicePermCallback = null;
 }
+
+function setMicEnabled(enabled) {
+  db.settings.micEnabled = enabled;
+  if(!enabled) {
+    db.settings.micPermGranted = false; // reset so modal shows again if re-enabled
+    _voiceEngine.stop(true);
+    stopSmartVoice();
+  }
+  saveDB();
+  updateMicToggleUI();
+  showToast(enabled ? '🎤 Microphone enabled' : '🔇 Microphone disabled', 'info');
+}
+
+function updateMicToggleUI() {
+  const tog = document.getElementById('mic-enabled-toggle');
+  const sub = document.getElementById('mic-toggle-sub');
+  if (!tog) return;
+  const enabled = db.settings.micEnabled !== false;
+  tog.checked = enabled;
+  if (sub) sub.textContent = enabled
+    ? (db.settings.micPermGranted ? '✅ Permission granted — mic is active' : '⏳ Tap a mic button to grant permission')
+    : '🔇 Mic disabled — tap to re-enable';
+}
+
 function _stopAllVoice() {
   _voiceEngine.stop(true);
   stopSmartVoice();
@@ -8875,7 +9429,7 @@ function launchConfetti(){
 }
 
 // ===== RECURRING TRANSACTIONS =====
-const RECUR_FREQ_LABELS={daily:'Daily',weekly:'Weekly',monthly:'Monthly',yearly:'Yearly'};
+const RECUR_FREQ_LABELS={daily:'Daily',weekly:'Weekly',monthly:'Monthly',semimonthly:'Semi-Monthly',yearly:'Yearly'};
 
 function renderRecurringList(){
   const el=document.getElementById('goals-content');if(!el)return;
@@ -8900,6 +9454,13 @@ function renderRecurringList(){
       dueBadge=`<span class="recur-badge" style="background:rgba(90,98,130,0.15);color:var(--text3)">⏸ Paused</span>`;
     } else if(overdueSched.length>0){
       dueBadge=`<span class="recur-badge" style="background:var(--rose-bg);color:var(--rose)">⚠️ ${overdueSched.length} missed</span>`;
+      // Also show next upcoming date alongside the missed badge
+      if(nextDue){
+        const daysUntil=Math.ceil((new Date(nextDue.date+'T00:00:00')-new Date())/(1000*60*60*24));
+        if(daysUntil===0)dueBadge+=`<span class="recur-badge" style="background:var(--amber-bg);color:var(--amber)">📅 Due Today</span>`;
+        else if(daysUntil<=3)dueBadge+=`<span class="recur-badge" style="background:var(--amber-bg);color:var(--amber)">⏰ In ${daysUntil}d</span>`;
+        else dueBadge+=`<span class="recur-badge next">Next: ${fmtDate(nextDue.date)}</span>`;
+      }
     } else if(nextDue){
       const daysUntil=Math.ceil((new Date(nextDue.date+'T00:00:00')-new Date())/(1000*60*60*24));
       if(daysUntil===0)dueBadge=`<span class="recur-badge" style="background:var(--amber-bg);color:var(--amber)">📅 Due Today</span>`;
@@ -8928,7 +9489,7 @@ function renderRecurringList(){
         ${appliedCount>0?`<span style="font-size:10px;color:var(--text3)">${appliedCount} applied</span>`:''}
       </div>
       <div class="recur-actions" onclick="event.stopPropagation()">
-        <button class="recur-btn apply" onclick="applyRecurringNow('${r.id}')">💰 Pay Now</button>
+        <button class="recur-btn apply" onclick="openRecurPay('${r.id}')">${r.type==='income'?'✅ Received':'💰 Pay Now'}</button>
         <button class="recur-btn sched" onclick="openRecurringSchedule('${r.id}')">📊 Schedule</button>
         <button class="recur-btn pause" onclick="toggleRecurPause('${r.id}')">${isPaused?'▶ Resume':'⏸ Pause'}</button>
         <button class="recur-btn del" onclick="deleteRecurring('${r.id}')">🗑</button>
@@ -8943,6 +9504,22 @@ function getNextRecurDate(r){
   if(r.frequency==='daily'){const d=new Date(Math.max(now,start));d.setDate(d.getDate()+1);return d.toISOString().split('T')[0];}
   if(r.frequency==='weekly'){const d=new Date(Math.max(now,start));d.setDate(d.getDate()+7);return d.toISOString().split('T')[0];}
   if(r.frequency==='monthly'){const d=new Date(now.getFullYear(),now.getMonth()+1,start.getDate());return d.toISOString().split('T')[0];}
+  if(r.frequency==='semimonthly'){
+    const d1=r.semiDay1||15,d2=r.semiDay2||30;
+    const todayStr=today();
+    // Find next cutoff date after today in this or next month
+    for(let mo=0;mo<3;mo++){
+      const y=now.getFullYear(),m=now.getMonth()+mo;
+      const yr=y+Math.floor(m/12),mt=m%12;
+      for(const d of [d1,d2].sort((a,b)=>a-b)){
+        const lastDay=new Date(yr,mt+1,0).getDate();
+        const actualD=Math.min(d,lastDay);
+        const ds=yr+'-'+String(mt+1).padStart(2,'0')+'-'+String(actualD).padStart(2,'0');
+        if(ds>todayStr)return ds;
+      }
+    }
+    return null;
+  }
   if(r.frequency==='yearly'){return`${now.getFullYear()+1}-${String(start.getMonth()+1).padStart(2,'0')}-${String(start.getDate()).padStart(2,'0')}`;}
   return null;
 }
@@ -8965,6 +9542,9 @@ function openAddRecurring(){
   document.getElementById('recur-start').value=today();
   document.getElementById('recur-end').value='';
   document.getElementById('recur-due-day').value='';
+  document.getElementById('recur-semi-day1').value='15';
+  document.getElementById('recur-semi-day2').value='30';
+  onRecurFreqChange();
   const cats=EXPENSE_CATS;
   document.getElementById('recur-category').innerHTML=cats.map(c=>`<option value="${c}">${c}</option>`).join('');
   document.querySelector('#modal-recur .type-tab.expense').classList.add('active');
@@ -8988,6 +9568,9 @@ function openEditRecurring(id){
   document.getElementById('recur-start').value=r.startDate;
   document.getElementById('recur-end').value=r.endDate||'';
   document.getElementById('recur-due-day').value=r.dueDay||'';
+  document.getElementById('recur-semi-day1').value=r.semiDay1||15;
+  document.getElementById('recur-semi-day2').value=r.semiDay2||30;
+  onRecurFreqChange();
   const cats=r.type==='expense'?EXPENSE_CATS:INCOME_CATS;
   document.getElementById('recur-category').innerHTML=cats.map(c=>`<option value="${c}"${c===r.category?' selected':''}>${c}</option>`).join('');
   document.querySelectorAll('#modal-recur .type-tab').forEach(t=>t.classList.remove('active'));
@@ -8996,6 +9579,14 @@ function openEditRecurring(id){
   document.getElementById('recur-account').innerHTML=accOpts;
   openModal('modal-recur');
 }
+function onRecurFreqChange(){
+  const freq=document.getElementById('recur-freq').value;
+  const semiGrp=document.getElementById('recur-semimonthly-group');
+  const dueDayGrp=document.getElementById('recur-due-day-group');
+  if(semiGrp)semiGrp.style.display=freq==='semimonthly'?'':'none';
+  if(dueDayGrp)dueDayGrp.style.display=(freq==='monthly')?'':'none';
+}
+
 function saveRecurring(){
   const name=document.getElementById('recur-name').value.trim();
   const amount=parseFloat(document.getElementById('recur-amount').value)||0;
@@ -9005,15 +9596,23 @@ function saveRecurring(){
   const startDate=document.getElementById('recur-start').value;
   const endDate=document.getElementById('recur-end').value||null;
   const dueDay=parseInt(document.getElementById('recur-due-day').value)||null;
+  // Semi-monthly: two cutoff days
+  let semiDay1=null,semiDay2=null;
+  if(frequency==='semimonthly'){
+    semiDay1=Math.max(1,Math.min(31,parseInt(document.getElementById('recur-semi-day1').value)||15));
+    semiDay2=Math.max(1,Math.min(31,parseInt(document.getElementById('recur-semi-day2').value)||30));
+    if(semiDay1===semiDay2){showToast('The two cutoff days must be different','error');return;}
+    if(semiDay1>semiDay2){const tmp=semiDay1;semiDay1=semiDay2;semiDay2=tmp;} // ensure day1<day2
+  }
   if(!name){showToast('Please enter a name','error');return;}
   if(amount<=0){showToast('Please enter a valid amount','error');return;}
   if(!startDate){showToast('Please set a start date','error');return;}
   if(editingRecurId){
     const r=db.recurring.find(r=>r.id===editingRecurId);
-    if(r)Object.assign(r,{name,amount,category,accountId,frequency,startDate,endDate,dueDay,type:currentRecurType});
+    if(r)Object.assign(r,{name,amount,category,accountId,frequency,startDate,endDate,dueDay,semiDay1,semiDay2,type:currentRecurType});
     showToast('Recurring rule updated! 🔄','success');
   } else {
-    db.recurring.push({id:uid(),name,amount,category,accountId,frequency,startDate,endDate,dueDay,type:currentRecurType,status:'active',lastApplied:null,createdAt:Date.now()});
+    db.recurring.push({id:uid(),name,amount,category,accountId,frequency,startDate,endDate,dueDay,semiDay1,semiDay2,type:currentRecurType,status:'active',lastApplied:null,createdAt:Date.now()});
     showToast('Recurring rule saved! 🔄','success');
   }
   saveDB();closeModal('modal-recur');editingRecurId=null;renderGoalsScreen();renderCashFlow();
@@ -9031,26 +9630,246 @@ function toggleRecurPause(id){
   saveDB();renderGoalsScreen();updateRecurringBadge();
   showToast(r.status==='paused'?'Recurring paused ⏸':'Recurring resumed ▶','success');
 }
-function applyRecurringNow(id,txFee=0){
-  const r=db.recurring.find(r=>r.id===id);if(!r||r.status==='paused')return;
-  const acc=db.accounts.find(a=>a.id===r.accountId);
-  if(r.type==='expense'&&acc&&acc.balance<r.amount){
-    showToast(`⚠️ Insufficient balance! ${acc.name} has ${fmt(acc.balance)}`,'warn');return;
-  }
-  const tx={id:uid(),type:r.type,amount:r.amount,category:r.category,accountId:r.accountId,date:today(),desc:r.name,recurringId:r.id,createdAt:Date.now()};
-  db.transactions.unshift(tx);applyTransaction(tx);
-  // Record fee as separate transaction if provided
-  if(txFee>0){
-    if(acc)acc.balance-=txFee;
-    const feeTx={id:uid(),type:'expense',amount:txFee,category:'💳 Fees',accountId:r.accountId,date:today(),desc:`Transaction Fee: ${r.name}`,recurringId:r.id,createdAt:Date.now()};
-    db.transactions.unshift(feeTx);
-    addLog('created',`Transaction fee: ${r.name} ${fmt(txFee)}`,feeTx.id,'transaction');
-    showToast(`✅ ${r.name}: ${fmt(r.amount)} applied + ${fmt(txFee)} fee recorded!`,'success');
+// ─── RECURRING PAY NOW / RECEIVED ────────────────────────────────────────────
+
+function openRecurPay(id) {
+  const r = db.recurring.find(r => r.id === id); if (!r) return;
+  payingRecurId = id;
+  const isIncome = r.type === 'income';
+  const amtColor = isIncome ? 'var(--income)' : 'var(--expense)';
+  const amtSign  = isIncome ? '+' : '-';
+
+  if (isIncome) {
+    // ── INCOME: "Mark as Received" modal ───────────────────────────────────
+    document.getElementById('recur-receive-title').textContent = '✅ Received: ' + r.name;
+    document.getElementById('recur-receive-detail').innerHTML = `
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:12px;color:var(--text3)">${r.category.replace(/^\S+\s/,'')}</div>
+        <div style="font-family:var(--mono);font-size:20px;font-weight:700;color:${amtColor};margin:4px 0">${amtSign}${fmt(r.amount)}</div>
+        <div style="font-size:11px;color:var(--text3)">${RECUR_FREQ_LABELS[r.frequency]}</div>
+      </div>`;
+
+    // Build unpaid occurrence chips
+    const schedule = generateRecurringSchedule(r);
+    const pending = schedule.filter(s => s.status === 'missed' || s.status === 'current' || s.status === 'upcoming').slice(0, 12);
+    const occEl = document.getElementById('recur-receive-occurrences');
+    if (pending.length) {
+      occEl.innerHTML = pending.map((s, i) => {
+        const isFirst = i === 0;
+        const chipColor = s.status === 'missed' ? 'var(--rose)' : s.status === 'current' ? 'var(--amber)' : 'var(--blue)';
+        return `<label style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--bg3);border:1.5px solid ${isFirst ? chipColor : 'var(--border)'};cursor:pointer;transition:border 0.15s" id="recur-recv-chip-${i}">
+          <input type="radio" name="recur-recv-occ" value="${s.date}" ${isFirst ? 'checked' : ''} onchange="highlightRecurRecvChip()" style="accent-color:${chipColor}">
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700">${fmtDate(s.date)}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px">${s.status === 'missed' ? '⚠️ Missed' : s.status === 'current' ? '📅 Today' : '⏳ Upcoming'}</div>
+          </div>
+          <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:${amtColor}">${amtSign}${fmt(r.amount)}</div>
+        </label>`;
+      }).join('');
+    } else {
+      occEl.innerHTML = `<div style="font-size:12px;color:var(--text3);padding:10px;text-align:center">No pending occurrences — all up to date! ✅</div>`;
+    }
+
+    document.getElementById('recur-receive-amount').value = r.amount;
+    document.getElementById('recur-receive-date').value = today();
+    document.getElementById('recur-receive-ref').value = '';
+    const accOpts = db.accounts.map(a => `<option value="${a.id}"${a.id === r.accountId ? ' selected' : ''}>${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('') || '<option value="">No accounts</option>';
+    document.getElementById('recur-receive-account').innerHTML = accOpts;
+    openModal('modal-recur-receive');
+
   } else {
-    showToast(`✅ ${r.name}: ${fmt(r.amount)} applied!`,'success');
+    // ── EXPENSE: "Pay Now" modal ───────────────────────────────────────────
+    document.getElementById('recur-pay-title').textContent = '💰 Pay: ' + r.name;
+    document.getElementById('recur-pay-detail').innerHTML = `
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:12px;color:var(--text3)">${r.category.replace(/^\S+\s/,'')}</div>
+        <div style="font-family:var(--mono);font-size:20px;font-weight:700;color:${amtColor};margin:4px 0">${amtSign}${fmt(r.amount)}</div>
+        <div style="font-size:11px;color:var(--text3)">${RECUR_FREQ_LABELS[r.frequency]}</div>
+      </div>`;
+
+    // Build unpaid occurrence checkboxes (allow multi-select for catch-up)
+    const schedule = generateRecurringSchedule(r);
+    const pending = schedule.filter(s => s.status === 'missed' || s.status === 'current' || s.status === 'upcoming').slice(0, 12);
+    const occEl = document.getElementById('recur-pay-occurrences');
+    if (pending.length) {
+      occEl.innerHTML = pending.map((s, i) => {
+        const isFirst = i === 0;
+        const chipColor = s.status === 'missed' ? 'var(--rose)' : s.status === 'current' ? 'var(--amber)' : 'var(--blue)';
+        return `<label style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--bg3);border:1.5px solid ${isFirst ? chipColor : 'var(--border)'};cursor:pointer;transition:border 0.15s" id="recur-pay-chip-${i}">
+          <input type="checkbox" name="recur-pay-occ" value="${s.date}" ${isFirst ? 'checked' : ''} onchange="updateRecurPayAmount()" style="accent-color:${chipColor};width:16px;height:16px">
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700">${fmtDate(s.date)}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px">${s.status === 'missed' ? '⚠️ Missed' : s.status === 'current' ? '📅 Due Today' : '⏳ Upcoming'}</div>
+          </div>
+          <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:${amtColor}">${amtSign}${fmt(r.amount)}</div>
+        </label>`;
+      }).join('');
+    } else {
+      occEl.innerHTML = `<div style="font-size:12px;color:var(--text3);padding:10px;text-align:center">No pending occurrences — all up to date! ✅</div>`;
+    }
+
+    // Update selection note
+    updateRecurPayAmount();
+
+    document.getElementById('recur-pay-date').value = today();
+    document.getElementById('recur-pay-ref').value = '';
+    document.getElementById('recur-pay-tx-fee').value = '';
+    document.getElementById('recur-pay-late-fee').value = '';
+    document.getElementById('recur-pay-balance-warning').style.display = 'none';
+    const accOpts = db.accounts.map(a => `<option value="${a.id}"${a.id === r.accountId ? ' selected' : ''}>${ACC_ICONS[a.type]} ${a.name} (${fmt(a.balance)})</option>`).join('') || '<option value="">No accounts</option>';
+    document.getElementById('recur-pay-account').innerHTML = accOpts;
+    openModal('modal-recur-pay');
   }
-  r.lastApplied=today();
-  saveDB();renderHome();renderTransactions();renderGoalsScreen();
+}
+
+function updateRecurPayAmount() {
+  const r = db.recurring.find(r => r.id === payingRecurId); if (!r) return;
+  const checked = [...document.querySelectorAll('#recur-pay-occurrences input[type=checkbox]:checked')];
+  const count = checked.length;
+  const total = r.amount * count;
+  document.getElementById('recur-pay-amount').value = total > 0 ? total.toFixed(2) : '';
+
+  // Color chips based on checked state
+  document.querySelectorAll('#recur-pay-occurrences label').forEach((lbl, i) => {
+    const cb = lbl.querySelector('input[type=checkbox]');
+    lbl.style.borderColor = cb.checked ? 'var(--accent)' : 'var(--border)';
+  });
+
+  const noteEl = document.getElementById('recur-pay-selection-note');
+  if (count > 1) {
+    noteEl.style.display = 'block';
+    noteEl.innerHTML = `📅 Paying <strong>${count} occurrences</strong> — total <strong>${fmt(total)}</strong>`;
+  } else if (count === 0) {
+    noteEl.style.display = 'block';
+    noteEl.innerHTML = `<span style="color:var(--rose)">⚠️ Select at least one occurrence to pay.</span>`;
+  } else {
+    noteEl.style.display = 'none';
+  }
+  checkRecurPayWarning();
+}
+
+function highlightRecurRecvChip() {
+  document.querySelectorAll('#recur-receive-occurrences label').forEach((lbl) => {
+    const rb = lbl.querySelector('input[type=radio]');
+    lbl.style.borderColor = rb.checked ? 'var(--accent)' : 'var(--border)';
+  });
+}
+
+function checkRecurPayWarning() {
+  const r = db.recurring.find(r => r.id === payingRecurId); if (!r) return;
+  const amount = parseFloat(document.getElementById('recur-pay-amount').value) || 0;
+  const txFee  = parseFloat(document.getElementById('recur-pay-tx-fee').value)  || 0;
+  const lateFee= parseFloat(document.getElementById('recur-pay-late-fee').value) || 0;
+  const totalOut = amount + txFee + lateFee;
+  const accId = document.getElementById('recur-pay-account').value;
+  const acc = db.accounts.find(a => a.id === accId);
+  const wEl = document.getElementById('recur-pay-balance-warning');
+  if (acc && totalOut > acc.balance) {
+    wEl.style.display = 'block';
+    const parts = [];
+    if(amount>0) parts.push(`payment ${fmt(amount)}`);
+    if(txFee>0)  parts.push(`tx fee ${fmt(txFee)}`);
+    if(lateFee>0)parts.push(`late fee ${fmt(lateFee)}`);
+    wEl.textContent = `⚠️ Insufficient balance! ${acc.name} has ${fmt(acc.balance)} but total (${parts.join(' + ')}) = ${fmt(totalOut)}.`;
+  } else {
+    wEl.style.display = 'none';
+  }
+}
+
+function executeRecurPay() {
+  const r = db.recurring.find(r => r.id === payingRecurId); if (!r) return;
+  const checked = [...document.querySelectorAll('#recur-pay-occurrences input[type=checkbox]:checked')];
+  if (checked.length === 0) { showToast('Please select at least one occurrence to pay.', 'error'); return; }
+  const amount   = parseFloat(document.getElementById('recur-pay-amount').value) || 0;
+  const accId    = document.getElementById('recur-pay-account').value;
+  const payDate  = document.getElementById('recur-pay-date').value || today();
+  const txFee    = parseFloat(document.getElementById('recur-pay-tx-fee').value) || 0;
+  const lateFee  = parseFloat(document.getElementById('recur-pay-late-fee').value) || 0;
+  const ref      = document.getElementById('recur-pay-ref').value.trim();
+  const totalOut = amount + txFee + lateFee;
+
+  if (amount <= 0) { showToast('Please enter a valid payment amount.', 'error'); return; }
+  const acc = db.accounts.find(a => a.id === accId);
+  if (acc && totalOut > acc.balance) {
+    showToast(`❌ Insufficient balance! Need ${fmt(totalOut)} but ${acc.name} has only ${fmt(acc.balance)}.`, 'error'); return;
+  }
+  // Savings reserve warning
+  if (acc) {
+    const reserve = acc.savingsReserve || 0;
+    if (reserve > 0 && (acc.balance - totalOut) < reserve) {
+      showToast(`⚠️ This will dip below your savings reserve of ${fmt(reserve)} in ${acc.name}.`, 'warn');
+    }
+  }
+
+  const occDates = checked.map(cb => cb.value);
+  const occCount = occDates.length;
+  const perOcc   = amount / occCount;
+
+  // Create one transaction per occurrence so schedule correctly marks each as applied
+  occDates.forEach((dateStr, i) => {
+    const txDesc = occCount > 1
+      ? `Payment: ${r.name} (${i+1}/${occCount}) — ${fmtDate(dateStr)}`
+      : `Payment: ${r.name}`;
+    const tx = { id: uid(), type: 'expense', amount: perOcc, category: r.category, accountId: accId, date: payDate, ref, desc: txDesc, recurringId: r.id, recurringDate: dateStr, createdAt: Date.now() };
+    db.transactions.unshift(tx);
+    applyTransaction(tx);
+  });
+
+  // Transaction fee — single record
+  if (txFee > 0) {
+    if (acc) acc.balance -= txFee;
+    db.transactions.unshift({ id: uid(), type: 'expense', amount: txFee, category: '💳 Fees', accountId: accId, date: payDate, ref, desc: `Transaction Fee: ${r.name}`, recurringId: r.id, createdAt: Date.now() });
+  }
+  // Late fee — single record
+  if (lateFee > 0) {
+    if (acc) acc.balance -= lateFee;
+    db.transactions.unshift({ id: uid(), type: 'expense', amount: lateFee, category: '💳 Fees', accountId: accId, date: payDate, ref, desc: `Late Fee: ${r.name}`, recurringId: r.id, createdAt: Date.now() });
+  }
+
+  r.lastApplied = payDate;
+  addLog('created', `Recurring paid: ${r.name} ${fmt(amount)} × ${occCount}`, r.id, 'recurring');
+
+  saveDB();
+  closeModal('modal-recur-pay');
+  payingRecurId = null;
+  const msg = occCount > 1
+    ? `✅ ${r.name}: ${occCount} occurrences paid (${fmt(amount)})!`
+    : `✅ ${r.name}: ${fmt(amount)} paid!`;
+  showToast(msg, 'success');
+  renderHome(); renderTransactions(); renderGoalsScreen(); renderCashFlow();
+}
+
+function executeRecurReceive() {
+  const r = db.recurring.find(r => r.id === payingRecurId); if (!r) return;
+  const selectedOcc = document.querySelector('#recur-receive-occurrences input[type=radio]:checked');
+  if (!selectedOcc) { showToast('Please select which occurrence was received.', 'error'); return; }
+  const occDate  = selectedOcc.value;
+  const amount   = parseFloat(document.getElementById('recur-receive-amount').value) || 0;
+  const accId    = document.getElementById('recur-receive-account').value;
+  const recvDate = document.getElementById('recur-receive-date').value || today();
+  const ref      = document.getElementById('recur-receive-ref').value.trim();
+
+  if (amount <= 0) { showToast('Please enter a valid amount.', 'error'); return; }
+  if (!accId)      { showToast('Please select an account.', 'error'); return; }
+
+  const txDesc = `Received: ${r.name} — ${fmtDate(occDate)}`;
+  const tx = { id: uid(), type: 'income', amount, category: r.category, accountId: accId, date: recvDate, ref, desc: txDesc, recurringId: r.id, recurringDate: occDate, createdAt: Date.now() };
+  db.transactions.unshift(tx);
+  applyTransaction(tx);
+  r.lastApplied = recvDate;
+  addLog('created', `Recurring received: ${r.name} ${fmt(amount)}`, r.id, 'recurring');
+
+  saveDB();
+  closeModal('modal-recur-receive');
+  payingRecurId = null;
+  showToast(`✅ ${r.name}: ${fmt(amount)} marked as received!`, 'success');
+  renderHome(); renderTransactions(); renderGoalsScreen(); renderCashFlow();
+}
+
+function applyRecurringNow(id, txFee=0){
+  // Legacy auto-apply (called by applyDueRecurring / autoApplyRecur only — not user-facing)
+  const r=db.recurring.find(r=>r.id===id);if(!r||r.status==='paused')return;
+  openRecurPay(id);
 }
 function applyDueRecurring(){
   // Called on app load — auto-apply any overdue recurring rules
@@ -9065,6 +9884,20 @@ function applyDueRecurring(){
     if(r.frequency==='daily')due=now>la;
     else if(r.frequency==='weekly')due=(now-la)/(1000*60*60*24)>=7;
     else if(r.frequency==='monthly'){due=now.getMonth()!==la.getMonth()||now.getFullYear()!==la.getFullYear();}
+    else if(r.frequency==='semimonthly'){
+      // Due if today is one of the cutoff days and hasn't been applied this cutoff period
+      const d1=r.semiDay1||15,d2=r.semiDay2||30;
+      const todayDate=now.getDate();
+      const lastMonth=la.getMonth(),lastDay=la.getDate(),lastYear=la.getFullYear();
+      const isDay1=todayDate===Math.min(d1,new Date(now.getFullYear(),now.getMonth()+1,0).getDate());
+      const isDay2=todayDate===Math.min(d2,new Date(now.getFullYear(),now.getMonth()+1,0).getDate());
+      if(isDay1||isDay2){
+        // Only apply if lastApplied was before this cutoff date
+        const lastAppliedMonthSame=lastMonth===now.getMonth()&&lastYear===now.getFullYear();
+        if(!lastAppliedMonthSame)due=true;
+        else if(isDay2&&lastDay<d2)due=true; // applied at day1, now at day2
+      }
+    }
     else if(r.frequency==='yearly')due=now.getFullYear()!==la.getFullYear();
     if(due)autoApplyRecur(r,t);
   });
@@ -10300,6 +11133,8 @@ saveDB(); // save any auto-applied transactions
 if(db.settings.demoMode) _updateDemoUI(true);
 // FEATURE 4: Restore silence delay setting on app load
 if(db.settings.vaiSilenceDelay!==undefined) _voiceEngine.silenceDelay = db.settings.vaiSilenceDelay>0 ? db.settings.vaiSilenceDelay : 500;
+// Initialize mic enabled state (default: true)
+if(db.settings.micEnabled === undefined) db.settings.micEnabled = true;
 updateOverdueBadge();
 updatePayablesBadge();
 updateRecurringBadge();
