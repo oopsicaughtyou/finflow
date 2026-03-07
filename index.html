@@ -388,6 +388,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 .scroll-area { flex: 1; overflow-y: auto; padding-bottom: 86px; scrollbar-width: none; }
 .scroll-area::-webkit-scrollbar { display: none; }
+/* Pull-to-refresh */
+.ptr-indicator { display:flex; align-items:center; justify-content:center; height:0; overflow:hidden; transition:height .2s ease; background:var(--bg); flex-shrink:0; }
+.ptr-indicator.visible { height:52px; }
+.ptr-icon { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:600; color:var(--text3); }
+.ptr-icon svg { transition:transform .3s ease; }
+.ptr-icon.spinning svg { animation:ptr-spin .6s linear infinite; }
+@keyframes ptr-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
 /* ══════════════════════════════
    TOP BAR (non-home screens)
@@ -2403,6 +2410,8 @@ html.light .toast {
   font-size: 40px; font-weight: 800; color: var(--text); letter-spacing: -1.5px; margin-bottom: 16px; line-height: 1;
 }
 .v5-nw-amount.negative { color: var(--rose); }
+/* Counter animation — overflow clip for digit roll */
+.v5-nw-amount, #hbc-income, #hbc-expense { will-change: contents; }
 
 /* Income / Expenses stat cards */
 .v5-stat-cards {
@@ -5095,8 +5104,8 @@ html.light .tx-card:active {
     </div>
     <div style="width:34px"></div>
   </div>
-  <!-- Period filter row -->
-  <div style="display:flex;gap:6px;padding:10px 16px 4px;background:var(--bg);border-bottom:1px solid var(--border)">
+  <!-- Period filter row (hidden) -->
+  <div style="display:none;gap:6px;padding:10px 16px 4px;background:var(--bg);border-bottom:1px solid var(--border)">
     <button class="rpt-period-btn active" onclick="setAllReportsPeriod('daily',this)">Today</button>
     <button class="rpt-period-btn" onclick="setAllReportsPeriod('weekly',this)">Week</button>
     <button class="rpt-period-btn" onclick="setAllReportsPeriod('monthly',this)">Month</button>
@@ -9514,99 +9523,137 @@ function cfEndDate() {
 }
 
 // ── Collect all upcoming cash-flow events ──────────────────
-// Architecture: uses the same canonical schedule generators as the Calendar
-// module (generateRecurringSchedule, generatePayableSchedule) so both views
-// are always in sync — Calendar is the single source of truth.
 function cfCollectEvents(endDate) {
   const todayStr = today();
-  const events   = [];
-  const seenIds  = new Set(); // deduplication guard — prevents any event appearing twice
+  const events = [];
 
-  // ── 1. Pending planned transactions (income + expense, not transfer) ──────
-  db.planned
-    .filter(p => p.status === 'pending' && p.date > todayStr && p.date <= endDate && p.type !== 'transfer')
+  // 1. Pending planned transactions (income + expense, not transfer)
+  db.planned.filter(p => p.status === 'pending' && p.date > todayStr && p.date <= endDate && p.type !== 'transfer')
     .forEach(p => {
-      const eid = 'planned-' + p.id;
-      if (seenIds.has(eid)) return;
-      seenIds.add(eid);
       events.push({
-        date:    p.date,
-        type:    p.type,
-        amount:  p.amount,
-        label:   p.category.replace(/^\S+\s/, '') + (p.desc ? ' — ' + p.desc : ''),
+        date: p.date,
+        type: p.type,
+        amount: p.amount,
+        label: p.category.replace(/^\S+\s/, '') + (p.desc ? ' — ' + p.desc : ''),
         catIcon: p.category.split(' ')[0] || '📅',
-        source:  'planned',
-        id:      p.id
+        source: 'planned',
+        id: p.id
       });
     });
 
-  // ── 2. Recurring — delegate to generateRecurringSchedule (Calendar's engine) ──
-  // This ensures all frequencies (monthly, weekly, daily, semi-monthly, bi-weekly,
-  // yearly) are handled identically to the Calendar view — no duplicate logic.
-  db.recurring
-    .filter(r => r.status === 'active' && r.type !== 'transfer')
-    .forEach(r => {
-      if (r.endDate && r.endDate < todayStr) return;
-      try {
-        const schedule = generateRecurringSchedule(r);
-        schedule
-          .filter(s =>
-            (s.status === 'upcoming' || s.status === 'current' || s.status === 'missed') &&
-            s.date > todayStr && s.date <= endDate
-          )
-          .forEach(s => {
-            const eid = 'recur-' + r.id + '-' + s.date;
-            if (seenIds.has(eid)) return;
-            seenIds.add(eid);
-            events.push({
-              date:    s.date,
-              type:    r.type,
-              amount:  r.amount,
-              label:   r.name,
-              catIcon: r.category ? r.category.split(' ')[0] : '🔄',
-              source:  'recurring',
-              id:      r.id + '-' + s.date
-            });
-          });
-      } catch(e) {}
-    });
+  // 2. Active recurring transactions (project occurrences into the window)
+  db.recurring.filter(r => r.status === 'active' && r.type !== 'transfer').forEach(r => {
+    if (r.endDate && r.endDate < todayStr) return;
 
-  // ── 3. Active payables — delegate to generatePayableSchedule (Calendar's engine) ──
-  // Uses the same covered-months logic the Calendar and payable detail screen use,
-  // so paid months are never shown and future installments are accurate.
-  db.payables
-    .filter(p => p.status === 'active' && p.dueDay && p.monthlyPayment > 0)
-    .forEach(py => {
-      try {
-        const schedule = generatePayableSchedule(py);
-        schedule
-          .filter(s =>
-            (s.status === 'overdue' || s.status === 'current' || s.status === 'upcoming') &&
-            s.date > todayStr && s.date <= endDate
-          )
-          .forEach(s => {
-            // Dedup key uses monthKey so a payable can never appear twice in the same month
-            const eid = 'payable-' + py.id + '-' + s.monthKey;
-            if (seenIds.has(eid)) return;
-            seenIds.add(eid);
-            // Skip if a planned item already represents this payable on the same date
-            const alreadyPlanned = events.some(e =>
-              e.source === 'planned' && e.date === s.date &&
-              e.label.toLowerCase().includes(py.name.toLowerCase())
-            );
-            if (alreadyPlanned) return;
-            events.push({
-              date:    s.date,
-              type:    'expense',
-              amount:  s.amount,
-              label:   py.name,
-              catIcon: '💳',
-              source:  'payable',
-              id:      py.id + '-' + s.date
-            });
+    // Build set of months where this recurring was already applied (has matching transaction)
+    const appliedTxDates = new Set(
+      db.transactions.filter(tx => tx.recurringId === r.id).map(tx => tx.date)
+    );
+    // Also track month-keys of applied transactions to skip whole months
+    const appliedMonthKeys = new Set(
+      db.transactions.filter(tx => tx.recurringId === r.id).map(tx => tx.date.substring(0, 7))
+    );
+
+    const start = new Date(Math.max(new Date(todayStr + 'T00:00:00'), new Date(r.startDate ? r.startDate + 'T00:00:00' : todayStr + 'T00:00:00')));
+    const end = new Date(endDate + 'T23:59:59');
+    let cur = new Date(start);
+    // advance to the first occurrence AFTER today
+    if (r.frequency === 'daily')   cur.setDate(cur.getDate() + 1);
+    else if (r.frequency === 'weekly') cur.setDate(cur.getDate() + 7);
+    else if (r.frequency === 'monthly') {
+      // next occurrence: correct due day of month (use dueDay or startDate day)
+      const startDay = r.dueDay || new Date(r.startDate + 'T00:00:00').getDate();
+      cur = new Date(start.getFullYear(), start.getMonth(), startDay);
+      if (cur <= start) cur = new Date(cur.getFullYear(), cur.getMonth() + 1, startDay);
+    }
+    else if (r.frequency === 'semimonthly') {
+      const d1=r.semiDay1||15, d2=r.semiDay2||30;
+      const nowD=new Date(todayStr+'T00:00:00');
+      for(let mo=0;mo<6;mo++){
+        const yr=nowD.getFullYear()+Math.floor((nowD.getMonth()+mo)/12);
+        const mt=(nowD.getMonth()+mo)%12;
+        for(const d of [d1,d2].sort((a,b)=>a-b)){
+          const lastDay=new Date(yr,mt+1,0).getDate();
+          const actualD=Math.min(d,lastDay);
+          const ds2=`${yr}-${String(mt+1).padStart(2,'0')}-${String(actualD).padStart(2,'0')}`;
+          if(ds2>todayStr&&ds2<=endDate&&ds2>=r.startDate&&!appliedTxDates.has(ds2)){
+            events.push({date:ds2,type:r.type,amount:r.amount,label:r.name+' (semi-monthly)',catIcon:r.category?r.category.split(' ')[0]:'🔄',source:'recurring',id:r.id+'-'+ds2});
+          }
+        }
+      }
+      return;
+    }
+    else if (r.frequency === 'yearly') { cur.setFullYear(cur.getFullYear() + 1); }
+
+    let safety = 0;
+    while (cur <= end && safety++ < 60) {
+      // Use local date string to avoid timezone offset shifting the date
+      const ds = localDate(cur);
+      if (ds > todayStr && ds <= endDate) {
+        // Skip if a transaction with this recurringId already exists for this month (already paid)
+        const monthKey = ds.substring(0, 7);
+        const alreadyPaid = appliedMonthKeys.has(monthKey) ||
+          (r.frequency === 'monthly' && appliedTxDates.has(ds));
+        if (!alreadyPaid) {
+          events.push({
+            date: ds,
+            type: r.type,
+            amount: r.amount,
+            label: r.name + ' (recurring)',
+            catIcon: r.category ? r.category.split(' ')[0] : '🔄',
+            source: 'recurring',
+            id: r.id + '-' + ds
           });
-      } catch(e) {}
+        }
+      }
+      if (r.frequency === 'daily')   cur.setDate(cur.getDate() + 1);
+      else if (r.frequency === 'weekly')  cur.setDate(cur.getDate() + 7);
+      else if (r.frequency === 'monthly') {
+        const dueDay = r.dueDay || new Date(r.startDate + 'T00:00:00').getDate();
+        cur = new Date(cur.getFullYear(), cur.getMonth() + 1, dueDay);
+      }
+      else if (r.frequency === 'yearly')  cur.setFullYear(cur.getFullYear() + 1);
+    }
+  });
+
+  // 3. Active payables due within window
+  db.payables.filter(p => p.status === 'active' && p.dueDay && p.monthlyPayment > 0).forEach(py => {
+    const now = new Date();
+    // Build covered months set for all payables (not just singleMonthOnly)
+    const coveredMonths = new Set();
+    (py.payments || []).forEach(pay => {
+      const months = pay.months || 1;
+      const payDate = new Date(pay.date + 'T00:00:00');
+      let dueMo = new Date(payDate.getFullYear(), payDate.getMonth(), py.dueDay);
+      if (dueMo < payDate) dueMo = new Date(payDate.getFullYear(), payDate.getMonth() + 1, py.dueDay);
+      for (let mm = 0; mm < months; mm++) {
+        const d = new Date(dueMo.getFullYear(), dueMo.getMonth() + mm, py.dueDay);
+        coveredMonths.add(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+      }
     });
+    for (let m = 0; m < 3; m++) {
+      const dueDate = new Date(now.getFullYear(), now.getMonth() + m, py.dueDay);
+      const dueMonthKey = dueDate.getFullYear() + '-' + String(dueDate.getMonth() + 1).padStart(2, '0');
+      // Skip months already covered by a payment
+      if (coveredMonths.has(dueMonthKey)) continue;
+      const ds = dueDate.getFullYear()+'-'+String(dueDate.getMonth()+1).padStart(2,'0')+'-'+String(dueDate.getDate()).padStart(2,'0');
+      if (ds > todayStr && ds <= endDate) {
+        // avoid double-counting with planned items that already exist for this payable
+        const alreadyPlanned = events.some(e => e.source === 'planned' && e.date === ds && e.label.includes(py.name));
+        if (!alreadyPlanned) {
+          events.push({
+            date: ds,
+            type: 'expense',
+            amount: py.monthlyPayment,
+            label: py.name + ' (payable due)',
+            catIcon: '💳',
+            source: 'payable',
+            id: py.id + '-' + ds
+          });
+        }
+      }
+    }
+  });
 
   // Sort chronologically
   events.sort((a, b) => a.date.localeCompare(b.date));
@@ -12335,6 +12382,7 @@ function executePayPayable(){
   // Update payable
   py.paidAmount=(py.paidAmount||0)+amount;
   py.remaining=Math.max(0,py.totalAmount-py.paidAmount);
+  const justFullyPaid = py.remaining<=0 && py.status!=='paid';
   if(py.remaining<=0)py.status='paid';
   if(!py.payments)py.payments=[];
   py.payments.push({id:uid(),amount,accountId:accId,date:payDate,ref,months,createdAt:Date.now()});
@@ -12364,7 +12412,7 @@ function executePayPayable(){
 
   // ── Handle advance multi-month payment: waive scheduled dates ─
   // For singleMonthOnly payables: only mark the CURRENT due month as paid, no auto-scheduling
-  if(py.dueDay&&py.status!=='paid'){
+  if(py.dueDay&&(py.status!=='paid'||justFullyPaid)){
     const now=new Date();
     let nextDue=new Date(now.getFullYear(),now.getMonth(),py.dueDay);
     if(nextDue<now)nextDue=new Date(now.getFullYear(),now.getMonth()+1,py.dueDay);
@@ -12396,6 +12444,12 @@ function executePayPayable(){
     }
   }
 
+  // ── If payable just became fully paid, remove ALL remaining pending planned items ──
+  if(justFullyPaid){
+    db.planned.filter(p=>p.payableId===py.id&&p.status==='pending').forEach(p=>{
+      p.status='completed';p.completedAt=Date.now();p.completedNote='Auto-cleared: payable fully paid off';
+    });
+  }
   saveDB();closeModal('modal-pay-payable');
   let successMsg=py.status==='paid'?`🎉 ${py.name} is now FULLY PAID!`:`Payment recorded! ${fmt(py.remaining)} remaining`;
   if(months>1)successMsg=`✅ ${months} months paid! Next due date advanced.`;
@@ -15817,12 +15871,12 @@ function renderPlannedTab(){
     if(converted.length){
       html=`<div class="pp-list">${converted.map(p=>{
         const py=db.payables.find(x=>x.id===p.convertedToPayable);
-        const pyBadge=py?`<div style="margin-top:8px;background:var(--violet-bg);border:1px solid rgba(124,131,253,.2);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--violet);font-weight:600;display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/></svg> Payable: <strong>${py.name}</strong></div>`:'';
+        const pyBadge=py?`<div style="margin-top:8px;background:var(--violet-bg);border:1px solid rgba(124,131,253,.2);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--violet);font-weight:600;display:flex;align-items:center;gap:6px;justify-content:space-between"><div style="display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/></svg> Payable: <strong>${py.name}</strong></div><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg></div>`:'';
         const tc=p.type==='expense'?'expense':p.type==='income'?'income':'transfer';
         const sign=p.type==='expense'?'−':p.type==='income'?'+':'⇄';
         const typeLabel=p.type==='expense'?'Expense':p.type==='income'?'Income':'Transfer';
         const acc=db.accounts.find(a=>a.id===p.accountId);
-        return `<div class="pp-card is-done" style="border-left-color:var(--violet);opacity:1">
+        return `<div class="pp-card is-done" style="border-left-color:var(--violet);opacity:1;cursor:${py?'pointer':'default'}" onclick="${py?`openPayableDetail('${py.id}');showScreen('payable-detail')`:''}">
           <div class="pp-top">
             <span class="pp-type-badge ${tc}">${typeLabel}</span>
             <span style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:99px;background:var(--violet-bg);color:var(--violet)">💳 Converted</span>
@@ -19449,6 +19503,195 @@ function sweldoReset() {
   window._sweldoLastNet = 0;
   document.getElementById('sweldo-scroll').scrollTop = 0;
 }
+
+// ============================================================
+// ===== PULL-TO-REFRESH ======================================
+// ============================================================
+(function initPullToRefresh() {
+  const PTR_THRESHOLD = 72;
+  let startY = 0, currentY = 0, isPulling = false, isRefreshing = false;
+  const reloadSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/><path d="M21 3v5h-5"/></svg>`;
+
+  function getActiveScrollArea() {
+    const active = document.querySelector('.screen.active');
+    if (!active) return null;
+    return active.querySelector('.scroll-area') || active;
+  }
+
+  function injectIndicator(screen) {
+    if (screen.querySelector('.ptr-indicator')) return;
+    const ind = document.createElement('div');
+    ind.className = 'ptr-indicator';
+    ind.innerHTML = `<div class="ptr-icon">${reloadSvg}<span>Pull to refresh</span></div>`;
+    const scrollArea = screen.querySelector('.scroll-area');
+    if (scrollArea) screen.insertBefore(ind, scrollArea);
+    else screen.insertBefore(ind, screen.firstChild);
+  }
+
+  function doRefresh() {
+    if (isRefreshing) return;
+    isRefreshing = true;
+    const active = document.querySelector('.screen.active');
+    const ind = active?.querySelector('.ptr-indicator');
+    if (ind) {
+      ind.classList.add('visible');
+      const icon = ind.querySelector('.ptr-icon');
+      if (icon) { icon.classList.add('spinning'); icon.querySelector('span').textContent = 'Refreshing…'; }
+    }
+    setTimeout(() => {
+      const name = active?.id?.replace('screen-','') || 'home';
+      try { showScreen(name); } catch(e) {}
+      if (ind) {
+        ind.classList.remove('visible');
+        const icon = ind.querySelector('.ptr-icon');
+        if (icon) { icon.classList.remove('spinning'); icon.querySelector('span').textContent = 'Pull to refresh'; }
+      }
+      isRefreshing = false;
+    }, 700);
+  }
+
+  document.addEventListener('touchstart', e => {
+    const scrollArea = getActiveScrollArea();
+    if (!scrollArea) return;
+    if (scrollArea.scrollTop > 0) return;
+    startY = e.touches[0].clientY;
+    isPulling = true;
+    const active = document.querySelector('.screen.active');
+    if (active) injectIndicator(active);
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!isPulling || isRefreshing) return;
+    const scrollArea = getActiveScrollArea();
+    if (!scrollArea || scrollArea.scrollTop > 0) { isPulling = false; return; }
+    currentY = e.touches[0].clientY;
+    const dy = Math.max(0, currentY - startY);
+    const active = document.querySelector('.screen.active');
+    const ind = active?.querySelector('.ptr-indicator');
+    if (!ind) return;
+    if (dy > 18) {
+      const h = Math.min(PTR_THRESHOLD, dy * 0.55);
+      ind.style.height = h + 'px';
+      ind.style.transition = 'none';
+      const icon = ind.querySelector('.ptr-icon');
+      if (icon) {
+        icon.querySelector('span').textContent = dy > PTR_THRESHOLD ? 'Release to refresh' : 'Pull to refresh';
+        icon.querySelector('svg').style.transform = `rotate(${Math.min(180, dy * 1.5)}deg)`;
+      }
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (!isPulling) return;
+    isPulling = false;
+    const dy = Math.max(0, currentY - startY);
+    const active = document.querySelector('.screen.active');
+    const ind = active?.querySelector('.ptr-indicator');
+    if (dy > PTR_THRESHOLD) {
+      doRefresh();
+    } else {
+      if (ind) { ind.style.transition = 'height .2s ease'; ind.style.height = '0'; }
+    }
+    startY = 0; currentY = 0;
+  }, { passive: true });
+})();
+
+// ============================================================
+// ===== HOME AMOUNT COUNTER ANIMATION ========================
+// ============================================================
+
+/**
+ * Animates an element's text from its current numeric value to `target`.
+ * Handles negative values, decimals, and the currency prefix symbol.
+ * @param {HTMLElement} el      - DOM element to animate
+ * @param {number}      target  - Final numeric value
+ * @param {number}      duration - Animation duration in ms (default 1200)
+ * @param {boolean}     isNegative - Whether to show a leading minus sign
+ */
+function animateCounter(el, target, duration = 1200, isNegative = false) {
+  if (!el) return;
+  // Cancel any in-progress animation on this element
+  if (el._rafId) cancelAnimationFrame(el._rafId);
+
+  const symbol = getCurrency();
+  const absTarget = Math.abs(target);
+
+  // Ease-out-expo for a natural deceleration feel
+  function easeOutExpo(t) {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  // Parse the current displayed value to start from (for re-renders)
+  const rawCurrent = parseFloat(
+    (el.textContent || '0').replace(/[^0-9.\-]/g, '')
+  ) || 0;
+  const startVal = Math.abs(rawCurrent);
+  const startTime = performance.now();
+
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutExpo(progress);
+    const current = startVal + (absTarget - startVal) * eased;
+
+    // Format with 2 decimal places + thousands separator, matching fmt()
+    const formatted = symbol + (isNegative ? '-' : '') +
+      current.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    el.textContent = formatted;
+
+    if (progress < 1) {
+      el._rafId = requestAnimationFrame(tick);
+    } else {
+      // Snap to exact final value to avoid float drift
+      el.textContent = symbol + (isNegative ? '-' : '') +
+        absTarget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      el._rafId = null;
+    }
+  }
+
+  el._rafId = requestAnimationFrame(tick);
+}
+
+let _lastHomeBalance = null, _lastHomeIncome = null, _lastHomeExpense = null;
+
+const _origRenderHome = renderHome;
+renderHome = function() {
+  _origRenderHome.apply(this, arguments);
+
+  const style = db.settings?.appStyle || 'classic';
+  if (style === 'old') return;
+
+  const total   = db.accounts.reduce((s,a) => s + a.balance, 0);
+  const pTxs    = filterByPeriod(db.transactions, currentPeriod);
+  const income  = pTxs.filter(t => t.type === 'income').reduce((s,t) => s + t.amount, 0);
+  const expense = pTxs.filter(t => t.type === 'expense').reduce((s,t) => s + t.amount, 0);
+
+  const heroEl = document.getElementById('hero-balance');
+  const incEl  = document.getElementById('hbc-income');
+  const expEl  = document.getElementById('hbc-expense');
+
+  if (!priv?.homeTotal && heroEl) {
+    // First render: count up from 0. Subsequent: count from last known value.
+    const isFirstRender = _lastHomeBalance === null;
+    const dur = isFirstRender ? 1500 : 900;
+    animateCounter(heroEl, total, dur, total < 0);
+    if (total < 0) heroEl.classList.add('negative');
+    else heroEl.classList.remove('negative');
+  }
+
+  if (!priv?.homeSummary) {
+    if (incEl && _lastHomeIncome !== income) {
+      animateCounter(incEl, income, _lastHomeIncome === null ? 1400 : 800);
+    }
+    if (expEl && _lastHomeExpense !== expense) {
+      animateCounter(expEl, expense, _lastHomeExpense === null ? 1400 : 800);
+    }
+  }
+
+  _lastHomeBalance = total;
+  _lastHomeIncome  = income;
+  _lastHomeExpense = expense;
+};
 </script>
 </body>
 </html>
