@@ -2088,14 +2088,6 @@ html.light .toast {
 .py-v2-status.done    { background: var(--emerald-bg); color: var(--emerald); border: 1px solid rgba(16,185,129,.2); }
 
 /* ── Payable Detail Screen ── */
-/* Account Transactions Screen */
-.acctx-ptab {
-  padding: 5px 10px; border: none; border-radius: 7px; background: none;
-  color: var(--text3); font-size: 11px; font-weight: 700; cursor: pointer;
-  font-family: var(--font); transition: all .15s; white-space: nowrap; -webkit-appearance: none;
-}
-.acctx-ptab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.18); }
-
 /* screen-payable-detail uses .screen rules */
 
 .py-detail-hero {
@@ -3941,6 +3933,353 @@ html.light #bell-badge {
 .rpt-cf-evt-amt{font-family:var(--mono);font-size:12px;font-weight:700;margin-left:auto;}
 /* Footer summary tiles */
 .rpt-footer-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border);}
+/* ── REFACTORED CASHFLOW REPORT NEW COMPONENTS ── */
+/* Source Breakdown Cards */
+.cf-sources-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.cf-src-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 10px;text-align:center;position:relative;overflow:hidden;}
+.cf-src-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.cf-src-card.planned::before{background:linear-gradient(90deg,#6366f1,#8b5cf6);}
+.cf-src-card.recurring::before{background:linear-gradient(90deg,#06b6d4,#0ea5e9);}
+.cf-src-card.payable::before{background:linear-gradient(90deg,#f59e0b,#f97316);}
+.cf-src-icon{font-size:18px;margin-bottom:5px;}
+.cf-src-count{font-family:var(--mono);font-size:18px;font-weight:800;color:var(--text);line-height:1;}
+.cf-src-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-top:3px;}
+.cf-src-amt{font-size:10px;font-weight:700;margin-top:5px;font-family:var(--mono);}
+/* Weekly forecast table */
+.cf-week-table{width:100%;border-collapse:collapse;}
+.cf-week-table th{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.cf-week-table th:last-child,.cf-week-table td:last-child{text-align:right;}
+.cf-week-table td{font-size:11px;padding:9px 8px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:middle;}
+.cf-week-table tr:last-child td{border-bottom:none;}
+.cf-week-table tr:hover td{background:var(--bg3);}
+.cf-wk-bal{font-family:var(--mono);font-size:11px;font-weight:700;}
+.cf-wk-bal.good{color:var(--emerald);}
+.cf-wk-bal.warn{color:var(--amber);}
+.cf-wk-bal.bad{color:var(--rose);}
+/* Date group header in events */
+.cf-date-group-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 4px;background:var(--bg3);border-bottom:1px solid var(--border);}
+.cf-date-group-label{font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;}
+.cf-date-group-bal{font-family:var(--mono);font-size:10px;font-weight:700;}
+/* Event row full detail */
+.cf-ev-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);}
+.cf-ev-row:last-child{border-bottom:none;}
+.cf-ev-icon-wrap{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+.cf-ev-icon-wrap.income{background:rgba(16,185,129,.12);}
+.cf-ev-icon-wrap.expense{background:rgba(244,63,94,.1);}
+.cf-ev-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cf-ev-meta{font-size:10px;color:var(--text3);margin-top:1px;}
+.cf-ev-badge{display:inline-block;padding:1px 6px;border-radius:99px;font-size:8px;font-weight:700;margin-left:4px;}
+.cf-ev-badge.planned{background:rgba(99,102,241,.12);color:#6366f1;}
+.cf-ev-badge.recurring{background:rgba(6,182,212,.12);color:#06b6d4;}
+.cf-ev-badge.payable{background:rgba(245,158,11,.12);color:#f59e0b;}
+.cf-ev-amount{font-family:var(--mono);font-size:13px;font-weight:700;margin-left:auto;flex-shrink:0;}
+.cf-ev-amount.income{color:var(--emerald);}
+.cf-ev-amount.expense{color:var(--rose);}
+/* Net cash flow summary bar */
+.cf-net-bar{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;}
+.cf-net-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.cf-net-bar-label{font-size:10px;font-weight:700;color:var(--text3);width:72px;flex-shrink:0;}
+.cf-net-bar-track{flex:1;height:8px;background:var(--bg3);border-radius:99px;overflow:hidden;}
+.cf-net-bar-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.cf-net-bar-val{font-family:var(--mono);font-size:11px;font-weight:700;width:70px;text-align:right;flex-shrink:0;}
+/* Show-all toggle */
+.cf-show-all-btn{width:100%;padding:10px;text-align:center;font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;border-top:1px solid var(--border);cursor:pointer;font-family:var(--font);}
+
+/* ══════════════════════════════════════════════════════
+   ONBOARDING WIZARD — Light mode, mobile-first, v2
+══════════════════════════════════════════════════════ */
+
+/* ── Overlay shell ─────────────────────────────────── */
+#ob-overlay{
+  position:fixed;inset:0;z-index:9999;
+  background:#F0F4FF;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  overflow:hidden;
+}
+#ob-overlay.ob-active{display:flex;}
+
+/* ── Decorative blobs (light, subtle) ─────────────── */
+.ob-blob{
+  position:absolute;border-radius:50%;
+  filter:blur(80px);opacity:.28;
+  pointer-events:none;
+  animation:obPulse 7s ease-in-out infinite alternate;
+}
+.ob-blob-1{width:320px;height:320px;top:-100px;left:-80px;background:#A5C0FF;}
+.ob-blob-2{width:240px;height:240px;bottom:-60px;right:-60px;background:#A7F3D0;animation-delay:-3.5s;}
+.ob-blob-3{width:160px;height:160px;top:35%;left:60%;background:#DDD6FE;animation-delay:-1.5s;}
+@keyframes obPulse{from{transform:scale(1)}to{transform:scale(1.18)}}
+
+/* ── Top progress bar ──────────────────────────────── */
+.ob-progress-bar{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:rgba(61,126,255,.12);z-index:10;flex-shrink:0;
+}
+.ob-progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,#3D7EFF,#06B6D4);
+  border-radius:0 3px 3px 0;
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Top nav bar (back arrow + step label) ─────────── */
+.ob-topbar{
+  width:100%;max-width:480px;
+  display:flex;align-items:center;
+  padding:18px 20px 4px;
+  flex-shrink:0;
+  position:relative;z-index:5;
+  min-height:52px;
+}
+.ob-back-btn{
+  width:36px;height:36px;border-radius:10px;
+  border:1.5px solid #DDE3F0;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;-webkit-appearance:none;
+  color:#64748B;transition:all .15s;flex-shrink:0;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.ob-back-btn:active{transform:scale(.92);background:#F1F5F9;}
+.ob-step-label{
+  flex:1;text-align:center;
+  font-size:11px;font-weight:700;
+  color:#94A3B8;letter-spacing:.8px;text-transform:uppercase;
+}
+.ob-back-spacer{width:36px;flex-shrink:0;}/* keeps label centered */
+
+/* ── Scrollable slides area ────────────────────────── */
+.ob-slides{
+  width:100%;max-width:480px;
+  flex:1;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:8px 24px 16px;
+  position:relative;z-index:2;
+  /* Critical: min-height:0 lets flex-child shrink so footer is never covered */
+  min-height:0;
+}
+/* Hide scrollbar visually */
+.ob-slides::-webkit-scrollbar{display:none;}
+.ob-slides{scrollbar-width:none;}
+
+.ob-slide{
+  width:100%;
+  animation:obSlideIn .3s cubic-bezier(.34,1.05,.64,1) both;
+}
+@keyframes obSlideIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+@keyframes obSlideBack{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:translateX(0)}}
+.ob-slide.back{animation:obSlideBack .3s cubic-bezier(.34,1.05,.64,1) both;}
+
+/* ── Typography ────────────────────────────────────── */
+.ob-kicker{
+  font-size:10px;font-weight:800;
+  color:#94A3B8;text-transform:uppercase;
+  letter-spacing:1.6px;margin-bottom:8px;
+}
+.ob-title{
+  font-size:26px;font-weight:800;
+  color:#0F172A;line-height:1.2;
+  letter-spacing:-.6px;margin-bottom:10px;
+}
+.ob-title span{
+  background:linear-gradient(135deg,#3D7EFF 0%,#06B6D4 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.ob-body{
+  font-size:13px;color:#64748B;
+  line-height:1.75;margin-bottom:22px;
+}
+
+/* ── Splash feature rows ───────────────────────────── */
+.ob-splash-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:4px;}
+.ob-splash-row{
+  display:flex;align-items:center;gap:14px;
+  background:#fff;
+  border:1px solid #E8EEF8;
+  border-radius:14px;padding:13px 15px;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.ob-splash-ico{
+  width:40px;height:40px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.ob-splash-ico.blue{background:#EFF4FF;}
+.ob-splash-ico.cyan{background:#ECFEFF;}
+.ob-splash-ico.violet{background:#F3F0FF;}
+.ob-splash-row-title{font-size:13px;font-weight:700;color:#0F172A;}
+.ob-splash-row-sub{font-size:11px;color:#94A3B8;margin-top:2px;}
+
+/* ── Choice pill buttons ───────────────────────────── */
+.ob-choices{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:20px;}
+.ob-choice{
+  padding:9px 16px;border-radius:99px;
+  border:1.5px solid #DDE3F0;
+  background:#fff;color:#475569;
+  font-family:var(--font);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .15s;
+  -webkit-appearance:none;
+  display:flex;align-items:center;gap:6px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  /* Prevent iOS button weirdness */
+  touch-action:manipulation;
+  user-select:none;-webkit-user-select:none;
+}
+.ob-choice:active{transform:scale(.93);background:#F1F5F9;}
+.ob-choice.selected{
+  background:#EFF4FF;
+  border-color:#3D7EFF;
+  color:#3D7EFF;
+  box-shadow:0 0 0 3px rgba(61,126,255,.1);
+}
+.ob-choice svg{flex-shrink:0;}
+
+/* ── Occupation / use-case grid cards ──────────────── */
+.ob-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.ob-card{
+  background:#fff;
+  border:1.5px solid #E2E8F0;
+  border-radius:14px;
+  padding:15px 12px;
+  text-align:center;
+  cursor:pointer;
+  transition:all .15s;
+  -webkit-appearance:none;
+  font-family:var(--font);
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  touch-action:manipulation;
+  user-select:none;-webkit-user-select:none;
+}
+.ob-card:active{transform:scale(.94);}
+.ob-card.selected{
+  background:#EFF4FF;
+  border-color:#3D7EFF;
+  box-shadow:0 0 0 3px rgba(61,126,255,.1);
+}
+.ob-card-ico-wrap{
+  width:40px;height:40px;border-radius:11px;
+  background:#F1F5F9;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 10px;transition:background .15s;
+}
+.ob-card.selected .ob-card-ico-wrap{background:#DBEAFE;}
+.ob-card-label{font-size:12px;font-weight:700;color:#0F172A;}
+.ob-card-sub{font-size:10px;color:#94A3B8;margin-top:3px;line-height:1.4;}
+
+/* ── Tour feature cards ────────────────────────────── */
+.ob-feature{
+  background:#fff;
+  border:1px solid #E8EEF8;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:12px;
+  display:flex;gap:14px;align-items:flex-start;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.ob-feature-ico{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.ob-feature-ico.blue{background:#EFF4FF;}
+.ob-feature-ico.emerald{background:#ECFDF5;}
+.ob-feature-ico.violet{background:#F3F0FF;}
+.ob-feature-ico.amber{background:#FFFBEB;}
+.ob-feature-ico.cyan{background:#ECFEFF;}
+.ob-feature-body{flex:1;min-width:0;}
+.ob-feature-title{font-size:14px;font-weight:700;color:#0F172A;margin-bottom:5px;}
+.ob-feature-desc{font-size:12px;color:#64748B;line-height:1.6;}
+
+/* ── Name input ────────────────────────────────────── */
+.ob-name-input{
+  width:100%;padding:14px 16px;
+  background:#fff;
+  border:1.5px solid #DDE3F0;
+  border-radius:13px;
+  color:#0F172A;font-family:var(--font);
+  font-size:15px;font-weight:600;
+  outline:none;box-sizing:border-box;
+  -webkit-appearance:none;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  transition:border-color .15s, box-shadow .15s;
+}
+.ob-name-input:focus{
+  border-color:#3D7EFF;
+  box-shadow:0 0 0 3px rgba(61,126,255,.12);
+}
+.ob-name-input::placeholder{color:#CBD5E1;}
+
+/* ── Ready / final slide ───────────────────────────── */
+.ob-ready-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#ECFDF5;border:1px solid #A7F3D0;
+  color:#059669;border-radius:99px;
+  padding:5px 14px;font-size:11px;font-weight:700;
+  margin-bottom:16px;
+}
+.ob-tip-card{
+  background:#fff;border:1px solid #E8EEF8;
+  border-radius:13px;padding:13px 15px;
+  font-size:12px;color:#475569;line-height:1.65;
+  display:flex;gap:10px;align-items:flex-start;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+  margin-bottom:10px;
+}
+.ob-tip-ico{flex-shrink:0;margin-top:1px;}
+
+/* ── Footer area (always visible, never scrolls) ───── */
+.ob-footer{
+  width:100%;max-width:480px;
+  padding:10px 24px max(24px, env(safe-area-inset-bottom));
+  flex-shrink:0;
+  position:relative;z-index:5;
+  background:transparent;
+}
+
+/* ── Dots row ──────────────────────────────────────── */
+.ob-dots{
+  display:flex;justify-content:center;
+  gap:6px;margin-bottom:16px;
+}
+.ob-dot{
+  height:6px;border-radius:99px;
+  background:#CBD5E1;
+  transition:all .3s ease;
+  cursor:pointer;
+}
+.ob-dot-sm{width:6px;}
+.ob-dot-active{width:20px;background:#3D7EFF;}
+.ob-dot-done{width:6px;background:#93C5FD;}
+
+/* ── CTA buttons ───────────────────────────────────── */
+.ob-btn-primary{
+  width:100%;padding:15px;
+  background:linear-gradient(135deg,#3D7EFF 0%,#2563EB 100%);
+  border:none;border-radius:13px;
+  color:#fff;font-family:var(--font);
+  font-size:15px;font-weight:700;
+  cursor:pointer;
+  box-shadow:0 4px 18px rgba(61,126,255,.3);
+  transition:all .15s;
+  -webkit-appearance:none;
+  touch-action:manipulation;
+  display:block;
+}
+.ob-btn-primary:active{transform:scale(.97);box-shadow:0 2px 8px rgba(61,126,255,.2);}
+.ob-btn-ghost{
+  width:100%;padding:12px;
+  background:none;border:none;
+  color:#94A3B8;font-family:var(--font);
+  font-size:13px;font-weight:600;
+  cursor:pointer;margin-top:2px;
+  transition:color .15s;
+  -webkit-appearance:none;
+  touch-action:manipulation;
+  display:block;
+}
 .rpt-footer-tile{padding:11px 8px;text-align:center;border-right:1px solid var(--border);}
 .rpt-footer-tile:last-child{border-right:none;}
 .rpt-footer-val{font-family:var(--mono);font-size:12px;font-weight:700;}
@@ -4682,13 +5021,13 @@ html.light .tx-card:active {
   <div id="acctx-summary" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 14px 0;flex-shrink:0"></div>
 
   <!-- Period filter tabs -->
-  <div style="display:flex;gap:0;padding:10px 14px 0;flex-shrink:0;overflow-x:auto;scrollbar-width:none">
-    <div id="acctx-period-tabs" style="display:flex;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:3px;flex-shrink:0">
-      <button class="acctx-ptab active" onclick="setAccTxPeriod('today',this)">Today</button>
-      <button class="acctx-ptab" onclick="setAccTxPeriod('7days',this)">7 Days</button>
-      <button class="acctx-ptab" onclick="setAccTxPeriod('30days',this)">30 Days</button>
-      <button class="acctx-ptab" onclick="setAccTxPeriod('year',this)">Year</button>
-      <button class="acctx-ptab" onclick="setAccTxPeriod('custom',this)">Custom</button>
+  <div style="padding:10px 14px 0;flex-shrink:0">
+    <div class="period-tabs" id="acctx-period-tabs" style="margin-bottom:0">
+      <button class="period-tab active" onclick="setAccTxPeriod('today',this)">Today</button>
+      <button class="period-tab" onclick="setAccTxPeriod('7days',this)">7 Days</button>
+      <button class="period-tab" onclick="setAccTxPeriod('30days',this)">30 Days</button>
+      <button class="period-tab" onclick="setAccTxPeriod('year',this)">Year</button>
+      <button class="period-tab" onclick="setAccTxPeriod('custom',this)">Custom</button>
     </div>
   </div>
 
@@ -7182,30 +7521,39 @@ html.light .tx-card:active {
 </div>
 
 <!-- ONBOARDING POPUP -->
-<div class="modal-overlay" id="modal-onboarding" style="align-items:center;padding:20px">
-  <div class="modal" style="border-radius:24px;max-width:420px;width:100%;padding:28px 24px;text-align:center">
-    <div style="font-size:48px;margin-bottom:12px">💸</div>
-    <div style="font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px">Welcome to Abix!</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:22px;line-height:1.7">Your personal money tracker — all data stays on your device. Here are some quick tips to get started:</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;text-align:left">
-      <div style="background:var(--bg3);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px">
-        <span style="font-size:22px">➕</span>
-        <div><div style="font-size:12px;font-weight:700">Add Transactions</div><div style="font-size:11px;color:var(--text3)">Tap the + button to log expenses, income, or transfers</div></div>
-      </div>
-      <div style="background:var(--bg3);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px">
-        <span style="font-size:22px">🏦</span>
-        <div><div style="font-size:12px;font-weight:700">Set Up Accounts</div><div style="font-size:11px;color:var(--text3)">Add your bank, e-wallet (GCash/Maya), or cash wallet first</div></div>
-      </div>
-      <div style="background:var(--bg3);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px">
-        <span style="font-size:22px">💳</span>
-        <div><div style="font-size:12px;font-weight:700">Track Payables</div><div style="font-size:11px;color:var(--text3)">Log loans & credit cards — get notified before due dates</div></div>
-      </div>
-      <div style="background:var(--bg3);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px">
-        <span style="font-size:22px">📅</span>
-        <div><div style="font-size:12px;font-weight:700">Plan Ahead</div><div style="font-size:11px;color:var(--text3)">Schedule future expenses & income in the Planned tab</div></div>
-      </div>
-    </div>
-    <button class="btn-primary" onclick="closeOnboarding()" style="margin-top:0">Got it, let's go! 🚀</button>
+<!-- ══════════════════════════════════════════════════
+     ONBOARDING WIZARD  –  Light mode, v2
+══════════════════════════════════════════════════ -->
+<div id="ob-overlay">
+  <!-- Decorative blobs -->
+  <div class="ob-blob ob-blob-1"></div>
+  <div class="ob-blob ob-blob-2"></div>
+  <div class="ob-blob ob-blob-3"></div>
+
+  <!-- Top progress bar -->
+  <div class="ob-progress-bar">
+    <div class="ob-progress-fill" id="ob-prog-fill" style="width:0%"></div>
+  </div>
+
+  <!-- Top navigation bar (back button + step label) -->
+  <div class="ob-topbar" id="ob-topbar">
+    <button class="ob-back-btn" id="ob-back-btn" onclick="obGoBack()" style="display:none" aria-label="Back">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+    </button>
+    <div class="ob-step-label" id="ob-step-label"></div>
+    <div class="ob-back-spacer" id="ob-back-spacer"></div>
+  </div>
+
+  <!-- Scrollable slide content -->
+  <div class="ob-slides" id="ob-slides-wrap">
+    <div class="ob-slide" id="ob-slide-content"></div>
+  </div>
+
+  <!-- Sticky footer: dots + CTA -->
+  <div class="ob-footer">
+    <div class="ob-dots" id="ob-dots"></div>
+    <button class="ob-btn-primary" id="ob-btn-next" onclick="obNext()">Continue</button>
+    <button class="ob-btn-ghost" id="ob-btn-skip" onclick="obSkip()">Skip intro</button>
   </div>
 </div>
 
@@ -7299,7 +7647,7 @@ function getThemeColors() {
 
 // ===== DATA =====
 const DB_KEY='finflow_v3';
-let db={accounts:[],transactions:[],planned:[],logs:[],settings:{currency:'₱|PHP'},payables:[],qrCodes:[],qrContacts:[],budgets:[],goals:[],recurring:[],aiPatterns:{}};
+let db={accounts:[],transactions:[],planned:[],logs:[],settings:{currency:'₱|PHP',userProfile:null},payables:[],qrCodes:[],qrContacts:[],budgets:[],goals:[],recurring:[],aiPatterns:{}};
 
 // Default privacy settings — all off (amounts visible)
 const PRIV_DEFAULTS={homeTotal:false,homeSummary:false,chips:false,cards:false,accounts:false,transactions:false};
@@ -7615,7 +7963,10 @@ function showPayablesTab(tab,btn){
 // ===== TOAST =====
 function showToast(msg,type='success'){
   const t=document.getElementById('toast');
-  t.textContent=msg;
+  // CSS ::before already injects the type icon (❌ ✅ ⚠️ ℹ️).
+  // Strip any leading emoji that duplicates it so the icon never appears twice.
+  const stripped=msg.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}\u{1F004}-\u{1F0CF}❌✅⚠️ℹ️✔️🔴🟡🟢📷🎙️💡📤📥🗑️✏️🎯📅]+\s*/u,'');
+  t.textContent=stripped;
   t.className='toast show '+type;
   // longer messages stay a bit longer
   const dur=msg.length>60?4500:3000;
@@ -8669,8 +9020,8 @@ function openAccountTxScreen(id){
   document.getElementById('acctx-balance').style.color = balColor;
   document.getElementById('acctx-edit-btn').onclick = () => editAccountFromTxScreen();
   // Set active tab to 30days
-  document.querySelectorAll('.acctx-ptab').forEach(b => b.classList.remove('active'));
-  const tab = document.querySelector('.acctx-ptab[onclick*="30days"]');
+  document.querySelectorAll('#acctx-period-tabs .period-tab').forEach(b => b.classList.remove('active'));
+  const tab = document.querySelector('#acctx-period-tabs .period-tab[onclick*="30days"]');
   if(tab) tab.classList.add('active');
   document.getElementById('acctx-custom-range').style.display = 'none';
   // Summary strip
@@ -8716,7 +9067,7 @@ function getAccTxDateRange(){
 
 function setAccTxPeriod(period, btn){
   _acctxPeriod = period;
-  document.querySelectorAll('.acctx-ptab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#acctx-period-tabs .period-tab').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   const cr = document.getElementById('acctx-custom-range');
   if(period === 'custom'){
@@ -9031,6 +9382,10 @@ function setCfPeriod(p) {
 }
 
 // ── Cashflow report panel (inside Reports screen) ──────────────────────────
+// Data is sourced 100% from calendar-forecasted entries:
+//   📅 db.planned   → Pending future planned payments & income
+//   🔄 db.recurring → Active recurring rules projected forward
+//   💳 db.payables  → Active payables with upcoming due dates
 function renderCashflowReport(){
   const el=document.getElementById('reports-cashflow-panel');if(!el)return;
   const currentBalance=db.accounts.reduce((s,a)=>s+a.balance,0);
@@ -9039,81 +9394,108 @@ function renderCashflowReport(){
   const timeline=cfBuildTimeline(currentBalance,events,endDate);
   const projectedBalance=timeline.length?timeline[timeline.length-1].balance:currentBalance;
   const delta=projectedBalance-currentBalance;
-  const insights=cfGenerateInsights(currentBalance,timeline,events);
-  const periodLabels={'7d':'7 Days','14d':'14 Days','30d':'30 Days','eom':'End of Month'};
+  const periodLabels={'7d':'Next 7 Days','14d':'Next 14 Days','30d':'Next 30 Days','eom':'End of Month'};
+  const periodShort={'7d':'7D','14d':'14D','30d':'30D','eom':'EOM'};
   const balClass=projectedBalance<0?'danger':projectedBalance<2000?'warn':'good';
   const deltaSign=delta>=0?'+':'';
   const deltaClass=delta>=0?'pos':'neg';
+  const todayStr=today();
 
-  // Alert — notif-pill chip style
-  let alertHtml='';
+  // ── Totals ─────────────────────────────────────────────────────
+  const expectedIn =events.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+  const expectedOut=events.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  const netCashFlow=expectedIn-expectedOut;
+
+  // ── Risk detection ─────────────────────────────────────────────
   const goesNegative=timeline.find(d=>d.balance<0);
-  const goesLow=timeline.find(d=>d.balance<2000&&d.balance>=0);
-  if(goesNegative){
-    alertHtml=`<div class="notif-pill error" style="margin-bottom:8px;cursor:default"><div class="notif-pill-icon">🚨</div><div class="notif-pill-text">Expenses (${fmt(goesNegative.balance)}) exceed income this period</div></div>`;
-  } else if(goesLow){
-    alertHtml=`<div class="notif-pill warn" style="margin-bottom:8px;cursor:default"><div class="notif-pill-icon">⚠️</div><div class="notif-pill-text">Balance may drop below ${fmt(2000)} on ${fmtDate(goesLow.date)}</div></div>`;
-  } else if(events.length>0){
-    alertHtml=`<div class="notif-pill success" style="margin-bottom:8px;cursor:default"><div class="notif-pill-icon">✅</div><div class="notif-pill-text">Cash flow looks healthy for the next ${periodLabels[cfPeriod]}</div></div>`;
+  const goesLow     =timeline.find(d=>d.balance<2000&&d.balance>=0);
+
+  // ── Events list — grouped by date ─────────────────────────────
+  let eventsHtml='';
+  const cfShowAll=window._cfShowAll||false;
+  const LIMIT=10;
+  const displayEvents=cfShowAll?events:events.slice(0,LIMIT);
+  const moreCount=events.length>LIMIT?events.length-LIMIT:0;
+
+  if(!displayEvents.length){
+    eventsHtml=`<div style="padding:32px 16px;text-align:center;color:var(--text3)">
+      <div style="font-size:26px;margin-bottom:8px">📭</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:4px">No upcoming events</div>
+      <div style="font-size:11px;line-height:1.6">Add planned payments, recurring rules,<br>or payable due dates to see your forecast.</div>
+    </div>`;
+  } else {
+    let lastDate='';
+    displayEvents.forEach(e=>{
+      if(e.date!==lastDate){
+        lastDate=e.date;
+        const dayLabel=e.date===todayStr?'Today':new Date(e.date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+        eventsHtml+=`<div style="padding:8px 16px 4px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px">${dayLabel}</div>`;
+      }
+      const icon=e.catIcon||(e.source==='recurring'?'🔄':e.source==='payable'?'💳':'📅');
+      const sign=e.type==='income'?'+':'-';
+      const amtColor=e.type==='income'?'var(--emerald)':'var(--rose)';
+      const iconBg=e.type==='income'?'rgba(16,185,129,.1)':'rgba(239,68,68,.08)';
+      const label=e.label.replace(/ \(recurring\)| \(payable due\)/,'');
+      eventsHtml+=`<div style="display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--border)">
+        <div style="width:32px;height:32px;border-radius:9px;background:${iconBg};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px">${icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:1px">${fmtDate(e.date)}</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:${amtColor};flex-shrink:0">${sign}${fmt(e.amount)}</div>
+      </div>`;
+    });
   }
 
-  // Largest upcoming payment insight
-  const largestExp=events.filter(e=>e.type==='expense').sort((a,b)=>b.amount-a.amount)[0];
-  const insightPill=largestExp?`<div class="notif-pill info" style="margin-bottom:12px;cursor:default"><div class="notif-pill-icon">💡</div><div class="notif-pill-text">Largest upcoming payment: ${fmt(largestExp.amount)} for ${largestExp.label.split(' —')[0]} (${largestExp.source})</div></div>`:'';
-
-  // Top events — tx-item style
-  const topEvents=events.slice(0,6);
-  const eventsHtml=topEvents.length?topEvents.map(e=>{
-    const isIncome=e.type==='income';
-    const dayStr=e.date===today()?'Today':fmtDate(e.date);
-    const icon=e.catIcon||(e.source==='recurring'?'🔄':e.source==='payable'?'💳':'📅');
-    return `<div class="tx-item">
-      <div class="tx-icon ${e.type}" style="font-size:18px">${icon}</div>
-      <div style="flex:1;min-width:0">
-        <div class="tx-cat" style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.label}</div>
-        <div class="tx-date">${dayStr}</div>
-      </div>
-      <div class="tx-amount" style="color:${isIncome?'var(--emerald)':'var(--rose)'};font-size:12px">${isIncome?'+':'-'}${fmt(e.amount)}</div>
-    </div>`;
-  }).join(''):`<div style="padding:18px;text-align:center;color:var(--text3);font-size:12px">No upcoming events in this window.<br>Add recurring rules or planned transactions.</div>`;
-
-  const moreCount=events.length>6?events.length-6:0;
-  const expectedIn=events.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
-  const expectedOut=events.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
+  // ── Risk notice (only if something to warn about) ──────────────
+  const riskHtml=goesNegative
+    ?`<div class="notif-pill error" style="margin-bottom:12px;cursor:default"><div class="notif-pill-icon">⚠️</div><div class="notif-pill-text">Balance may go negative on ${fmtDate(goesNegative.date)}</div></div>`
+    :goesLow
+    ?`<div class="notif-pill warn" style="margin-bottom:12px;cursor:default"><div class="notif-pill-icon">⚠️</div><div class="notif-pill-text">Balance may drop below ${fmt(2000)} on ${fmtDate(goesLow.date)}</div></div>`
+    :'';
 
   el.innerHTML=`
+  <!-- HERO ─────────────────────────────────────────────── -->
   <div class="rpt-cf-hero">
     <div class="rpt-cf-inner">
-      <div class="rpt-cf-label">Projected Balance — ${periodLabels[cfPeriod]}</div>
+      <div class="rpt-cf-label">${periodLabels[cfPeriod]}</div>
       <div class="rpt-cf-amount ${balClass}">${fmt(projectedBalance)}</div>
-      <div class="rpt-cf-badge ${deltaClass}">${deltaSign}${fmt(delta)} vs today</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <div class="rpt-cf-badge ${deltaClass}">${deltaSign}${fmt(delta)} vs today</div>
+      </div>
       <div class="rpt-cf-period-row">
-        ${['7d','14d','30d','eom'].map(p=>`<button class="rpt-cf-pbtn${cfPeriod===p?' active':''}" onclick="cfPeriod='${p}';renderCashflowReport()">${p==='eom'?'EOM':p.toUpperCase()}</button>`).join('')}
+        ${['7d','14d','30d','eom'].map(p=>`<button class="rpt-cf-pbtn${cfPeriod===p?' active':''}" onclick="window._cfShowAll=false;cfPeriod='${p}';renderCashflowReport()">${periodShort[p]}</button>`).join('')}
       </div>
     </div>
   </div>
-  ${alertHtml}
+
+  <!-- RISK NOTICE (conditional) ────────────────────────── -->
+  ${riskHtml}
+
+  <!-- CHART ────────────────────────────────────────────── -->
   <div class="rpt-card">
-    <div class="rpt-card-hdr">
-      <div class="rpt-card-ico" style="background:rgba(59,130,246,.12)"><svg width="16" height="16" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.305a11.95 11.95 0 0 1 5.814-5.519l2.74-1.22m0 0-5.94-2.28m5.94 2.28-2.28 5.941"/></svg></div>
-      <div class="rpt-card-title">Balance Forecast</div>
+    <div class="rpt-card-body" style="padding-top:14px">
+      <div class="rpt-chart-wrap"><canvas id="rpt-cf-chart"></canvas></div>
     </div>
-    <div class="rpt-card-body"><div class="rpt-chart-wrap"><canvas id="rpt-cf-chart"></canvas></div></div>
   </div>
-  ${insightPill}
-  <div class="rpt-card">
+
+  <!-- EVENTS LIST ──────────────────────────────────────── -->
+  <div class="rpt-card" style="overflow:hidden">
     <div class="rpt-card-hdr">
-      <div class="rpt-card-ico" style="background:rgba(245,158,11,.12)"><svg width="16" height="16" fill="none" stroke="#F59E0B" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg></div>
-      <div class="rpt-card-title">Upcoming Events (${events.length}) <span style="font-size:9px;color:var(--text3);font-weight:400">🔄 Recurring · 💳 Payables · 📅 Planned</span></div>
+      <div class="rpt-card-title">Upcoming <span style="font-weight:400;color:var(--text3)">${events.length} events</span></div>
     </div>
-    <div style="padding:0">
+    <div>
       ${eventsHtml}
-      ${moreCount>0?`<div style="text-align:center;padding:8px 0;font-size:11px;color:var(--blue);cursor:pointer" onclick="showCfAllEvents()">+${moreCount} more events →</div>`:''}
+      ${moreCount>0&&!cfShowAll
+        ?`<button class="cf-show-all-btn" onclick="window._cfShowAll=true;renderCashflowReport()">Show ${moreCount} more ↓</button>`
+        :cfShowAll&&events.length>LIMIT
+        ?`<button class="cf-show-all-btn" onclick="window._cfShowAll=false;renderCashflowReport()">Show less ↑</button>`
+        :''}
     </div>
-    <div class="rpt-footer-row">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border)">
       <div class="rpt-footer-tile"><div class="rpt-footer-val" style="color:var(--emerald)">+${fmt(expectedIn)}</div><div class="rpt-footer-lbl">Expected In</div></div>
       <div class="rpt-footer-tile"><div class="rpt-footer-val" style="color:var(--rose)">-${fmt(expectedOut)}</div><div class="rpt-footer-lbl">Expected Out</div></div>
-      <div class="rpt-footer-tile"><div class="rpt-footer-val" style="color:var(--text2)">${events.length}</div><div class="rpt-footer-lbl">Events</div></div>
+      <div class="rpt-footer-tile"><div class="rpt-footer-val" style="color:${netCashFlow>=0?'var(--emerald)':'var(--rose)'}">${netCashFlow>=0?'+':''}${fmt(netCashFlow)}</div><div class="rpt-footer-lbl">Net Flow</div></div>
     </div>
   </div>`;
 
@@ -13000,15 +13382,507 @@ function checkDuePlanned(){
   if(due.length){const ov=due.filter(p=>p.date<t).length;const td=due.filter(p=>p.date===t).length;let m='';if(ov)m+=`⚠️ ${ov} overdue! `;if(td)m+=`📅 ${td} due today!`;if(m)setTimeout(()=>showToast(m.trim(),'warn'),1200);}
 }
 
-// ===== ONBOARDING =====
+// ═══════════════════════════════════════════════════════════
+// ONBOARDING WIZARD v2 — Light mode, Heroicons, mobile-first
+// ═══════════════════════════════════════════════════════════
+
+const OB_KEY         = 'finflow_onboarded';
+const OB_PROFILE_KEY = 'finflow_profile';
+
+// Collected profile answers
+let obProfile = { name:'', ageRange:'', occupation:'', primaryUse:'' };
+
+// Heroicons (outline, 20px) used throughout wizard
+const OB_ICONS = {
+  creditCard: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/></svg>`,
+  calendar:   `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>`,
+  chartBar:   `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"/></svg>`,
+  plusCircle: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`,
+  building:   `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z"/></svg>`,
+  arrowPath:  `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>`,
+  sparkles:   `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"/></svg>`,
+  trendUp:    `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.305a11.95 11.95 0 0 1 5.814-5.519l2.74-1.22m0 0-5.94-2.28m5.94 2.28-2.28 5.941"/></svg>`,
+  banknotes:  `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"/></svg>`,
+  academic:   `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 3.741-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg>`,
+  briefcase:  `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z"/></svg>`,
+  computer:   `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0H3"/></svg>`,
+  store:      `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016 2.993 2.993 0 0 0 2.25-1.016 3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/></svg>`,
+  user:       `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>`,
+  users:      `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>`,
+  target:     `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke="currentColor"/><circle cx="12" cy="12" r="5" stroke="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>`,
+  checkCircle:`<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`,
+  lightBulb:  `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.355a3 3 0 0 1-3 0M9 3.75l.003.003a1.5 1.5 0 0 1 2.994 0L12 3.75m-3 7.5h6m-6 3h6m-3-9V3.75"/></svg>`,
+  mapPin:     `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>`,
+  leaf:       `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 0 1-1.161.886l-.143.048a1.107 1.107 0 0 0-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 0 1-1.652.928l-.679-.906a1.125 1.125 0 0 0-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 0 0-8.862 12.872M12.75 3.031a9 9 0 0 1 6.69 14.036m0 0-.177-.529A2.249 2.249 0 0 0 17.128 15H16.5l-.324-.324a1.453 1.453 0 0 0-2.328.377l-.036.073a1.586 1.586 0 0 1-.982.816l-.99.282c-.55.157-.894.702-.8 1.267l.073.438c.08.474.49.821.97.821.846 0 1.598.542 1.865 1.345l.215.643m5.276-3.67a9.012 9.012 0 0 1-5.276 3.67m0 0a9 9 0 0 1-10.275-4.835M15.75 9c0 .896-.393 1.7-1.016 2.25"/></svg>`,
+};
+
+// Step definitions
+const OB_STEPS = [
+  { id:'splash',     type:'splash',   label:'' },
+  { id:'name',       type:'question', label:'About You · 1 of 4' },
+  { id:'age',        type:'question', label:'About You · 2 of 4' },
+  { id:'occupation', type:'question', label:'About You · 3 of 4' },
+  { id:'use',        type:'question', label:'About You · 4 of 4' },
+  { id:'tour1',      type:'tour',     label:'Quick Tour · 1 of 3' },
+  { id:'tour2',      type:'tour',     label:'Quick Tour · 2 of 3' },
+  { id:'tour3',      type:'tour',     label:'Quick Tour · 3 of 3' },
+  { id:'ready',      type:'ready',    label:'' },
+];
+
+let obStep = 0;
+let obBack = false;
+
+/* ── Entry point ───────────────────────────────────── */
 function checkOnboarding(){
-  if(!localStorage.getItem('finflow_onboarded')){
-    document.getElementById('modal-onboarding').classList.add('open');
+  if(localStorage.getItem(OB_KEY)) return;
+  obStep   = 0;
+  obBack   = false;
+  obProfile = { name:'', ageRange:'', occupation:'', primaryUse:'' };
+  const ov = document.getElementById('ob-overlay');
+  if(ov) ov.classList.add('ob-active');
+  _obRender();
+}
+
+/* ── Navigation ────────────────────────────────────── */
+function obNext(){
+  // Capture name before moving on
+  const step = OB_STEPS[obStep];
+  if(step.id === 'name'){
+    const v = document.getElementById('ob-name-input');
+    if(v) obProfile.name = v.value.trim();
+  }
+  // Required fields
+  if(step.id === 'age'        && !obProfile.ageRange)   { _obShake(); return; }
+  if(step.id === 'occupation' && !obProfile.occupation) { _obShake(); return; }
+  if(step.id === 'use'        && !obProfile.primaryUse) { _obShake(); return; }
+
+  if(obStep >= OB_STEPS.length - 1){ _obFinish(); return; }
+  obBack = false;
+  obStep++;
+  _obRender();
+}
+
+function obSkip(){ _obFinish(); }
+
+function obGoBack(){
+  if(obStep === 0) return;
+  obBack = true;
+  obStep--;
+  _obRender();
+}
+
+/* ── Render step ───────────────────────────────────── */
+function _obRender(){
+  const total   = OB_STEPS.length;
+  const step    = OB_STEPS[obStep];
+  const isFirst = obStep === 0;
+  const isLast  = obStep === total - 1;
+
+  // Progress bar
+  const fill = document.getElementById('ob-prog-fill');
+  if(fill) fill.style.width = Math.round((obStep / (total - 1)) * 100) + '%';
+
+  // Top bar
+  const backBtn     = document.getElementById('ob-back-btn');
+  const spacer      = document.getElementById('ob-back-spacer');
+  const stepLabel   = document.getElementById('ob-step-label');
+  if(backBtn){
+    backBtn.style.display  = isFirst ? 'none' : 'flex';
+    spacer.style.display   = isFirst ? 'none' : '';
+  }
+  if(stepLabel) stepLabel.textContent = step.label || '';
+
+  // Dots
+  const dotsEl = document.getElementById('ob-dots');
+  if(dotsEl){
+    dotsEl.innerHTML = OB_STEPS.map((s, i) => {
+      if(i === obStep) return `<div class="ob-dot ob-dot-active"></div>`;
+      if(i < obStep)   return `<div class="ob-dot ob-dot-done"></div>`;
+      return `<div class="ob-dot ob-dot-sm"></div>`;
+    }).join('');
+  }
+
+  // Button labels
+  const btnNext = document.getElementById('ob-btn-next');
+  const btnSkip = document.getElementById('ob-btn-skip');
+  if(btnNext) btnNext.textContent = isLast ? "Let's go! →" : 'Continue →';
+  if(btnSkip){
+    btnSkip.style.display  = isLast ? 'none' : '';
+    btnSkip.textContent    = isFirst ? 'Skip intro' : 'Back';
+    btnSkip.onclick        = isFirst ? obSkip : obGoBack;
+  }
+
+  // Render slide — REPLACE then force animation replay
+  const wrap = document.getElementById('ob-slide-content');
+  if(!wrap) return;
+  const dir = obBack ? ' back' : '';
+  wrap.className = 'ob-slide' + dir;
+  void wrap.offsetWidth; // reflow to replay animation
+  wrap.innerHTML = _obSlideHtml(step);
+
+  // Auto-focus name input
+  if(step.id === 'name'){
+    setTimeout(() => {
+      const inp = document.getElementById('ob-name-input');
+      if(inp) inp.focus();
+    }, 360);
+  }
+
+  // Scroll slide back to top on each step change
+  const slidesWrap = document.getElementById('ob-slides-wrap');
+  if(slidesWrap) slidesWrap.scrollTop = 0;
+}
+
+/* ── Slide HTML factory ─────────────────────────────── */
+function _obSlideHtml(step){
+
+  switch(step.id){
+
+    // ── SPLASH ──────────────────────────────────────────
+    case 'splash': return `
+      <div style="padding-top:8px">
+        <div style="text-align:center;margin-bottom:22px">
+          <div style="width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,#3D7EFF,#06B6D4);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 28px rgba(61,126,255,.3)">
+            <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"/></svg>
+          </div>
+          <div class="ob-kicker">Welcome to</div>
+          <div class="ob-title" style="font-size:30px"><span>Abix</span> Money Tracker</div>
+          <div class="ob-body" style="margin-bottom:0">Your personal finance companion — track spending, plan ahead, and reach your money goals. Everything stays private on your device.</div>
+        </div>
+        <div class="ob-splash-rows">
+          <div class="ob-splash-row">
+            <div class="ob-splash-ico blue" style="color:#3D7EFF">${OB_ICONS.creditCard}</div>
+            <div><div class="ob-splash-row-title">Track every peso</div><div class="ob-splash-row-sub">Log expenses, income &amp; transfers instantly</div></div>
+          </div>
+          <div class="ob-splash-row">
+            <div class="ob-splash-ico cyan" style="color:#0891B2">${OB_ICONS.calendar}</div>
+            <div><div class="ob-splash-row-title">Plan your future</div><div class="ob-splash-row-sub">Schedule bills, salaries &amp; upcoming payments</div></div>
+          </div>
+          <div class="ob-splash-row">
+            <div class="ob-splash-ico violet" style="color:#7C3AED">${OB_ICONS.chartBar}</div>
+            <div><div class="ob-splash-row-title">See the big picture</div><div class="ob-splash-row-sub">Reports &amp; cash flow forecasts, always current</div></div>
+          </div>
+        </div>
+      </div>`;
+
+    // ── NAME ────────────────────────────────────────────
+    case 'name': return `
+      <div style="padding-top:8px">
+        <div class="ob-kicker">Personalization</div>
+        <div class="ob-title">What should we <span>call you?</span></div>
+        <div class="ob-body">Helps us personalize your dashboard and reports. Totally optional.</div>
+        <input id="ob-name-input" type="text" class="ob-name-input"
+          placeholder="Your first name"
+          value="${obProfile.name}"
+          onkeydown="if(event.key==='Enter')obNext()">
+        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;color:#94A3B8;font-size:11px">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+          Stored on your device only. Never shared.
+        </div>
+      </div>`;
+
+    // ── AGE ─────────────────────────────────────────────
+    case 'age': return `
+      <div style="padding-top:8px">
+        <div class="ob-kicker">Your Profile</div>
+        <div class="ob-title">How old <span>are you?</span></div>
+        <div class="ob-body">Helps us suggest the right financial tips and insights for your life stage.</div>
+        <div class="ob-choices" id="ob-age-choices">
+          ${[
+            ['Under 18', 'academic'],
+            ['18 – 24',  'academic'],
+            ['25 – 34',  'briefcase'],
+            ['35 – 44',  'building'],
+            ['45 – 54',  'trendUp'],
+            ['55+',      'leaf'],
+          ].map(([label, ico]) => `
+            <button type="button" class="ob-choice${obProfile.ageRange===label?' selected':''}"
+              onclick="obSelectAge('${label}')">
+              <span style="color:${obProfile.ageRange===label?'#3D7EFF':'#94A3B8'};display:flex">${(OB_ICONS[ico]||'').replace('width="22" height="22"','width="15" height="15"')}</span>
+              ${label}
+            </button>`).join('')}
+        </div>
+        ${!obProfile.ageRange ? `<div style="font-size:11px;color:#F59E0B;display:flex;align-items:center;gap:5px"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg> Please pick your age range to continue</div>` : ''}
+      </div>`;
+
+    // ── OCCUPATION ──────────────────────────────────────
+    case 'occupation': return `
+      <div style="padding-top:8px">
+        <div class="ob-kicker">Your Profile</div>
+        <div class="ob-title">What do <span>you do?</span></div>
+        <div class="ob-body">We'll set up the right defaults and insights for your situation.</div>
+        <div class="ob-cards" id="ob-occ-cards">
+          ${[
+            ['student',  'academic',  'Student',    'Allowances & school expenses'],
+            ['employed', 'briefcase', 'Employed',   'Salary, bills & savings'],
+            ['freelance','computer',  'Freelancer', 'Variable income & projects'],
+            ['business', 'store',     'Business',   'Revenue, costs & growth'],
+          ].map(([val, ico, label, sub]) => `
+            <button type="button" class="ob-card${obProfile.occupation===val?' selected':''}"
+              data-val="${val}" onclick="obSelectOcc('${val}')">
+              <div class="ob-card-ico-wrap" style="color:${obProfile.occupation===val?'#3D7EFF':'#64748B'}">${OB_ICONS[ico]||''}</div>
+              <div class="ob-card-label">${label}</div>
+              <div class="ob-card-sub">${sub}</div>
+            </button>`).join('')}
+        </div>
+        <div class="ob-choices" id="ob-occ-extras">
+          ${[['retired','leaf','Retired'],['other','sparkles','Other']].map(([val,ico,label]) => `
+            <button type="button" class="ob-choice${obProfile.occupation===val?' selected':''}"
+              data-val="${val}" onclick="obSelectOcc('${val}')">
+              <span style="display:flex;color:${obProfile.occupation===val?'#3D7EFF':'#94A3B8'}">${(OB_ICONS[ico]||'').replace('width="22" height="22"','width="15" height="15"')}</span>
+              ${label}
+            </button>`).join('')}
+        </div>
+        ${!obProfile.occupation ? `<div style="font-size:11px;color:#F59E0B;display:flex;align-items:center;gap:5px;margin-top:4px"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg> Please select your occupation to continue</div>` : ''}
+      </div>`;
+
+    // ── PRIMARY USE ──────────────────────────────────────
+    case 'use': return `
+      <div style="padding-top:8px">
+        <div class="ob-kicker">Your Goals</div>
+        <div class="ob-title">How will you <span>use Abix?</span></div>
+        <div class="ob-body">We'll prioritize the right features and report types for your needs.</div>
+        <div class="ob-cards" id="ob-use-cards">
+          ${[
+            ['personal', 'user',     'Personal',      'Track my own spending & income'],
+            ['family',   'users',    'Family',        'Manage household finances'],
+            ['savings',  'target',   'Save for Goals','Build a fund or save for something big'],
+            ['business', 'trendUp',  'Side Business', 'Track income, costs & profit'],
+          ].map(([val, ico, label, sub]) => `
+            <button type="button" class="ob-card${obProfile.primaryUse===val?' selected':''}"
+              data-val="${val}" onclick="obSelectUse('${val}')">
+              <div class="ob-card-ico-wrap" style="color:${obProfile.primaryUse===val?'#3D7EFF':'#64748B'}">${OB_ICONS[ico]||''}</div>
+              <div class="ob-card-label">${label}</div>
+              <div class="ob-card-sub">${sub}</div>
+            </button>`).join('')}
+        </div>
+        ${!obProfile.primaryUse ? `<div style="font-size:11px;color:#F59E0B;display:flex;align-items:center;gap:5px"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg> Please select how you'll use Abix to continue</div>` : ''}
+      </div>`;
+
+    // ── TOUR 1 ───────────────────────────────────────────
+    case 'tour1': return `
+      <div style="padding-top:8px">
+        <div class="ob-kicker">Feature Tour</div>
+        <div class="ob-title">Log money <span>in seconds</span></div>
+        <div class="ob-body">Tap the <strong style="color:#0F172A">＋ button</strong> at the bottom of the home screen any time you spend or earn.</div>
+        <div class="ob-feature">
+          <div class="ob-feature-ico blue" style="color:#3D7EFF">${OB_ICONS.plusCircle}</div>
+          <div class="ob-feature-body">
+            <div class="ob-feature-title">Add Transactions</div>
+            <div class="ob-feature-desc">Choose Expense, Income, or Transfer. Pick a category, enter the amount, and the dashboard updates instantly.</div>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <div class="ob-feature-ico emerald" style="color:#059669">${OB_ICONS.building}</div>
+          <div class="ob-feature-body">
+            <div class="ob-feature-title">Set Up Accounts First</div>
+            <div class="ob-feature-desc">Add your bank accounts, GCash, Maya, or a cash wallet. Transactions are automatically linked to the right account.</div>
+          </div>
+        </div>
+      </div>`;
+
+    // ── TOUR 2 ───────────────────────────────────────────
+    case 'tour2': return `
+      <div style="padding-top:8px">
+        <div class="ob-kicker">Feature Tour</div>
+        <div class="ob-title">Plan &amp; <span>forecast ahead</span></div>
+        <div class="ob-body">Never be caught off guard by a bill again. Schedule everything that's coming.</div>
+        <div class="ob-feature">
+          <div class="ob-feature-ico violet" style="color:#7C3AED">${OB_ICONS.calendar}</div>
+          <div class="ob-feature-body">
+            <div class="ob-feature-title">Planned Payments</div>
+            <div class="ob-feature-desc">Schedule future income or expenses — your salary, rent, subscriptions. They appear in your cash flow forecast automatically.</div>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <div class="ob-feature-ico amber" style="color:#D97706">${OB_ICONS.arrowPath}</div>
+          <div class="ob-feature-body">
+            <div class="ob-feature-title">Recurring Rules</div>
+            <div class="ob-feature-desc">Set up rules for monthly bills, weekly allowances, or any repeating transaction. They're applied automatically so you never forget.</div>
+          </div>
+        </div>
+      </div>`;
+
+    // ── TOUR 3 ───────────────────────────────────────────
+    case 'tour3': return `
+      <div style="padding-top:8px">
+        <div class="ob-kicker">Feature Tour</div>
+        <div class="ob-title">Reports &amp; <span>smart insights</span></div>
+        <div class="ob-body">Tap the <strong style="color:#0F172A">Reports tab</strong> to see exactly where your money goes and where it's heading.</div>
+        <div class="ob-feature">
+          <div class="ob-feature-ico blue" style="color:#3D7EFF">${OB_ICONS.chartBar}</div>
+          <div class="ob-feature-body">
+            <div class="ob-feature-title">Expense &amp; Income Reports</div>
+            <div class="ob-feature-desc">Visual breakdowns by category and month. Instantly spot your biggest expenses and income trends.</div>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <div class="ob-feature-ico cyan" style="color:#0891B2">${OB_ICONS.sparkles}</div>
+          <div class="ob-feature-body">
+            <div class="ob-feature-title">Cash Flow Forecast</div>
+            <div class="ob-feature-desc">See your projected balance for the next 7, 14, or 30 days — built from your planned and recurring events.</div>
+          </div>
+        </div>
+      </div>`;
+
+    // ── READY ────────────────────────────────────────────
+    case 'ready': {
+      const firstName = obProfile.name ? obProfile.name.split(' ')[0] : null;
+      const greeting  = firstName ? `You're all set, ${firstName}!` : "You're all set!";
+      const tipMap = {
+        student:   'Start by logging your daily allowance and tracking where it goes.',
+        employed:  'Set up your salary as a recurring income to see your cash flow forecast.',
+        freelance: 'Use Planned Payments to schedule client payments and project expenses.',
+        business:  'Track revenue and costs separately in Reports to see your real profit.',
+        retired:   'Add your pension or savings account to monitor your monthly budget.',
+        other:     'Start by adding your first account and logging a transaction.',
+      };
+      const useTipMap = {
+        personal: 'Add at least one account to start tracking your spending.',
+        family:   'Create accounts for each family member to track separately.',
+        savings:  'Set up a Savings Goal to watch your progress grow.',
+        business: 'Use the Budget feature to set spending caps by category.',
+      };
+      const tip  = tipMap[obProfile.occupation]  || tipMap.other;
+      const tip2 = useTipMap[obProfile.primaryUse] || 'Explore Reports after adding a few transactions.';
+      return `
+        <div style="padding-top:8px;text-align:center">
+          <div style="width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,#10B981,#059669);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(16,185,129,.28)">
+            <svg width="38" height="38" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+          </div>
+          <div class="ob-ready-badge">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+            Profile saved
+          </div>
+          <div class="ob-title">${greeting}</div>
+          <div class="ob-body" style="margin-bottom:20px">Your profile is saved. We've personalized your experience based on your answers.</div>
+          <div style="text-align:left;display:flex;flex-direction:column;gap:10px">
+            <div class="ob-tip-card">
+              <div class="ob-tip-ico" style="color:#3D7EFF">${OB_ICONS.lightBulb}</div>
+              <div style="color:#475569;font-size:12px;line-height:1.65">${tip}</div>
+            </div>
+            <div class="ob-tip-card">
+              <div class="ob-tip-ico" style="color:#059669">${OB_ICONS.mapPin}</div>
+              <div style="color:#475569;font-size:12px;line-height:1.65">${tip2}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    default: return '';
   }
 }
-function closeOnboarding(){
-  localStorage.setItem('finflow_onboarded','1');
-  document.getElementById('modal-onboarding').classList.remove('open');
+
+/* ── Shake animation for missing required field ──────── */
+function _obShake(){
+  const wrap = document.getElementById('ob-slide-content');
+  if(!wrap) return;
+  wrap.style.transition = 'transform .07s ease';
+  wrap.style.transform  = 'translateX(-10px)';
+  setTimeout(()=>{ wrap.style.transform = 'translateX(8px)';  }, 70);
+  setTimeout(()=>{ wrap.style.transform = 'translateX(-6px)'; }, 140);
+  setTimeout(()=>{ wrap.style.transform = 'translateX(4px)';  }, 210);
+  setTimeout(()=>{ wrap.style.transform = 'translateX(0)';    }, 280);
+}
+
+/* ── Finish onboarding ───────────────────────────────── */
+function _obFinish(){
+  // Grab name if still on that screen
+  if(OB_STEPS[obStep] && OB_STEPS[obStep].id === 'name'){
+    const v = document.getElementById('ob-name-input');
+    if(v) obProfile.name = v.value.trim();
+  }
+
+  // Save to db
+  db.settings.userProfile = { ...obProfile, completedAt: new Date().toISOString() };
+  saveDB();
+  try{ localStorage.setItem(OB_PROFILE_KEY, JSON.stringify(obProfile)); }catch(e){}
+  localStorage.setItem(OB_KEY, '1');
+
+  // Animate out
+  const ov = document.getElementById('ob-overlay');
+  if(ov){
+    ov.style.transition = 'opacity .4s ease';
+    ov.style.opacity    = '0';
+    setTimeout(()=>{ ov.style.display='none'; }, 420);
+  }
+
+  _obApplyProfileDefaults();
+}
+
+/* ── Profile-based defaults ──────────────────────────── */
+function _obApplyProfileDefaults(){
+  if(!db.settings.homeWidgets) db.settings.homeWidgets = {};
+  if(obProfile.occupation==='business' || obProfile.primaryUse==='business'){
+    db.settings.homeWidgets.showBudgetPanel = true;
+  }
+  saveDB();
+  renderHome();
+}
+
+/* ── Legacy alias ────────────────────────────────────── */
+function closeOnboarding(){ _obFinish(); }
+
+/* ── Stubs kept for safety (no longer used internally) ── */
+function _obRefreshChoices(){}
+function _obRefreshCards(){}
+
+/* ── Named selection handlers (called from inline onclick) ── */
+function obSelectAge(label){
+  obProfile.ageRange = label;
+  // Update all age choice pills visually
+  document.querySelectorAll('#ob-age-choices .ob-choice').forEach(function(btn){
+    const isSelected = btn.textContent.trim().endsWith(label) || btn.textContent.trim().includes(label);
+    btn.classList.toggle('selected', isSelected);
+    const ico = btn.querySelector('span');
+    if(ico) ico.style.color = isSelected ? '#3D7EFF' : '#94A3B8';
+  });
+  // Remove validation warning if present
+  const warn = document.querySelector('#ob-slide-content > div > div:last-child');
+  if(warn && warn.style && warn.style.color === 'rgb(245, 158, 11)') warn.style.display = 'none';
+}
+
+function obSelectOcc(val){
+  obProfile.occupation = val;
+  // Cards
+  document.querySelectorAll('#ob-occ-cards .ob-card').forEach(function(card){
+    const sel = card.dataset.val === val;
+    card.classList.toggle('selected', sel);
+    const ico = card.querySelector('.ob-card-ico-wrap');
+    if(ico) ico.style.color = sel ? '#3D7EFF' : '#64748B';
+  });
+  // Extra pill choices (retired / other)
+  document.querySelectorAll('#ob-occ-extras .ob-choice').forEach(function(btn){
+    const sel = btn.dataset.val === val;
+    btn.classList.toggle('selected', sel);
+    const ico = btn.querySelector('span');
+    if(ico) ico.style.color = sel ? '#3D7EFF' : '#94A3B8';
+  });
+  // If a pill was selected, deselect cards and vice-versa
+  const isExtra = val === 'retired' || val === 'other';
+  if(isExtra){
+    document.querySelectorAll('#ob-occ-cards .ob-card').forEach(c => {
+      c.classList.remove('selected');
+      const ico = c.querySelector('.ob-card-ico-wrap');
+      if(ico) ico.style.color = '#64748B';
+    });
+  } else {
+    document.querySelectorAll('#ob-occ-extras .ob-choice').forEach(b => {
+      b.classList.remove('selected');
+      const ico = b.querySelector('span');
+      if(ico) ico.style.color = '#94A3B8';
+    });
+  }
+}
+
+function obSelectUse(val){
+  obProfile.primaryUse = val;
+  document.querySelectorAll('#ob-use-cards .ob-card').forEach(function(card){
+    const sel = card.dataset.val === val;
+    card.classList.toggle('selected', sel);
+    const ico = card.querySelector('.ob-card-ico-wrap');
+    if(ico) ico.style.color = sel ? '#3D7EFF' : '#64748B';
+  });
 }
 
 // ===== PATCH NOTES =====
