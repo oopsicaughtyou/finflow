@@ -4332,28 +4332,7 @@ html.light #bell-badge {
 (function() {
   // Inline service worker via Blob — no separate sw.js file needed
   if ('serviceWorker' in navigator) {
-    const swCode = `
-      const CACHE = 'abix-v1';
-      self.addEventListener('install', e => self.skipWaiting());
-      self.addEventListener('activate', e => clients.claim());
-      self.addEventListener('fetch', e => {
-        if (e.request.method !== 'GET') return;
-        e.respondWith(
-          caches.open(CACHE).then(cache =>
-            cache.match(e.request).then(cached => {
-              const fresh = fetch(e.request).then(resp => {
-                if (resp && resp.status === 200) cache.put(e.request, resp.clone());
-                return resp;
-              }).catch(() => cached);
-              return cached || fresh;
-            })
-          )
-        );
-      });
-    `;
-    const swBlob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl, { scope: './' }).catch(() => {});
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(e){ console.warn('SW registration failed:', e); });
   }
 
   // ══════════════════════════════════════
