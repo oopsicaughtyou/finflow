@@ -388,13 +388,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 .scroll-area { flex: 1; overflow-y: auto; padding-bottom: 86px; scrollbar-width: none; }
 .scroll-area::-webkit-scrollbar { display: none; }
-/* Pull-to-refresh */
-.ptr-indicator { display:flex; align-items:center; justify-content:center; height:0; overflow:hidden; transition:height .2s ease; background:var(--bg); flex-shrink:0; }
-.ptr-indicator.visible { height:52px; }
-.ptr-icon { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:600; color:var(--text3); }
-.ptr-icon svg { transition:transform .3s ease; }
-.ptr-icon.spinning svg { animation:ptr-spin .6s linear infinite; }
-@keyframes ptr-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
 /* ══════════════════════════════
    TOP BAR (non-home screens)
@@ -2410,8 +2403,6 @@ html.light .toast {
   font-size: 40px; font-weight: 800; color: var(--text); letter-spacing: -1.5px; margin-bottom: 16px; line-height: 1;
 }
 .v5-nw-amount.negative { color: var(--rose); }
-/* Counter animation — overflow clip for digit roll */
-.v5-nw-amount, #hbc-income, #hbc-expense { will-change: contents; }
 
 /* Income / Expenses stat cards */
 .v5-stat-cards {
@@ -12382,7 +12373,7 @@ function executePayPayable(){
   // Update payable
   py.paidAmount=(py.paidAmount||0)+amount;
   py.remaining=Math.max(0,py.totalAmount-py.paidAmount);
-  const justFullyPaid = py.remaining<=0 && py.status!=='paid';
+  const justFullyPaid=py.remaining<=0&&py.status!=='paid';
   if(py.remaining<=0)py.status='paid';
   if(!py.payments)py.payments=[];
   py.payments.push({id:uid(),amount,accountId:accId,date:payDate,ref,months,createdAt:Date.now()});
@@ -12444,7 +12435,7 @@ function executePayPayable(){
     }
   }
 
-  // ── If payable just became fully paid, remove ALL remaining pending planned items ──
+  // ── Safety sweep: if payable just fully paid, clear ALL pending planned items linked to it ──
   if(justFullyPaid){
     db.planned.filter(p=>p.payableId===py.id&&p.status==='pending').forEach(p=>{
       p.status='completed';p.completedAt=Date.now();p.completedNote='Auto-cleared: payable fully paid off';
@@ -15871,12 +15862,12 @@ function renderPlannedTab(){
     if(converted.length){
       html=`<div class="pp-list">${converted.map(p=>{
         const py=db.payables.find(x=>x.id===p.convertedToPayable);
-        const pyBadge=py?`<div style="margin-top:8px;background:var(--violet-bg);border:1px solid rgba(124,131,253,.2);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--violet);font-weight:600;display:flex;align-items:center;gap:6px;justify-content:space-between"><div style="display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/></svg> Payable: <strong>${py.name}</strong></div><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg></div>`:'';
+        const pyBadge=py?`<div style="margin-top:8px;background:var(--violet-bg);border:1px solid rgba(124,131,253,.2);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--violet);font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:6px"><div style="display:flex;align-items:center;gap:6px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/></svg> Payable: <strong>${py.name}</strong></div><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg></div>`:'';
         const tc=p.type==='expense'?'expense':p.type==='income'?'income':'transfer';
         const sign=p.type==='expense'?'−':p.type==='income'?'+':'⇄';
         const typeLabel=p.type==='expense'?'Expense':p.type==='income'?'Income':'Transfer';
         const acc=db.accounts.find(a=>a.id===p.accountId);
-        return `<div class="pp-card is-done" style="border-left-color:var(--violet);opacity:1;cursor:${py?'pointer':'default'}" onclick="${py?`openPayableDetail('${py.id}');showScreen('payable-detail')`:''}">
+        return `<div class="pp-card is-done" style="border-left-color:var(--violet);opacity:1;cursor:${py?'pointer':'default'}" ${py?`onclick="openPayableDetail('${py.id}')"`:''}>
           <div class="pp-top">
             <span class="pp-type-badge ${tc}">${typeLabel}</span>
             <span style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:99px;background:var(--violet-bg);color:var(--violet)">💳 Converted</span>
@@ -19215,6 +19206,18 @@ loadDB();
 initTheme();
 cleanDismissedAlerts();
 applyDueRecurring(); // auto-apply any due recurring transactions
+// ── Data-migration: clear any pending planned items linked to fully-paid payables ──
+(function cleanupPaidPayablePlanned(){
+  let dirty=false;
+  db.payables.filter(p=>p.status==='paid').forEach(py=>{
+    db.planned.filter(p=>p.payableId===py.id&&p.status==='pending').forEach(p=>{
+      p.status='completed';p.completedAt=p.completedAt||Date.now();
+      p.completedNote=p.completedNote||'Auto-cleared: payable fully paid off';
+      dirty=true;
+    });
+  });
+  if(dirty)saveDB();
+})();
 saveDB(); // save any auto-applied transactions
 // Restore demo mode UI if app was reloaded during demo
 if(db.settings.demoMode) _updateDemoUI(true);
@@ -19505,192 +19508,154 @@ function sweldoReset() {
 }
 
 // ============================================================
-// ===== PULL-TO-REFRESH ======================================
+// ===== PULL-TO-REFRESH (silent — no label) ==================
 // ============================================================
 (function initPullToRefresh() {
-  const PTR_THRESHOLD = 72;
-  let startY = 0, currentY = 0, isPulling = false, isRefreshing = false;
-  const reloadSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/><path d="M21 3v5h-5"/></svg>`;
+  const THRESHOLD = 70;
+  let startY = 0, dy = 0, isPulling = false, isRefreshing = false;
 
-  function getActiveScrollArea() {
-    const active = document.querySelector('.screen.active');
-    if (!active) return null;
-    return active.querySelector('.scroll-area') || active;
+  // Inject the indicator div once into each screen lazily
+  function getOrCreateIndicator(screen) {
+    let ind = screen.querySelector('.ptr-ind');
+    if (!ind) {
+      ind = document.createElement('div');
+      ind.className = 'ptr-ind';
+      ind.style.cssText = 'height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:height .18s ease;flex-shrink:0';
+      ind.innerHTML = `<div class="ptr-spinner" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/><path d="M21 3v5h-5"/></svg></div>`;
+      const scrollArea = screen.querySelector('.scroll-area');
+      if (scrollArea) screen.insertBefore(ind, scrollArea);
+      else screen.insertBefore(ind, screen.firstChild);
+    }
+    return ind;
   }
 
-  function injectIndicator(screen) {
-    if (screen.querySelector('.ptr-indicator')) return;
-    const ind = document.createElement('div');
-    ind.className = 'ptr-indicator';
-    ind.innerHTML = `<div class="ptr-icon">${reloadSvg}<span>Pull to refresh</span></div>`;
-    const scrollArea = screen.querySelector('.scroll-area');
-    if (scrollArea) screen.insertBefore(ind, scrollArea);
-    else screen.insertBefore(ind, screen.firstChild);
+  function getScrollEl() {
+    const screen = document.querySelector('.screen.active');
+    if (!screen) return null;
+    return screen.querySelector('.scroll-area') || screen;
   }
 
-  function doRefresh() {
+  function doRefresh(screen) {
     if (isRefreshing) return;
     isRefreshing = true;
-    const active = document.querySelector('.screen.active');
-    const ind = active?.querySelector('.ptr-indicator');
-    if (ind) {
-      ind.classList.add('visible');
-      const icon = ind.querySelector('.ptr-icon');
-      if (icon) { icon.classList.add('spinning'); icon.querySelector('span').textContent = 'Refreshing…'; }
+    const ind = getOrCreateIndicator(screen);
+    // Show spinner spinning
+    ind.style.height = '52px';
+    const spin = ind.querySelector('.ptr-spinner');
+    if (spin) {
+      spin.style.opacity = '1';
+      spin.querySelector('svg').style.animation = 'ptr-spin .55s linear infinite';
     }
     setTimeout(() => {
-      const name = active?.id?.replace('screen-','') || 'home';
+      const name = (screen.id || '').replace('screen-', '') || 'home';
       try { showScreen(name); } catch(e) {}
-      if (ind) {
-        ind.classList.remove('visible');
-        const icon = ind.querySelector('.ptr-icon');
-        if (icon) { icon.classList.remove('spinning'); icon.querySelector('span').textContent = 'Pull to refresh'; }
-      }
+      if (spin) spin.style.opacity = '0';
+      ind.style.height = '0';
       isRefreshing = false;
-    }, 700);
+    }, 650);
   }
 
   document.addEventListener('touchstart', e => {
-    const scrollArea = getActiveScrollArea();
-    if (!scrollArea) return;
-    if (scrollArea.scrollTop > 0) return;
+    if (isRefreshing) return;
+    const scrollEl = getScrollEl();
+    if (!scrollEl || scrollEl.scrollTop > 2) return;
     startY = e.touches[0].clientY;
     isPulling = true;
-    const active = document.querySelector('.screen.active');
-    if (active) injectIndicator(active);
+    dy = 0;
   }, { passive: true });
 
   document.addEventListener('touchmove', e => {
     if (!isPulling || isRefreshing) return;
-    const scrollArea = getActiveScrollArea();
-    if (!scrollArea || scrollArea.scrollTop > 0) { isPulling = false; return; }
-    currentY = e.touches[0].clientY;
-    const dy = Math.max(0, currentY - startY);
-    const active = document.querySelector('.screen.active');
-    const ind = active?.querySelector('.ptr-indicator');
-    if (!ind) return;
-    if (dy > 18) {
-      const h = Math.min(PTR_THRESHOLD, dy * 0.55);
-      ind.style.height = h + 'px';
-      ind.style.transition = 'none';
-      const icon = ind.querySelector('.ptr-icon');
-      if (icon) {
-        icon.querySelector('span').textContent = dy > PTR_THRESHOLD ? 'Release to refresh' : 'Pull to refresh';
-        icon.querySelector('svg').style.transform = `rotate(${Math.min(180, dy * 1.5)}deg)`;
-      }
-    }
+    const scrollEl = getScrollEl();
+    if (!scrollEl || scrollEl.scrollTop > 2) { isPulling = false; return; }
+    dy = Math.max(0, e.touches[0].clientY - startY);
+    const screen = document.querySelector('.screen.active');
+    if (!screen || dy < 10) return;
+    const ind = getOrCreateIndicator(screen);
+    const capped = Math.min(THRESHOLD, dy * 0.5);
+    ind.style.transition = 'none';
+    ind.style.height = capped + 'px';
+    const spin = ind.querySelector('.ptr-spinner svg');
+    if (spin) spin.style.transform = `rotate(${Math.min(270, dy * 2)}deg)`;
+    const spinner = ind.querySelector('.ptr-spinner');
+    if (spinner) spinner.style.opacity = String(Math.min(1, dy / 40));
   }, { passive: true });
 
-  document.addEventListener('touchend', e => {
+  document.addEventListener('touchend', () => {
     if (!isPulling) return;
     isPulling = false;
-    const dy = Math.max(0, currentY - startY);
-    const active = document.querySelector('.screen.active');
-    const ind = active?.querySelector('.ptr-indicator');
-    if (dy > PTR_THRESHOLD) {
-      doRefresh();
-    } else {
+    const screen = document.querySelector('.screen.active');
+    if (dy > THRESHOLD && screen) {
+      doRefresh(screen);
+    } else if (screen) {
+      const ind = screen.querySelector('.ptr-ind');
       if (ind) { ind.style.transition = 'height .2s ease'; ind.style.height = '0'; }
     }
-    startY = 0; currentY = 0;
+    startY = 0; dy = 0;
   }, { passive: true });
+})();
+
+// Inject keyframe for ptr-spin into document head once
+(function(){
+  if (!document.getElementById('ptr-style')) {
+    const s = document.createElement('style');
+    s.id = 'ptr-style';
+    s.textContent = '@keyframes ptr-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+    document.head.appendChild(s);
+  }
 })();
 
 // ============================================================
 // ===== HOME AMOUNT COUNTER ANIMATION ========================
 // ============================================================
-
-/**
- * Animates an element's text from its current numeric value to `target`.
- * Handles negative values, decimals, and the currency prefix symbol.
- * @param {HTMLElement} el      - DOM element to animate
- * @param {number}      target  - Final numeric value
- * @param {number}      duration - Animation duration in ms (default 1200)
- * @param {boolean}     isNegative - Whether to show a leading minus sign
- */
-function animateCounter(el, target, duration = 1200, isNegative = false) {
-  if (!el) return;
-  // Cancel any in-progress animation on this element
-  if (el._rafId) cancelAnimationFrame(el._rafId);
-
-  const symbol = getCurrency();
-  const absTarget = Math.abs(target);
-
-  // Ease-out-expo for a natural deceleration feel
-  function easeOutExpo(t) {
-    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-  }
-
-  // Parse the current displayed value to start from (for re-renders)
-  const rawCurrent = parseFloat(
-    (el.textContent || '0').replace(/[^0-9.\-]/g, '')
-  ) || 0;
-  const startVal = Math.abs(rawCurrent);
-  const startTime = performance.now();
-
-  function tick(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = easeOutExpo(progress);
-    const current = startVal + (absTarget - startVal) * eased;
-
-    // Format with 2 decimal places + thousands separator, matching fmt()
-    const formatted = symbol + (isNegative ? '-' : '') +
-      current.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    el.textContent = formatted;
-
-    if (progress < 1) {
-      el._rafId = requestAnimationFrame(tick);
-    } else {
-      // Snap to exact final value to avoid float drift
-      el.textContent = symbol + (isNegative ? '-' : '') +
-        absTarget.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      el._rafId = null;
-    }
-  }
-
-  el._rafId = requestAnimationFrame(tick);
+function _parseAmount(str) {
+  // Extract raw number from formatted string like "₱5,770.17" or "-₱5,770.17"
+  const neg = str.includes('-');
+  const num = parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
+  return neg ? -num : num;
 }
 
-let _lastHomeBalance = null, _lastHomeIncome = null, _lastHomeExpense = null;
+function _animateCounter(el, targetStr, duration) {
+  if (!el) return;
+  // Strip privacy mask — don't animate hidden amounts
+  if (el.querySelector('.hidden-amount')) return;
+  const target = _parseAmount(targetStr);
+  const abs = Math.abs(target);
+  const sign = target < 0 ? '-' : '';
+  const sym = targetStr.match(/[₱$€£¥₩]/) ? targetStr.match(/[₱$€£¥₩]/)[0] : '';
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min(1, (now - start) / duration);
+    // Ease-out cubic
+    const ease = 1 - Math.pow(1 - p, 3);
+    const cur = abs * ease;
+    // Format with commas + 2 decimals
+    const formatted = sym + sign + cur.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    el.textContent = formatted;
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = targetStr; // snap to exact final value
+  }
+  requestAnimationFrame(tick);
+}
 
+// Wrap renderHome to trigger counter animation on home amounts
 const _origRenderHome = renderHome;
 renderHome = function() {
   _origRenderHome.apply(this, arguments);
-
   const style = db.settings?.appStyle || 'classic';
   if (style === 'old') return;
-
-  const total   = db.accounts.reduce((s,a) => s + a.balance, 0);
-  const pTxs    = filterByPeriod(db.transactions, currentPeriod);
-  const income  = pTxs.filter(t => t.type === 'income').reduce((s,t) => s + t.amount, 0);
-  const expense = pTxs.filter(t => t.type === 'expense').reduce((s,t) => s + t.amount, 0);
-
   const heroEl = document.getElementById('hero-balance');
   const incEl  = document.getElementById('hbc-income');
   const expEl  = document.getElementById('hbc-expense');
-
-  if (!priv?.homeTotal && heroEl) {
-    // First render: count up from 0. Subsequent: count from last known value.
-    const isFirstRender = _lastHomeBalance === null;
-    const dur = isFirstRender ? 1500 : 900;
-    animateCounter(heroEl, total, dur, total < 0);
-    if (total < 0) heroEl.classList.add('negative');
-    else heroEl.classList.remove('negative');
-  }
-
-  if (!priv?.homeSummary) {
-    if (incEl && _lastHomeIncome !== income) {
-      animateCounter(incEl, income, _lastHomeIncome === null ? 1400 : 800);
-    }
-    if (expEl && _lastHomeExpense !== expense) {
-      animateCounter(expEl, expense, _lastHomeExpense === null ? 1400 : 800);
-    }
-  }
-
-  _lastHomeBalance = total;
-  _lastHomeIncome  = income;
-  _lastHomeExpense = expense;
+  // Small delay so DOM is updated by _origRenderHome first
+  requestAnimationFrame(() => {
+    const heroVal = heroEl?.textContent?.trim();
+    const incVal  = incEl?.textContent?.trim();
+    const expVal  = expEl?.textContent?.trim();
+    if (heroVal && heroVal !== '₱0' && !heroEl.querySelector?.('.hidden-amount')) _animateCounter(heroEl, heroVal, 900);
+    if (incVal  && incVal  !== '₱0' && !incEl.querySelector?.('.hidden-amount'))  _animateCounter(incEl,  incVal,  700);
+    if (expVal  && expVal  !== '₱0' && !expEl.querySelector?.('.hidden-amount'))  _animateCounter(expEl,  expVal,  700);
+  });
 };
 </script>
 </body>
